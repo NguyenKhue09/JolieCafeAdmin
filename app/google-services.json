@@ -1,0 +1,117 @@
+{
+  "project_info": {
+    "project_number": "761101144147",
+    "firebase_url": "https://joliecafe-799f7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "joliecafe-799f7",
+    "storage_bucket": "joliecafe-799f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761101144147:android:003b9ff41d022ffcc676a6",
+        "android_client_info": {
+          "package_name": "com.nt118.joliecafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761101144147-03vetv6ia6t2hq44ilajn5e3ms1iop9p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafe",
+            "certificate_hash": "4bfa0aced26731e76b06b875ac564ebea3269c4b"
+          }
+        },
+        {
+          "client_id": "761101144147-33kn5dq4rip9gd8f6s2jvrsh0obmsgce.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafe",
+            "certificate_hash": "8c0f6677462f25105df7d8586eba0ff164d2db11"
+          }
+        },
+        {
+          "client_id": "761101144147-9gh95lmhk784q3cbaft5f9rmianuik1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafe",
+            "certificate_hash": "6e25d75f644e34381c227ba31e110c39ce467e29"
+          }
+        },
+        {
+          "client_id": "761101144147-ejn1td3lq4r58ruosp7buhnqvbmeg488.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafe",
+            "certificate_hash": "f03c53e05b1e8a1000d2c9318eefa740b8ea4dc8"
+          }
+        },
+        {
+          "client_id": "761101144147-uibifq8s7hiavg0g2nivrj17v7u78mtp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafe",
+            "certificate_hash": "3812d7a200ea5c2def59c70ede17c0ec4fe134da"
+          }
+        },
+        {
+          "client_id": "761101144147-1ac26g0mibusafq3vfgd7dutvgad81f1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDX6k8ji7FeXdBhHDb0XDVGOsXoi5QDBpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761101144147-1ac26g0mibusafq3vfgd7dutvgad81f1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761101144147:android:2939e87f87b296cac676a6",
+        "android_client_info": {
+          "package_name": "com.nt118.joliecafeadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "761101144147-3fh42h8kddfr0kvajrl4b27qgkd605bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nt118.joliecafeadmin",
+            "certificate_hash": "f03c53e05b1e8a1000d2c9318eefa740b8ea4dc8"
+          }
+        },
+        {
+          "client_id": "761101144147-1ac26g0mibusafq3vfgd7dutvgad81f1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDX6k8ji7FeXdBhHDb0XDVGOsXoi5QDBpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "761101144147-1ac26g0mibusafq3vfgd7dutvgad81f1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
