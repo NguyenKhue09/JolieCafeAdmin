@@ -15,4 +15,16 @@
         <item name="android:windowBackground">@color/grey_primary</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="switchColor">
+        <item name="colorControlActivated">@color/text_color_2</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+    </style>
 </resources>
