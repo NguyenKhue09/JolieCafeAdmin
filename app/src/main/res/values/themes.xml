@@ -15,4 +15,8 @@
         <item name="android:windowBackground">@color/grey_primary</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="switchColor">
+        <item name="colorControlActivated">@color/text_color_2</item>
+    </style>
 </resources>
