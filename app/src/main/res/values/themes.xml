@@ -63,6 +63,9 @@
     <style name="CornerSize50Percent" parent="">
         <item name="cornerSize">50%</item>
     </style>
+    <style name="CornerSize10Percent" parent="">
+        <item name="cornerSize">10%</item>
+    </style>
 
     <style name="TabText" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="fontFamily">@font/raleway_regular</item>
