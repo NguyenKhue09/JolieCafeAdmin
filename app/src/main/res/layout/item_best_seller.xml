@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="15dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_product_thumbnail"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:shapeAppearanceOverlay="@style/CornerSize10Percent"
+        android:src="@drawable/image_logo"/>
+
+    <TextView
+        android:id="@+id/tv_product_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_product_thumbnail"
+        app:layout_constraintBottom_toTopOf="@id/tv_product_sold"
+        style="@style/RegularText"
+        android:textColor="@color/title_text_color"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="10dp"
+        android:text="Affogato"/>
+
+    <TextView
+        android:id="@+id/tv_product_sold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        app:layout_constraintTop_toBottomOf="@id/tv_product_name"
+        app:layout_constraintStart_toStartOf="@id/tv_product_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/SmallNumber"
+        android:layout_marginBottom="10dp"
+        android:text="Sold: 83"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
