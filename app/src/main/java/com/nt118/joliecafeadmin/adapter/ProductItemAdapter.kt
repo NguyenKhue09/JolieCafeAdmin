@@ -23,7 +23,7 @@ class ProductItemAdapter(
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ProductItemRowLayoutBinding.inflate(layoutInflater)
+                val binding = ProductItemRowLayoutBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }
@@ -51,6 +51,7 @@ class ProductItemAdapter(
             holder.binding.itemImg.load(product.thumbnail) {
                 crossfade(600)
                 error(R.drawable.image_logo)
+                placeholder(R.drawable.image_logo)
             }
 
             holder.binding.productName.text = product.name

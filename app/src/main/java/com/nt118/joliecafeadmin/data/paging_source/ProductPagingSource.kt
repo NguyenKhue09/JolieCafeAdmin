@@ -30,11 +30,11 @@ class ProductPagingSource(
                 "type" to productQuery["type"]!!
             )
 
-            println(query)
+            //println(query)
 
             try {
                 val response = jolieAdminApi.getProducts(productQuery = query, token = token)
-                println(response)
+                //println(response)
                 return if(response.success) {
                     LoadResult.Page(
                         data = if(response.data.isNullOrEmpty()) emptyList() else response.data,

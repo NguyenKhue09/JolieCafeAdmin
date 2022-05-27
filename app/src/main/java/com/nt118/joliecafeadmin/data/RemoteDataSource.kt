@@ -18,7 +18,7 @@ class RemoteDataSource @Inject constructor(
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE),
             pagingSourceFactory = {
-                ProductPagingSource(jolieAdminApi, token, productQuery)
+                ProductPagingSource(jolieAdminApi, "Bearer $token", productQuery)
             }
         ).flow
     }

@@ -9,5 +9,9 @@ class Constants {
         val listProductTypes = listOf("All", "Coffee", "Tea", "Juice", "Pasty", "Milk shake", "Milk tea")
         const val API_GATEWAY = "/api/v1/jolie-cafe"
         const val PAGE_SIZE = 20
+
+        const val PREFERENCES_NAME = "jolie_admin_preferences"
+        const val PREFERENCES_BACK_ONLINE = "backOnline"
+        const val PREFERENCES_ADMIN_TOKEN = "adminToken"
     }
 }
