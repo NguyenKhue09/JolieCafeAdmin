@@ -12,4 +12,10 @@
     <string name="revenue_haicham">Revenue: \u0020</string>
     <string name="money">999.999.000 VND</string>
     <string name="best_sellers">Best sellers</string>
+    <string name="add_new_product">Add new product</string>
+    <string name="products_tab_page">Products tab page</string>
+    <string name="item_name">Latte</string>
+    <string name="dot_center_vertical">•</string>
+    <string name="item_favorite">5</string>
+    <string name="product_price">%s VND</string>
 </resources>

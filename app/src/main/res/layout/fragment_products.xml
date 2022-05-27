@@ -6,17 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.products.ProductsFragment">
 
+
     <TextView
-        android:id="@+id/text_dashboard"
+        android:id="@+id/text_product_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/large_margin"
+        android:layout_marginTop="@dimen/extra_large_margin"
+        android:fitsSystemWindows="true"
+        android:text="@string/products"
+        android:textAlignment="center"
+        android:textColor="@color/grey_primary_variant"
+        style="@style/BigText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SearchView
+        android:id="@+id/search_product_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/searchview_background"
+        android:backgroundTint="@color/grey_opacity60_primary"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@null"
+        android:layout_marginHorizontal="@dimen/large_margin"
+        android:queryHint="Search for your products..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_product_title"
+        app:theme="@style/SearchViewStyle" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/products_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_product_box"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/grey_primary_variant"
+        android:textAlignment="textStart"
+        app:tabIndicatorColor="@color/grey_primary_variant"
+        android:layout_marginTop="25dp"
+        app:tabPaddingStart="10dp"
+        app:tabMinWidth="10dp"
+        app:tabContentStart="30dp"
+        android:contentDescription="@string/products_tab_page"
+        app:tabTextColor="@color/text_color"
+        app:tabTextAppearance="@style/MyCustomTabTextAppearance">
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_product_item"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/small_margin"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/medium_margin"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/products_tab_layout"
+        tools:itemCount="10"
+        tools:listitem="@layout/product_item_row_layout">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_new_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:backgroundTint="@color/title_text_color"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/text_color"
+        android:contentDescription="@string/add_new_product"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
