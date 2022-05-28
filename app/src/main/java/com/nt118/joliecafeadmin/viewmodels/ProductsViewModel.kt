@@ -11,9 +11,7 @@ import com.nt118.joliecafeadmin.data.Repository
 import com.nt118.joliecafeadmin.models.Product
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

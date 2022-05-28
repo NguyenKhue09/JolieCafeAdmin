@@ -25,8 +25,9 @@ import com.nt118.joliecafeadmin.adapter.BestSellerAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
 import com.nt118.joliecafeadmin.util.ScreenUtils.spToPx
 import com.nt118.joliecafeadmin.viewmodels.RevenueViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RevenueFragment : Fragment() {
 
     private var _binding: FragmentRevenueBinding? = null
@@ -48,6 +49,8 @@ class RevenueFragment : Fragment() {
         initData(chart, requireContext())
 
         rvBestSeller.adapter = BestSellerAdapter()
+
+        println(revenueViewModel.adminToken)
 
         return binding.root
     }
