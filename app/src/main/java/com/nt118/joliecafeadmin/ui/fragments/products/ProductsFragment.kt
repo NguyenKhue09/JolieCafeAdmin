@@ -96,17 +96,21 @@ class ProductsFragment : Fragment() {
         val diffUtil = ProductComparator
         productItemAdapter = ProductItemAdapter(
             productFragment = this,
-            diffUtil = diffUtil
-        ) { productId ->
-            onProductClicked(productId = productId)
-        }
+            diffUtil = diffUtil,
+            onProductClicked = { productId ->
+                onProductClicked(productId = productId, isEdit = false)
+            },
+            onEditProductClicked = { productId ->
+                onProductClicked(productId = productId, isEdit = true)
+            }
+        )
     }
 
-    private fun onProductClicked(productId: String) {
+    private fun onProductClicked(productId: String, isEdit: Boolean) {
         if(productsViewModel.networkStatus) {
             val action = ProductsFragmentDirections.actionNavigationProductsToProductDetailActivity(
                 productId = productId,
-                isEdit = false
+                isEdit = isEdit
             )
             findNavController().navigate(action)
         }

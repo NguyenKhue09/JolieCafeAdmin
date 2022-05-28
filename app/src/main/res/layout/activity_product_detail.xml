@@ -64,7 +64,8 @@
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@color/text_input_custom_bg"
                 app:boxStrokeColor="@color/box_stroke_color_textinput"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_product_name"
@@ -95,11 +96,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                android:enabled="false"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@color/text_input_custom_bg"
                 app:boxStrokeColor="@color/box_stroke_color_textinput"
-                app:endIconMode="none">
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/et_product_type"
@@ -107,7 +107,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:dropDownSelector="@color/grey_secondary"
-                    android:inputType="none"
                     android:paddingStart="4dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="0dp"
@@ -134,7 +133,8 @@
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@color/text_input_custom_bg"
                 app:boxStrokeColor="@color/box_stroke_color_textinput"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_product_price"
@@ -167,7 +167,8 @@
                 android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@color/text_input_custom_bg"
-                app:boxStrokeColor="@color/box_stroke_color_textinput">
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                android:enabled="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/et_product_status"
@@ -175,7 +176,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:dropDownSelector="@color/grey_secondary"
-                    android:inputType="none"
                     android:paddingStart="4dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="0dp"
@@ -194,7 +194,7 @@
                 android:textColor="@color/text_color" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/et_product_name_description"
+                android:id="@+id/et_product_description_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -202,7 +202,8 @@
                 android:theme="@style/TextInputLayoutAppearance"
                 app:boxBackgroundColor="@color/text_input_custom_bg"
                 app:boxStrokeColor="@color/box_stroke_color_textinput"
-                app:errorEnabled="true">
+                app:errorEnabled="true"
+                android:enabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_product_description"
@@ -277,12 +278,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:enabled="false"
                             android:theme="@style/TextInputLayoutAppearance"
                             app:boxBackgroundColor="@color/text_input_custom_bg"
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
-                            app:endIconMode="custom"
+                            app:endIconMode="none"
+                            android:enabled="false"
                             app:endIconTint="@color/text_color">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -321,12 +322,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
-                            android:enabled="false"
                             android:theme="@style/TextInputLayoutAppearance"
                             app:boxBackgroundColor="@color/text_input_custom_bg"
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
-                            app:endIconMode="custom"
+                            app:endIconMode="none"
+                            android:enabled="false"
                             app:endIconTint="@color/text_color">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -364,7 +365,8 @@
                     android:theme="@style/TextInputLayoutAppearance"
                     app:boxBackgroundColor="@color/text_input_custom_bg"
                     app:boxStrokeColor="@color/box_stroke_color_textinput"
-                    app:errorEnabled="true">
+                    app:errorEnabled="true"
+                    android:enabled="false">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_product_discount_percent"
@@ -387,11 +389,14 @@
     </ScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/footer_action_button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
         <include
             android:id="@+id/footer_action_button"
             layout="@layout/product_detail_footer_action_button"

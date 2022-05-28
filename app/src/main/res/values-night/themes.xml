@@ -31,6 +31,7 @@
     <style name="DropDownMenuStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
         <item name="endIconTint">@color/checkable_color</item>
         <item name="rippleColor">@color/grey_primary</item>
+        <item name="endIconMode">none</item>
     </style>
 
     <style name="RegularText" parent="Theme.JolieCafeAdmin">

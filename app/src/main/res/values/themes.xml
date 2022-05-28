@@ -29,6 +29,7 @@
 
     <style name="DropDownMenuStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
         <item name="endIconTint">@color/checkable_color</item>
+        <item name="endIconMode">none</item>
         <item name="rippleColor">@color/text_color_2</item>
     </style>
 
