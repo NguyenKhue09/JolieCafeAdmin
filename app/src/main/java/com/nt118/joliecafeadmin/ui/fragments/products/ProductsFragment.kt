@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -96,7 +97,19 @@ class ProductsFragment : Fragment() {
         productItemAdapter = ProductItemAdapter(
             productFragment = this,
             diffUtil = diffUtil
-        )
+        ) { productId ->
+            onProductClicked(productId = productId)
+        }
+    }
+
+    private fun onProductClicked(productId: String) {
+        if(productsViewModel.networkStatus) {
+            val action = ProductsFragmentDirections.actionNavigationProductsToProductDetailActivity(
+                productId = productId,
+                isEdit = false
+            )
+            findNavController().navigate(action)
+        }
     }
 
     private fun setProductAdapterData() {

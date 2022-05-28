@@ -14,7 +14,8 @@ import com.nt118.joliecafeadmin.ui.fragments.products.ProductsFragment
 
 class ProductItemAdapter(
     private val productFragment: ProductsFragment,
-    diffUtil: DiffUtil.ItemCallback<Product>
+    diffUtil: DiffUtil.ItemCallback<Product>,
+    private val onProductClicked: (String) -> Unit
 ) : PagingDataAdapter<Product, ProductItemAdapter.MyViewHolder>(diffCallback = diffUtil) {
 
     class MyViewHolder(var binding: ProductItemRowLayoutBinding) :
@@ -40,9 +41,9 @@ class ProductItemAdapter(
         val product = getItem(position)
 
         product?.let {
+
             holder.binding.itemCard.setOnClickListener {
-//                val intent = Intent(prodcutFragment.context, DetailActivity::class.java)
-//                prodcutFragment.context?.startActivity(intent)
+                onProductClicked(product.id)
             }
 
             holder.binding.btnEditProduct.setOnClickListener {

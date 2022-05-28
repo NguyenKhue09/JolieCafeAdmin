@@ -24,9 +24,13 @@
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
-        <item name="colorControlNormal">@color/white</item>
         <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
+        <item name="colorSurface">@color/grey_opacity60_primary</item>
+    </style>
+
+    <style name="DropDownMenuStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
+        <item name="endIconTint">@color/checkable_color</item>
+        <item name="rippleColor">@color/grey_primary</item>
     </style>
 
     <style name="RegularText" parent="Theme.JolieCafeAdmin">
@@ -88,4 +92,18 @@
         <item name="android:fontFamily">@font/raleway_regular</item>
         <item name="android:tint">@color/text_color</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="backgroundTint">@color/text_color</item>
+    </style>
+
+    <style name="Button.Rounded" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="backgroundTint">@color/grey_secondary</item>
+        <item name="iconTint">@color/grey_primary</item>
+    </style>
+
 </resources>

@@ -3,15 +3,23 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_arrow_back.xml" value="0.222" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_edit.xml" value="0.221" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/searchview_background.xml" value="0.221" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/bottom_navigation_custom_bg.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/brush_color_bg.xml" value="0.155" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/ic_add.xml" value="0.2555" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/ic_calander.xml" value="0.155" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/ic_settings.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/ic_voucher.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/font/fonts.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_product_detail.xml" value="0.40100250626566414" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/drop_down_item.xml" value="0.6" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_detail_footer_action_button.xml" value="0.4878048780487805" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_item_row_layout.xml" value="0.5007704160246533" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1995" />
