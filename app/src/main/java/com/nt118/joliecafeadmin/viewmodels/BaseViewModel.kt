@@ -8,27 +8,34 @@ import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
 import com.nt118.joliecafeadmin.util.ApiResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import javax.inject.Inject
 
 open class BaseViewModel(
     application: Application,
     var dataStoreRepository: DataStoreRepository
 ) : AndroidViewModel(application){
 
-    val readBackOnline by lazy { dataStoreRepository.readBackOnline }
-    val readUserToken by lazy { dataStoreRepository.readAdminToken }
-
+    val readBackOnline = dataStoreRepository.readBackOnline
+    val readAdminToken = dataStoreRepository.readAdminToken
 
     var adminToken = ""
-
     var networkStatus = false
     var backOnline = false
 
-    private fun saveUserToken(userToken: String) =
+    init {
+        viewModelScope.launch {
+            readAdminToken.collectLatest { token ->
+                println(token)
+                adminToken = token
+            }
+        }
+    }
+
+    fun saveAdminToken(adminToken: String) =
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveAdminToken(userToken = userToken)
+            dataStoreRepository.saveAdminToken(userToken = adminToken)
         }
 
     private fun saveBackOnline(backOnline: Boolean) =

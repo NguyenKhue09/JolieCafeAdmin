@@ -52,13 +52,13 @@ class ProductsFragment : Fragment() {
 
         initProductAdapter()
         setProductAdapterData()
-        initProductAdapterData()
         updateBackOnlineStatus()
-        handleProductPagingAdapterState()
         configProductRecyclerView()
         addProductTabText()
         onProductsTabSelected()
 
+        initProductAdapterData()
+        handleProductPagingAdapterState()
         return binding.root
     }
 
@@ -69,6 +69,7 @@ class ProductsFragment : Fragment() {
                 productsViewModel.networkStatus = status
                 if (productsViewModel.networkStatus) {
                     lifecycleScope.launchWhenStarted {
+                        println("call init daa")
                         productsViewModel.getProducts(
                             productQuery = mapOf(
                                 "type" to listProductTypes[0]
@@ -137,7 +138,8 @@ class ProductsFragment : Fragment() {
     }
 
     private fun updateAdminToken() {
-        productsViewModel.readUserToken.asLiveData().observe(viewLifecycleOwner) { token ->
+        productsViewModel.readAdminToken.asLiveData().observe(viewLifecycleOwner) { token ->
+            println("update token")
             productsViewModel.adminToken = token
         }
     }
