@@ -15,7 +15,8 @@ import com.nt118.joliecafeadmin.ui.fragments.products.ProductsFragment
 class ProductItemAdapter(
     private val productFragment: ProductsFragment,
     diffUtil: DiffUtil.ItemCallback<Product>,
-    private val onProductClicked: (String) -> Unit
+    private val onProductClicked: (String) -> Unit,
+    private val onEditProductClicked: (String) -> Unit,
 ) : PagingDataAdapter<Product, ProductItemAdapter.MyViewHolder>(diffCallback = diffUtil) {
 
     class MyViewHolder(var binding: ProductItemRowLayoutBinding) :
@@ -47,6 +48,12 @@ class ProductItemAdapter(
             }
 
             holder.binding.btnEditProduct.setOnClickListener {
+                onEditProductClicked(product.id)
+            }
+
+
+            holder.binding.btnEditProduct.setOnClickListener {
+                onEditProductClicked(product.id)
             }
 
             holder.binding.itemImg.load(product.thumbnail) {
