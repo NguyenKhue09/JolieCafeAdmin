@@ -15,7 +15,11 @@
         android:id="@+id/navigation_products"
         android:name="com.nt118.joliecafeadmin.ui.fragments.products.ProductsFragment"
         android:label="@string/products"
-        tools:layout="@layout/fragment_products" />
+        tools:layout="@layout/fragment_products" >
+        <action
+            android:id="@+id/action_navigation_products_to_productDetailActivity"
+            app:destination="@id/productDetailActivity" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_vouchers"
@@ -27,4 +31,17 @@
         android:name="com.nt118.joliecafeadmin.ui.fragments.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <activity
+        android:id="@+id/productDetailActivity"
+        android:name="com.nt118.joliecafeadmin.ui.activities.product_detail.ProductDetailActivity"
+        android:label="activity_product_detail"
+        tools:layout="@layout/activity_product_detail" >
+        <argument
+            android:name="productId"
+            app:argType="string" />
+        <argument
+            android:name="isEdit"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </activity>
 </navigation>
