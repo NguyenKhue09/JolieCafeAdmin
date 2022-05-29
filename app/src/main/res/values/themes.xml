@@ -104,6 +104,11 @@
         <item name="cornerSize">50%</item>
         <item name="backgroundTint">@color/grey_secondary</item>
         <item name="iconTint">@color/grey_primary</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="elevation">0dp</item>
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button">

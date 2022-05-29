@@ -109,19 +109,22 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_edit_product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Button.Rounded"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="@dimen/medium_margin"
-                android:src="@drawable/ic_edit"
+                app:icon="@drawable/ic_edit"
+                app:iconSize="24dp"
+                app:iconTint="@color/text_color"
+                android:backgroundTint="@color/grey_opacity60_primary"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
                 app:layout_constraintBottom_toBottomOf="@+id/img_card"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/img_card"
-                app:tint="@color/text_color">
+                app:layout_constraintTop_toTopOf="@+id/img_card">
 
-            </ImageView>
-
+            </com.google.android.material.button.MaterialButton>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
