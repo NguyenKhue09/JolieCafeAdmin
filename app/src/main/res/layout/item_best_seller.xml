@@ -45,4 +45,13 @@
         android:layout_marginBottom="10dp"
         android:text="Sold: 83"/>
 
+    <ImageView
+        android:id="@+id/iv_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/badge"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

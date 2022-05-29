@@ -11,9 +11,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JolieCafeAdmin">
         <activity
-            android:name=".ui.activities.product_detail.ProductDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activities.login.LoginActivity"
             android:exported="true">
             <intent-filter>

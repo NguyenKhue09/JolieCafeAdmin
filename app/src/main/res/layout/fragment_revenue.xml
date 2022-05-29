@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.revenue.RevenueFragment"
-    android:paddingTop="20dp"
-    android:paddingHorizontal="20dp">
+    android:paddingTop="@dimen/large_margin"
+    android:paddingHorizontal="@dimen/large_margin">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_avatar"
@@ -15,7 +15,7 @@
         android:src="@drawable/image_logo"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/small_margin"
         app:shapeAppearanceOverlay="@style/CornerSize50Percent"
         android:scaleType="centerCrop"
         tools:ignore="ContentDescription" />
@@ -26,14 +26,14 @@
         app:layout_constraintTop_toTopOf="@id/iv_avatar"
         app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
         app:layout_constraintStart_toEndOf="@id/iv_avatar"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="@dimen/small_margin"
         android:text="Hi, Latte!"
         style="@style/RegularText"
         android:textColor="@color/title_text_color"/>
 
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintTop_toTopOf="@id/iv_avatar"
         app:layout_constraintBottom_toBottomOf="@id/iv_avatar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,7 @@
         app:tabIndicatorFullWidth="false"
         app:tabIndicatorColor="@color/grey_primary_variant"
         app:tabTextColor="@color/text_color"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="@dimen/extra_large_margin">
         
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tab_layout"
         style="@style/RegularText2"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:text="@string/revenue_haicham"/>
 
     <TextView
@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="164dp"
         app:layout_constraintTop_toBottomOf="@id/tv_revenue_title"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="@dimen/medium_margin"
         android:background="@drawable/chart_background"/>
 
     <TextView
@@ -110,7 +110,7 @@
         style="@style/RegularText"
         android:textColor="@color/title_text_color"
         android:text="@string/best_sellers"
-        android:layout_marginTop="27dp"/>
+        android:layout_marginTop="@dimen/extra_large_margin"/>
     
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_best_seller"
@@ -120,6 +120,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_best_seller"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:paddingTop="15dp"/>
+        android:paddingTop="@dimen/medium_margin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
