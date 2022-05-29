@@ -19,4 +19,15 @@
     <string name="item_favorite">5</string>
     <string name="product_price">%s VND</string>
     <string name="badge">Badge</string>
+    <string name="name">Name</string>
+    <string name="price">Price</string>
+    <string name="type">Type</string>
+    <string name="status">Status</string>
+    <string name="description">Description</string>
+    <string name="discount">Discount</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="discount_percent">Discount percent</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>

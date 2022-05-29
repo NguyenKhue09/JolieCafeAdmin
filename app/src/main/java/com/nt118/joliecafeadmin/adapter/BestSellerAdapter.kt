@@ -21,7 +21,9 @@ class BestSellerAdapter: RecyclerView.Adapter<BestSellerAdapter.ViewHolder>() {
             0 -> holder.binding.ivBadge.setImageResource(R.drawable.badge_1)
             1 -> holder.binding.ivBadge.setImageResource(R.drawable.badge_2)
             2 -> holder.binding.ivBadge.setImageResource(R.drawable.badge_3)
+            else -> holder.binding.ivBadge.setImageResource(0)
         }
+        holder.setIsRecyclable(false)
     }
 
     override fun getItemCount() = 10
