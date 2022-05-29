@@ -29,7 +29,7 @@ class RemoteDataSource @Inject constructor(
     }
 
     suspend fun updateProduct(
-        newData: Map<String, Any>,
+        newData: Map<String, String>,
         token: String
     ): Response<ApiResponseSingleData<Product>> {
         return jolieAdminApi.updateProduct(newData = newData, token = "Bearer $token")
