@@ -18,4 +18,5 @@
     <string name="dot_center_vertical">•</string>
     <string name="item_favorite">5</string>
     <string name="product_price">%s VND</string>
+    <string name="badge">Badge</string>
 </resources>
