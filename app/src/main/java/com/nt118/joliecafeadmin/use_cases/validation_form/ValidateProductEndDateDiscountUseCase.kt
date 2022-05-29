@@ -24,14 +24,16 @@ class ValidateProductEndDateDiscountUseCase {
                 errorMessage = "Valid date"
             )
 
-        when {
-            resultCompare > 0 -> {
-                return ValidationResult(
-                    successful = false,
-                    errorMessage = "End date discount must after start date!"
-                )
-            }
+
+
+        if (resultCompare > 0) {
+            println("compate date $resultCompare")
+            return ValidationResult(
+                successful = false,
+                errorMessage = "End date discount must after start date!"
+            )
         }
+
 
         return ValidationResult(
             successful = true

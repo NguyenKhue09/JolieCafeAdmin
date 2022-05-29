@@ -290,7 +290,7 @@
                             app:endIconMode="none"
                             app:endIconTint="@color/text_color">
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <AutoCompleteTextView
                                 android:id="@+id/et_product_start_date_discount"
                                 style="@style/RegularNumber"
                                 android:layout_width="match_parent"
@@ -338,7 +338,7 @@
                             app:endIconMode="none"
                             app:endIconTint="@color/text_color">
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <AutoCompleteTextView
                                 android:id="@+id/et_product_end_date_discount"
                                 style="@style/RegularNumber"
                                 android:layout_width="match_parent"

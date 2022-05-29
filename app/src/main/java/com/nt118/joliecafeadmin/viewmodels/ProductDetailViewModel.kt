@@ -115,15 +115,15 @@ class ProductDetailViewModel @Inject constructor(
             listOf(
                 nameResult,
                 priceResult,
-                descriptionResult
+                descriptionResult,
+                endDateResult,
+                discountResult
             )
         } else {
             listOf(
                 nameResult,
                 priceResult,
-                descriptionResult,
-                endDateResult,
-                discountResult
+                descriptionResult
             )
         }
 

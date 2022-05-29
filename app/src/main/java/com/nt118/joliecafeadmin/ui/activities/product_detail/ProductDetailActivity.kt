@@ -347,6 +347,8 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.etProductPriceLayout.isEnabled = true
         binding.etProductDescriptionLayout.isEnabled = true
         binding.etProductDiscountPercentLayout.isEnabled = true
+        binding.etProductStartDateDiscountLayout.isEnabled = true
+        binding.etProductEndDateDiscountLayout.isEnabled = true
 
         binding.etProductTypeLayout.isEnabled = true
         binding.etProductTypeLayout.endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
