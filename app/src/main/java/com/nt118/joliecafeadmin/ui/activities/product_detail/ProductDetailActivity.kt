@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +34,7 @@ import com.nt118.joliecafeadmin.util.extenstions.toDate
 import com.nt118.joliecafeadmin.viewmodels.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,11 +78,55 @@ class ProductDetailActivity : AppCompatActivity() {
             observerProductFormFieldChanged()
             observerProductFormFieldError()
             observerFooterActionClickEvent()
-
+            observerProductFormValidateSubmitEvent()
+            observerUpdateProductResponse()
             setupDatePicker()
             handleDatePickerEvent()
         }
 
+    }
+
+    private fun observerUpdateProductResponse() {
+        productActivityViewModel.productUpdateResponse.asLiveData().observe(this) { result ->
+            when(result) {
+                is ApiResult.Success -> {
+                    binding.productDetailCircularProgressIndicator.visibility = View.GONE
+                    Toast.makeText(this, "Update product date success!", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.Error -> {
+                    binding.productDetailCircularProgressIndicator.visibility = View.GONE
+                    Toast.makeText(this, "Update product data failed!", Toast.LENGTH_SHORT).show()
+                }
+                is ApiResult.Loading -> {
+                    binding.productDetailCircularProgressIndicator.visibility = View.VISIBLE
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun observerProductFormValidateSubmitEvent() {
+        lifecycleScope.launch {
+            productActivityViewModel.validationEvents.collect { event ->
+                when(event) {
+                    is ProductDetailViewModel.ValidationEvent.Success -> {
+                        productActivityViewModel.updateProduct(
+                            newData = mapOf(
+                                "id" to args.productId,
+                                "name" to productFormState.value.productName,
+                                "status" to productFormState.value.productStatus,
+                                "description" to productFormState.value.productDescription,
+                                "originPrice" to productFormState.value.productPrice,
+                                "type" to productFormState.value.productType,
+                                "startDateDiscount" to productFormState.value.productStartDateDiscount,
+                                "endDateDiscount" to productFormState.value.productEndDateDiscount,
+                                "discountPercent" to productFormState.value.productDiscountPercent
+                            )
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun observerProductFormFieldChanged() {
@@ -137,34 +180,10 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun observerFooterActionClickEvent() {
         binding.footerActionButton.btnCancel.setOnClickListener {
-
+            resetProductFormData()
         }
         binding.footerActionButton.btnSave.setOnClickListener {
             productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.Submit)
-        }
-    }
-
-    private fun getProductDataIfBackOnline() {
-        lifecycleScope.launchWhenStarted {
-            networkListener = NetworkListener()
-            networkListener.checkNetworkAvailability(this@ProductDetailActivity)
-                .collect { status ->
-                    productActivityViewModel.networkStatus = status
-                    productActivityViewModel.showNetworkStatus()
-                    if (productActivityViewModel.backOnline) {
-                        productActivityViewModel.getProductDetail(productId = args.productId)
-                    }
-                }
-        }
-    }
-
-    private fun getProductData() {
-        if (productActivityViewModel.networkStatus) {
-            lifecycleScope.launchWhenStarted {
-                productActivityViewModel.getProductDetail(productId = args.productId)
-            }
-        } else {
-            productActivityViewModel.showNetworkStatus()
         }
     }
 
@@ -198,6 +217,38 @@ class ProductDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun resetProductFormData() {
+        val product = productActivityViewModel.getProductDetailResponse.value.data
+        product?.let {
+            setProductData(product = it)
+        }
+        productActivityViewModel.cleanProductFormError()
+    }
+
+    private fun getProductDataIfBackOnline() {
+        lifecycleScope.launchWhenStarted {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(this@ProductDetailActivity)
+                .collect { status ->
+                    productActivityViewModel.networkStatus = status
+                    productActivityViewModel.showNetworkStatus()
+                    if (productActivityViewModel.backOnline) {
+                        productActivityViewModel.getProductDetail(productId = args.productId)
+                    }
+                }
+        }
+    }
+
+    private fun getProductData() {
+        if (productActivityViewModel.networkStatus) {
+            lifecycleScope.launchWhenStarted {
+                productActivityViewModel.getProductDetail(productId = args.productId)
+            }
+        } else {
+            productActivityViewModel.showNetworkStatus()
+        }
+    }
+
     private fun setProductData(product: Product) {
         binding.productImg.load(product.thumbnail) {
             crossfade(600)
@@ -228,6 +279,51 @@ class ProductDetailActivity : AppCompatActivity() {
         } else {
             binding.switchProductDiscount.isChecked = false
             binding.productDiscountLayoutSession.visibility = View.GONE
+        }
+    }
+
+    private fun setUpBackPress() {
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun setProductTypeDropDownMenu() {
+        val listTypes = listProductTypes.subList(1, listProductTypes.size - 1)
+        val productTypesAdapter = ArrayAdapter(this, R.layout.drop_down_item, listTypes)
+        binding.etProductType.setAdapter(productTypesAdapter)
+    }
+
+    private fun setProductStatusDropDownMenu() {
+        val productStatusAdapter =
+            ArrayAdapter(this, R.layout.drop_down_item, listProductStatus)
+        binding.etProductStatus.setAdapter(productStatusAdapter)
+    }
+
+    private fun setupDatePicker() {
+
+        val today = MaterialDatePicker.todayInUtcMilliseconds()
+
+        val constraintsBuilder =
+            CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.now())
+                .setStart(today)
+                .build()
+
+        datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select discount date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(constraintsBuilder)
+                .build()
+
+    }
+
+    private fun setDateDataToDateTimeInput(tag: String, date: String) {
+        if (tag == START_DATE_DISCOUNT_TAG) {
+            binding.etProductStartDateDiscount.setText(date)
+        } else if (tag == END_DATE_DISCOUNT_TAG) {
+            binding.etProductEndDateDiscount.setText(date)
         }
     }
 
@@ -269,54 +365,6 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.footerActionButtonContainer.visibility = View.VISIBLE
     }
 
-    private fun productDiscountSwitchButtonListener() {
-        binding.switchProductDiscount.setOnCheckedChangeListener { _, isChecked ->
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.IsDiscountChanged(isDiscount = isChecked))
-            if (isChecked) {
-                binding.productDiscountLayoutSession.visibility = View.VISIBLE
-            } else {
-                binding.productDiscountLayoutSession.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun setUpBackPress() {
-        binding.btnBack.setOnClickListener {
-            onBackPressed()
-        }
-    }
-
-    private fun setProductTypeDropDownMenu() {
-        val listTypes = listProductTypes.subList(1, listProductTypes.size - 1)
-        val productTypesAdapter = ArrayAdapter(this, R.layout.drop_down_item, listTypes)
-        binding.etProductType.setAdapter(productTypesAdapter)
-    }
-
-    private fun setProductStatusDropDownMenu() {
-        val productStatusAdapter =
-            ArrayAdapter(this, R.layout.drop_down_item, listProductStatus)
-        binding.etProductStatus.setAdapter(productStatusAdapter)
-    }
-
-    private fun setupDatePicker() {
-
-        val today = MaterialDatePicker.todayInUtcMilliseconds()
-
-        val constraintsBuilder =
-            CalendarConstraints.Builder()
-                .setValidator(DateValidatorPointForward.now())
-                .setStart(today)
-                .build()
-
-        datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select discount date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .setCalendarConstraints(constraintsBuilder)
-                .build()
-
-    }
-
     private fun handleDatePickerEvent() {
         datePicker.addOnPositiveButtonClickListener {
             val date = pairDateTime(it)
@@ -337,11 +385,14 @@ class ProductDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun setDateDataToDateTimeInput(tag: String, date: String) {
-        if (tag == START_DATE_DISCOUNT_TAG) {
-            binding.etProductStartDateDiscount.setText(date)
-        } else if (tag == END_DATE_DISCOUNT_TAG) {
-            binding.etProductEndDateDiscount.setText(date)
+    private fun productDiscountSwitchButtonListener() {
+        binding.switchProductDiscount.setOnCheckedChangeListener { _, isChecked ->
+            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.IsDiscountChanged(isDiscount = isChecked))
+            if (isChecked) {
+                binding.productDiscountLayoutSession.visibility = View.VISIBLE
+            } else {
+                binding.productDiscountLayoutSession.visibility = View.GONE
+            }
         }
     }
 

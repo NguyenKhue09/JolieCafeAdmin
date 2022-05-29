@@ -15,9 +15,10 @@ interface JolieAdminApi {
         @Header("Authorization") token: String
     ): ApiResponseMultiData<Product>
 
-    @POST("$API_GATEWAY/product/get-admin-products")
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/product/admin-update-product")
     suspend fun updateProduct(
-        @QueryMap newData: Map<String, Any>,
+        @Body newData: Map<String, String>,
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Product>>
 

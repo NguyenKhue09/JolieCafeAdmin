@@ -52,7 +52,7 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateProduct(newData: Map<String, Any>) {
+    fun updateProduct(newData: Map<String, String>) {
         viewModelScope.launch {
             _productUpdateResponse.value = ApiResult.Loading()
             try {
@@ -139,17 +139,21 @@ class ProductDetailViewModel @Inject constructor(
             )
             return
         } else {
-            productFormState.value = productFormState.value.copy(
-                productNameError = null,
-                productPriceError = null,
-                productDescriptionError = null,
-                productEndDateDiscountError = null,
-                productDiscountPercentError = null,
-            )
+            cleanProductFormError()
         }
         viewModelScope.launch {
             validationEventChannel.send(ValidationEvent.Success)
         }
+    }
+
+    fun cleanProductFormError() {
+        productFormState.value = productFormState.value.copy(
+            productNameError = null,
+            productPriceError = null,
+            productDescriptionError = null,
+            productEndDateDiscountError = null,
+            productDiscountPercentError = null,
+        )
     }
 
     sealed class ValidationEvent {
