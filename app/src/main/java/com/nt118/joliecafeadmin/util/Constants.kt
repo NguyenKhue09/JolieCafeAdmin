@@ -17,5 +17,8 @@ class Constants {
 
         const val START_DATE_DISCOUNT_TAG = "StartDateDiscount"
         const val END_DATE_DISCOUNT_TAG = "EndDateDiscount"
+
+        const val UTC_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        const val LOCAL_TIME_FORMAT = "yyyy/MM/dd"
     }
 }

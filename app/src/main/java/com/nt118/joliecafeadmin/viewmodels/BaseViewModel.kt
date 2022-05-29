@@ -56,6 +56,7 @@ open class BaseViewModel(
     }
 
     fun <T> handleApiResponse(response: Response<ApiResponseSingleData<T>>): ApiResult<T> {
+        val result = response.body()
         println(response)
         return when {
             response.message().toString().contains("timeout") -> {
@@ -65,7 +66,7 @@ open class BaseViewModel(
                 ApiResult.Error(response.message())
             }
             response.isSuccessful -> {
-                ApiResult.NullDataSuccess()
+                ApiResult.Success(result?.data!!)
             }
             else -> {
                 ApiResult.Error(response.message())

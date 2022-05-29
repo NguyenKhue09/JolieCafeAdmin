@@ -25,7 +25,7 @@
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/product_detail_sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
@@ -110,7 +110,7 @@
                     android:paddingStart="4dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="0dp"
-                    android:text="All"
+                    android:text="Coffee"
                     android:textColor="#ffffff" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -240,8 +240,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:checked="true"
-                    android:theme="@style/switchColor">
+                    android:checked="false"
+                    android:theme="@style/switchColor"
+                    android:enabled="false">
 
                 </androidx.appcompat.widget.SwitchCompat>
             </LinearLayout>
@@ -250,8 +251,8 @@
                 android:id="@+id/product_discount_layout_session"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/button_height"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -278,12 +279,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:enabled="false"
                             android:theme="@style/TextInputLayoutAppearance"
                             app:boxBackgroundColor="@color/text_input_custom_bg"
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconMode="none"
-                            android:enabled="false"
                             app:endIconTint="@color/text_color">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -322,12 +323,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                            android:enabled="false"
                             android:theme="@style/TextInputLayoutAppearance"
                             app:boxBackgroundColor="@color/text_input_custom_bg"
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconMode="none"
-                            android:enabled="false"
                             app:endIconTint="@color/text_color">
 
                             <com.google.android.material.textfield.TextInputEditText
@@ -362,11 +363,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                    android:enabled="false"
                     android:theme="@style/TextInputLayoutAppearance"
                     app:boxBackgroundColor="@color/text_input_custom_bg"
                     app:boxStrokeColor="@color/box_stroke_color_textinput"
-                    app:errorEnabled="true"
-                    android:enabled="false">
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_product_discount_percent"
@@ -383,6 +384,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height">
+            </View>
 
         </LinearLayout>
 
@@ -405,5 +411,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/product_detail_CircularProgressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:indicatorColor="@color/text_color_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

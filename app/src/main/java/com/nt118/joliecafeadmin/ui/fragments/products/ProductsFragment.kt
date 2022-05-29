@@ -49,7 +49,7 @@ class ProductsFragment : Fragment() {
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
-        updateAdminToken()
+
 
         initProductAdapter()
         setProductAdapterData()
@@ -151,13 +151,6 @@ class ProductsFragment : Fragment() {
             } else {
                 productsViewModel.showNetworkStatus()
             }
-        }
-    }
-
-    private fun updateAdminToken() {
-        productsViewModel.readAdminToken.asLiveData().observe(viewLifecycleOwner) { token ->
-            println("update token")
-            productsViewModel.adminToken = token
         }
     }
 
