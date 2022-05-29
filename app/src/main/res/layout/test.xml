@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                style="@style/SmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:text="@string/start"
+                android:textColor="@color/text_color" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_product_start_date_discount_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:enabled="false"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_time_input"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="none"
+                app:endIconTint="@color/text_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_start_date_discount"
+                    style="@style/RegularNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="none"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_end_date"
+                style="@style/SmallText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:text="@string/end"
+                android:textColor="@color/text_color" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/et_product_end_date_discount_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+                android:enabled="false"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_time_input"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconMode="none"
+                app:endIconTint="@color/text_color">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_product_end_date_discount"
+                    style="@style/RegularNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="none"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
