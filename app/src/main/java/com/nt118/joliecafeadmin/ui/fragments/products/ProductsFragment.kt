@@ -1,5 +1,6 @@
 package com.nt118.joliecafeadmin.ui.fragments.products
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
+import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductComparator
@@ -60,7 +62,16 @@ class ProductsFragment : Fragment() {
 
         initProductAdapterData()
         handleProductPagingAdapterState()
+
+        navigateToAddNewProductScreen()
+
         return binding.root
+    }
+
+    private fun navigateToAddNewProductScreen() {
+        binding.btnAddNewProduct.setOnClickListener {
+            startActivity(Intent(context, AddNewProductActivity::class.java))
+        }
     }
 
     private fun initProductAdapterData() {
