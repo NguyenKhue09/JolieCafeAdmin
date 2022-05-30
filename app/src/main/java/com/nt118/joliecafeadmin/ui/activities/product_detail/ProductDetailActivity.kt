@@ -88,7 +88,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun observerUpdateProductResponse() {
         productActivityViewModel.productUpdateResponse.asLiveData().observe(this) { result ->
-            when(result) {
+            when (result) {
                 is ApiResult.Success -> {
                     binding.productDetailCircularProgressIndicator.visibility = View.GONE
                     Toast.makeText(this, "Update product date success!", Toast.LENGTH_SHORT).show()
@@ -108,10 +108,11 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun observerProductFormValidateSubmitEvent() {
         lifecycleScope.launch {
             productActivityViewModel.validationEvents.collect { event ->
-                when(event) {
+                when (event) {
                     is ProductDetailViewModel.ValidationEvent.Success -> {
-                        productActivityViewModel.updateProduct(
-                            newData = mapOf(
+
+                        val newData = if (productFormState.value.isDiscount) {
+                            mapOf(
                                 "id" to args.productId,
                                 "name" to productFormState.value.productName,
                                 "status" to productFormState.value.productStatus,
@@ -122,6 +123,19 @@ class ProductDetailActivity : AppCompatActivity() {
                                 "endDateDiscount" to productFormState.value.productEndDateDiscount,
                                 "discountPercent" to productFormState.value.productDiscountPercent
                             )
+                        } else {
+                            mapOf(
+                                "id" to args.productId,
+                                "name" to productFormState.value.productName,
+                                "status" to productFormState.value.productStatus,
+                                "description" to productFormState.value.productDescription,
+                                "originPrice" to productFormState.value.productPrice,
+                                "type" to productFormState.value.productType,
+                            )
+                        }
+
+                        productActivityViewModel.updateProduct(
+                            newData = newData
                         )
                     }
                 }
@@ -132,49 +146,86 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun observerProductFormFieldChanged() {
         binding.etProductName.addTextChangedListener { name ->
             println(name.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductNameChanged(productName = name.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductNameChanged(
+                    productName = name.toString()
+                )
+            )
         }
         binding.etProductType.addTextChangedListener { type ->
             println(type.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductTypeChanged(productType = type.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductTypeChanged(
+                    productType = type.toString()
+                )
+            )
         }
         binding.etProductPrice.addTextChangedListener { price ->
             println(price.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductPriceChanged(productPrice = price.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductPriceChanged(
+                    productPrice = price.toString()
+                )
+            )
         }
         binding.etProductStatus.addTextChangedListener { status ->
             println(status.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductStatusChanged(productStatus = status.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductStatusChanged(
+                    productStatus = status.toString()
+                )
+            )
         }
         binding.etProductDescription.addTextChangedListener { description ->
             println(description.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductDescriptionChanged(productDescription = description.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductDescriptionChanged(
+                    productDescription = description.toString()
+                )
+            )
         }
 
         productDiscountSwitchButtonListener()
 
         binding.etProductStartDateDiscount.addTextChangedListener { start ->
             println(start.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductStartDateDiscountChanged(productStartDateDiscount = start.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductStartDateDiscountChanged(
+                    productStartDateDiscount = start.toString()
+                )
+            )
         }
         binding.etProductEndDateDiscount.addTextChangedListener { end ->
             println(end.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductEndDateDiscountChanged(productEndDateDiscount = end.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductEndDateDiscountChanged(
+                    productEndDateDiscount = end.toString()
+                )
+            )
         }
         binding.etProductDiscountPercent.addTextChangedListener { percent ->
             println(percent.toString())
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductDiscountPercentChanged(productDiscountPercent = percent.toString()))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.OnProductDiscountPercentChanged(
+                    productDiscountPercent = percent.toString()
+                )
+            )
         }
 
     }
 
     private fun observerProductFormFieldError() {
         productFormState.asLiveData().observe(this) { productFormState ->
-                binding.etProductName.error = productFormState.productNameError
-                binding.etProductPrice.error = productFormState.productPriceError
-                binding.etProductDescription.error = productFormState.productDescriptionError
-                binding.etProductEndDateDiscount.error = productFormState.productEndDateDiscountError
-                binding.etProductDiscountPercent.error = productFormState.productDiscountPercentError
+            binding.etProductName.error = productFormState.productNameError
+            binding.etProductPrice.error = productFormState.productPriceError
+            binding.etProductDescription.error = productFormState.productDescriptionError
+            binding.etProductEndDateDiscount.error = productFormState.productEndDateDiscountError
+            binding.etProductDiscountPercent.error = productFormState.productDiscountPercentError
+            if(productFormState.productEndDateDiscountError == null) {
+                binding.etProductEndDateDiscountLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
+            } else {
+                binding.etProductEndDateDiscountLayout.endIconMode = TextInputLayout.GONE
+            }
         }
     }
 
@@ -261,7 +312,7 @@ class ProductDetailActivity : AppCompatActivity() {
         binding.etProductStatus.setText(product.status)
         binding.etProductDescription.setText(product.description)
 
-        if(args.isEdit) {
+        if (args.isEdit) {
             setProductTypeDropDownMenu()
             setProductStatusDropDownMenu()
         }
@@ -389,7 +440,11 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun productDiscountSwitchButtonListener() {
         binding.switchProductDiscount.setOnCheckedChangeListener { _, isChecked ->
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.IsDiscountChanged(isDiscount = isChecked))
+            productActivityViewModel.onProductFormEvent(
+                event = ProductFormStateEvent.IsDiscountChanged(
+                    isDiscount = isChecked
+                )
+            )
             if (isChecked) {
                 binding.productDiscountLayoutSession.visibility = View.VISIBLE
             } else {
@@ -400,12 +455,31 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun productStartDateDiscountOnclickListener() {
         binding.etProductStartDateDiscountLayout.setEndIconOnClickListener {
+            binding.etProductStartDateDiscount.requestFocus()
+            //datePicker.show(supportFragmentManager, START_DATE_DISCOUNT_TAG)
+        }
+        binding.etProductStartDateDiscount.setOnFocusChangeListener { _, isFocus ->
+            if (isFocus) {
+                datePicker.show(supportFragmentManager, START_DATE_DISCOUNT_TAG)
+            }
+        }
+        binding.etProductStartDateDiscount.setOnClickListener {
             datePicker.show(supportFragmentManager, START_DATE_DISCOUNT_TAG)
         }
     }
 
     private fun productEndDateDiscountOnclickListener() {
         binding.etProductEndDateDiscountLayout.setEndIconOnClickListener {
+            binding.etProductEndDateDiscount.requestFocus()
+            //datePicker.show(supportFragmentManager, END_DATE_DISCOUNT_TAG)
+        }
+        binding.etProductEndDateDiscount.setOnFocusChangeListener { _, isFocus ->
+            if (isFocus) {
+                datePicker.show(supportFragmentManager, END_DATE_DISCOUNT_TAG)
+            }
+        }
+        binding.etProductEndDateDiscount.setOnClickListener {
+            println("setOnClickListener")
             datePicker.show(supportFragmentManager, END_DATE_DISCOUNT_TAG)
         }
     }
