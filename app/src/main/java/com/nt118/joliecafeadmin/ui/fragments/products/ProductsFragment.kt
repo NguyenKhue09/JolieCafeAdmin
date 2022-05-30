@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -14,15 +15,20 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
+import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductComparator
 import com.nt118.joliecafeadmin.util.extenstions.observeOnce
+import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
+import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.ProductsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,21 +57,56 @@ class ProductsFragment : Fragment() {
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
-
-
         initProductAdapter()
+        initProductAdapterData()
         setProductAdapterData()
         updateBackOnlineStatus()
         configProductRecyclerView()
         addProductTabText()
         onProductsTabSelected()
-
-        initProductAdapterData()
+        observerNetworkMessage()
         handleProductPagingAdapterState()
-
         navigateToAddNewProductScreen()
 
         return binding.root
+    }
+
+    private fun observerNetworkMessage() {
+        productsViewModel.networkMessage.observe(viewLifecycleOwner) { message ->
+            if (!productsViewModel.networkStatus) {
+                showSnackBar(message = message, status = Constants.SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_wifi_off)
+            } else if (productsViewModel.networkStatus) {
+                if (productsViewModel.backOnline) {
+                    showSnackBar(message = message, status = Constants.SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_wifi)
+                }
+            }
+        }
+    }
+
+    private fun showSnackBar(message: String, status: Int, icon: Int) {
+        val drawable = requireContext().getDrawable(icon)
+
+        val snackBarContentColor = when(status) {
+            Constants.SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
+            Constants.SNACK_BAR_STATUS_DISABLE -> R.color.dark_text_color
+            Constants.SNACK_BAR_STATUS_ERROR -> R.color.error_color
+            else -> R.color.text_color_2
+        }
+
+
+        val snackBar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction("Ok") {
+            }
+            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.grey_primary))
+            .setTextColor(ContextCompat.getColor(requireContext(), snackBarContentColor))
+            .setIcon(
+                drawable = drawable!!,
+                colorTint = ContextCompat.getColor(requireContext(), snackBarContentColor),
+                iconPadding = resources.getDimensionPixelOffset(R.dimen.small_margin)
+            )
+            .setCustomBackground(requireContext().getDrawable(R.drawable.snackbar_normal_custom_bg)!!)
+
+        snackBar.show()
     }
 
     private fun navigateToAddNewProductScreen() {

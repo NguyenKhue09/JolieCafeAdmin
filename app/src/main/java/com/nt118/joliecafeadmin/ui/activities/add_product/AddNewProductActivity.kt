@@ -1,32 +1,50 @@
 package com.nt118.joliecafeadmin.ui.activities.add_product
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.graphics.PorterDuff
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.databinding.ActivityAddNewProductBinding
+import com.nt118.joliecafeadmin.firebase.firebasefirestore.FirebaseStorage
 import com.nt118.joliecafeadmin.models.ProductFormState
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_DISABLE
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_SUCCESS
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductFormStateEvent
-import com.nt118.joliecafeadmin.util.extenstions.formatTo
-import com.nt118.joliecafeadmin.util.extenstions.observeOnce
-import com.nt118.joliecafeadmin.util.extenstions.toDate
+import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
+import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.AddNewProductViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -44,12 +62,16 @@ class AddNewProductActivity : AppCompatActivity() {
 
     private lateinit var productFormState: MutableStateFlow<ProductFormState>
 
+    private var productImageUri: Uri? = null
+    private lateinit var firebaseStorage: FirebaseStorage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityAddNewProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         productFormState = addNewProductViewModel.productFormState
+        firebaseStorage = FirebaseStorage()
 
         setUpBackPress()
         setupDatePicker()
@@ -65,11 +87,140 @@ class AddNewProductActivity : AppCompatActivity() {
         observerProductFormFieldError()
         observerFooterActionClickEvent()
         observerProductFormValidateSubmitEvent()
+        observerNetworkMessage()
 
         productStartDateDiscountOnclickListener()
         productEndDateDiscountOnclickListener()
 
+        onTakeImageButtonClicked()
+
         handleDatePickerEvent()
+    }
+
+    private fun observerNetworkMessage() {
+        addNewProductViewModel.networkMessage.observe(this) { message ->
+            if (!addNewProductViewModel.networkStatus) {
+              showSnackBar(message = message, status = SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_wifi_off)
+            } else if (addNewProductViewModel.networkStatus) {
+                if (addNewProductViewModel.backOnline) {
+                    showSnackBar(message = message, status = SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_wifi)
+                }
+            }
+        }
+    }
+
+    private fun showSnackBar(message: String, status: Int, icon: Int) {
+        val drawable = getDrawable(icon)
+
+        val snackBarContentColor = when(status) {
+            SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
+            SNACK_BAR_STATUS_DISABLE -> R.color.dark_text_color
+            SNACK_BAR_STATUS_ERROR -> R.color.error_color
+            else -> R.color.text_color_2
+        }
+
+
+        val snackBar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction("Ok") {
+            }
+            .setActionTextColor(ContextCompat.getColor(this, R.color.grey_primary))
+            .setTextColor(ContextCompat.getColor(this, snackBarContentColor))
+            .setIcon(
+                drawable = drawable!!,
+                colorTint = ContextCompat.getColor(this, snackBarContentColor),
+                iconPadding = resources.getDimensionPixelOffset(R.dimen.small_margin)
+            )
+            .setCustomBackground(getDrawable(R.drawable.snackbar_normal_custom_bg)!!)
+
+        snackBar.show()
+    }
+
+    private fun onTakeImageButtonClicked() {
+        binding.btnGetImage.setOnClickListener {
+            if(checkPermissionGranted(permission = Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                firebaseStorage.chooseFile(getFile)
+            } else {
+                requestGetFilePermission()
+            }
+        }
+    }
+
+    private val getFile =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+                val data: Uri? = result.data?.data
+                if (data != null) {
+                    try {
+                        val fileName = getNameFile(data, this)
+
+                        productImageUri = data
+
+                        setProductImage(uri = data)
+//                        firebaseStorage.uploadFile(
+//                            file = data,
+//                            fileName = fileName,
+//                            root = getString(R.string.app_name),
+//                            addNewProductActivity = this
+//                        )
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this,
+                            "Get image failed!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
+
+    private fun requestGetFilePermission() {
+        getFilePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private var getFilePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Toast.makeText(
+                    this,
+                    "Permission granted",
+                    Toast.LENGTH_LONG
+                ).show()
+                firebaseStorage.chooseFile(getFile)
+            } else {
+                Toast.makeText(
+                    this,
+                    "Oops, you just denied the permission for storage, You can also allow it from settings.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+
+    @SuppressLint("Range")
+    fun getNameFile(uri: Uri, context: Context): String {
+        var res: String? = null
+        if (uri.scheme.equals("content")) {
+            val cursor: Cursor = context.contentResolver.query(uri, null, null, null, null)!!
+            cursor.use { cur ->
+                if (cur.moveToFirst()) {
+                    res = cur.getString(cur.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            }
+        }
+        if (res == null) {
+            res = uri.path!!.split('/').also {
+                it[it.lastIndex]
+            }.toString()
+        }
+        return res as String
+    }
+
+    private fun checkPermissionGranted(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun observerProductFormValidateSubmitEvent() {
@@ -264,6 +415,14 @@ class AddNewProductActivity : AppCompatActivity() {
         val productStatusAdapter =
             ArrayAdapter(this, R.layout.drop_down_item, Constants.listProductStatus)
         binding.etProductStatus.setAdapter(productStatusAdapter)
+    }
+
+    private fun setProductImage(uri: Uri) {
+        binding.productImg.load(uri) {
+            crossfade(600)
+            error(R.drawable.image_logo)
+            placeholder(R.drawable.image_logo)
+        }
     }
 
     private fun updateBackOnlineStatus() {

@@ -20,5 +20,8 @@ class Constants {
 
         const val UTC_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         const val LOCAL_TIME_FORMAT = "yyyy/MM/dd"
+        const val SNACK_BAR_STATUS_SUCCESS = 1
+        const val SNACK_BAR_STATUS_DISABLE = 0
+        const val SNACK_BAR_STATUS_ERROR = -1
     }
 }
