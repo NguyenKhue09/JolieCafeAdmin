@@ -133,11 +133,19 @@ class ProductDetailActivity : AppCompatActivity() {
             when (result) {
                 is ApiResult.Success -> {
                     binding.productDetailCircularProgressIndicator.visibility = View.GONE
-                    Toast.makeText(this, "Update product date success!", Toast.LENGTH_SHORT).show()
+                    showSnackBar(
+                        message = "Update product date success",
+                        status = SNACK_BAR_STATUS_SUCCESS,
+                        icon = R.drawable.ic_success
+                    )
                 }
                 is ApiResult.Error -> {
                     binding.productDetailCircularProgressIndicator.visibility = View.GONE
-                    Toast.makeText(this, "Update product data failed!", Toast.LENGTH_SHORT).show()
+                    showSnackBar(
+                        message = "Update product data failed!",
+                        status = SNACK_BAR_STATUS_ERROR,
+                        icon = R.drawable.ic_error
+                    )
                 }
                 is ApiResult.Loading -> {
                     binding.productDetailCircularProgressIndicator.visibility = View.VISIBLE

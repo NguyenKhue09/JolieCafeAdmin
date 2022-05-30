@@ -250,7 +250,7 @@ class AddNewProductActivity : AppCompatActivity() {
                             )
                         }
 
-                        // add new product call function
+                        addNewProductViewModel.addNewProduct(productData = newProductData)
                     }
                 }
             }

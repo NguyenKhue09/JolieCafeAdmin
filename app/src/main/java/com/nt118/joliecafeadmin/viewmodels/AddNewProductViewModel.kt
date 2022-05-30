@@ -34,6 +34,19 @@ class AddNewProductViewModel @Inject constructor(
 
     val productFormState = MutableStateFlow(ProductFormState())
 
+    fun addNewProduct(productData: Map<String, String>) {
+        viewModelScope.launch {
+            _addNewProductResponse.value = ApiResult.Loading()
+            try {
+                val response =
+                    repository.remote.addNewProduct(productData = productData, token = adminToken)
+                _addNewProductResponse.value = handleApiResponse(response = response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _addNewProductResponse.value = ApiResult.Error(e.message)
+            }
+        }
+    }
 
     fun onProductFormEvent(event: ProductFormStateEvent) {
         when(event) {

@@ -22,6 +22,13 @@ interface JolieAdminApi {
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Product>>
 
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/product/create-new-product")
+    suspend fun addNewProduct(
+        @Body productData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Product>>
+
     @GET("$API_GATEWAY/product/get-admin-product-detail")
     suspend fun getProductDetail(
         @Query("productId") productId: String,
