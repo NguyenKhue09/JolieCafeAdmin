@@ -10,8 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JolieCafeAdmin">
-        <activity android:name=".ui.activities.product_detail.ProductDetailActivity">
-        </activity>
+        <activity
+            android:name=".ui.activities.add_product.AddNewProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.product_detail.ProductDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.login.LoginActivity"
             android:exported="true">

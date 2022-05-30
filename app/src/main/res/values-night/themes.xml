@@ -26,6 +26,7 @@
         <item name="android:textColorHint">@color/white</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorSurface">@color/grey_opacity60_primary</item>
+        <item name="hintTextColor">@color/text_color</item>
     </style>
 
     <style name="DropDownMenuStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">

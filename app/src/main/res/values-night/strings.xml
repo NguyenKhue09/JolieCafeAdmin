@@ -30,4 +30,10 @@
     <string name="discount_percent">Discount percent</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="enter_product_name">Enter product name</string>
+    <string name="enter_product_price">Enter product price</string>
+    <string name="enter_product_description">Enter product description</string>
+    <string name="enter_product_discount_percent">Enter product discount percent</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
 </resources>

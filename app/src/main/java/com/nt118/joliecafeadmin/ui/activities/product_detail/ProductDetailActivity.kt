@@ -479,7 +479,6 @@ class ProductDetailActivity : AppCompatActivity() {
             }
         }
         binding.etProductEndDateDiscount.setOnClickListener {
-            println("setOnClickListener")
             datePicker.show(supportFragmentManager, END_DATE_DISCOUNT_TAG)
         }
     }

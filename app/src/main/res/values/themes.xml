@@ -22,7 +22,6 @@
 
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">@color/white</item>
         <item name="colorControlActivated">@color/white</item>
         <item name="colorSurface">@color/grey_opacity60_primary</item>
     </style>
