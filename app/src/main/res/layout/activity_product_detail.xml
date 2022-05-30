@@ -288,7 +288,7 @@
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconMode="none"
-                            app:endIconTint="@color/text_color">
+                            app:endIconTint="@color/checkable_color">
 
                             <AutoCompleteTextView
                                 android:id="@+id/et_product_start_date_discount"
@@ -323,7 +323,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
                             android:text="@string/end"
-                            android:textColor="@color/text_color" />
+                            android:textColor="@color/checkable_color" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/et_product_end_date_discount_layout"
@@ -336,7 +336,7 @@
                             app:boxStrokeColor="@color/box_stroke_color_time_input"
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconMode="none"
-                            app:endIconTint="@color/text_color">
+                            app:endIconTint="@color/checkable_color">
 
                             <AutoCompleteTextView
                                 android:id="@+id/et_product_end_date_discount"
