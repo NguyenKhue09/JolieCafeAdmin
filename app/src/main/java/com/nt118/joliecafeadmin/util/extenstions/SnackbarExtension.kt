@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.widget.TextView
 import androidx.annotation.ColorInt
 import com.google.android.material.snackbar.Snackbar
-import com.nt118.joliecafeadmin.R
 
 fun Snackbar.setIcon(drawable: Drawable, @ColorInt colorTint: Int, iconPadding: Int): Snackbar {
     return this.apply {
