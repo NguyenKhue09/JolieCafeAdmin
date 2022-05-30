@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_arrow_back.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_camera.xml" value="0.1605" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_edit.xml" value="0.221" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/searchview_background.xml" value="0.221" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/bottom_navigation_custom_bg.xml" value="0.1" />
@@ -17,6 +18,7 @@
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_product_detail.xml" value="0.46647230320699706" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/add_new_product_footer_action_button.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/drop_down_item.xml" value="0.6" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.1" />

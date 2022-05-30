@@ -50,6 +50,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
+
 
     // paging 3
     def paging_version = "3.1.1"
