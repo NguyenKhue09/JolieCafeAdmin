@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import coil.load
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.databinding.ActivityProductDetailBinding
@@ -23,18 +25,18 @@ import com.nt118.joliecafeadmin.models.ProductFormState
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants.Companion.END_DATE_DISCOUNT_TAG
 import com.nt118.joliecafeadmin.util.Constants.Companion.LOCAL_TIME_FORMAT
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_DISABLE
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_SUCCESS
 import com.nt118.joliecafeadmin.util.Constants.Companion.START_DATE_DISCOUNT_TAG
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductStatus
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductFormStateEvent
-import com.nt118.joliecafeadmin.util.extenstions.formatTo
-import com.nt118.joliecafeadmin.util.extenstions.observeOnce
-import com.nt118.joliecafeadmin.util.extenstions.toDate
+import com.nt118.joliecafeadmin.util.extenstions.*
 import com.nt118.joliecafeadmin.viewmodels.ProductDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,7 +51,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private lateinit var datePicker: MaterialDatePicker<Long>
 
-    private val productActivityViewModel: ProductDetailViewModel by viewModels()
+    private val productDetailActivityViewModel: ProductDetailViewModel by viewModels()
 
     private lateinit var networkListener: NetworkListener
 
@@ -60,7 +62,7 @@ class ProductDetailActivity : AppCompatActivity() {
         _binding = ActivityProductDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        productFormState = productActivityViewModel.productFormState
+        productFormState = productDetailActivityViewModel.productFormState
 
         setUpBackPress()
 
@@ -69,6 +71,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
         getProductDataIfBackOnline()
         observerGetProductDetailResponse()
+        observerNetworkMessage()
 
         if (args.isEdit) {
             enableViewToEditProduct()
@@ -86,8 +89,47 @@ class ProductDetailActivity : AppCompatActivity() {
 
     }
 
+    private fun observerNetworkMessage() {
+        productDetailActivityViewModel.networkMessage.observe(this) { message ->
+            println(message)
+            if (!productDetailActivityViewModel.networkStatus) {
+                showSnackBar(message = message, status = SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_wifi_off)
+            } else if (productDetailActivityViewModel.networkStatus) {
+                if (productDetailActivityViewModel.backOnline) {
+                    showSnackBar(message = message, status = SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_wifi)
+                }
+            }
+        }
+    }
+
+    private fun showSnackBar(message: String, status: Int, icon: Int) {
+        val drawable = getDrawable(icon)
+
+        val snackBarContentColor = when(status) {
+            SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
+            SNACK_BAR_STATUS_DISABLE -> R.color.dark_text_color
+            SNACK_BAR_STATUS_ERROR -> R.color.error_color
+            else -> R.color.text_color_2
+        }
+
+
+        val snackBar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction("Ok") {
+            }
+            .setActionTextColor(ContextCompat.getColor(this, R.color.grey_primary))
+            .setTextColor(ContextCompat.getColor(this, snackBarContentColor))
+            .setIcon(
+                drawable = drawable!!,
+                colorTint = ContextCompat.getColor(this, snackBarContentColor),
+                iconPadding = resources.getDimensionPixelOffset(R.dimen.small_margin)
+            )
+            .setCustomBackground(getDrawable(R.drawable.snackbar_normal_custom_bg)!!)
+
+        snackBar.show()
+    }
+
     private fun observerUpdateProductResponse() {
-        productActivityViewModel.productUpdateResponse.asLiveData().observe(this) { result ->
+        productDetailActivityViewModel.productUpdateResponse.asLiveData().observe(this) { result ->
             when (result) {
                 is ApiResult.Success -> {
                     binding.productDetailCircularProgressIndicator.visibility = View.GONE
@@ -107,7 +149,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun observerProductFormValidateSubmitEvent() {
         lifecycleScope.launch {
-            productActivityViewModel.validationEvents.collect { event ->
+            productDetailActivityViewModel.validationEvents.collect { event ->
                 when (event) {
                     is ProductDetailViewModel.ValidationEvent.Success -> {
 
@@ -134,7 +176,7 @@ class ProductDetailActivity : AppCompatActivity() {
                             )
                         }
 
-                        productActivityViewModel.updateProduct(
+                        productDetailActivityViewModel.updateProduct(
                             newData = newData
                         )
                     }
@@ -146,7 +188,7 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun observerProductFormFieldChanged() {
         binding.etProductName.addTextChangedListener { name ->
             println(name.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductNameChanged(
                     productName = name.toString()
                 )
@@ -154,7 +196,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductType.addTextChangedListener { type ->
             println(type.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductTypeChanged(
                     productType = type.toString()
                 )
@@ -162,7 +204,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductPrice.addTextChangedListener { price ->
             println(price.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductPriceChanged(
                     productPrice = price.toString()
                 )
@@ -170,7 +212,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductStatus.addTextChangedListener { status ->
             println(status.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductStatusChanged(
                     productStatus = status.toString()
                 )
@@ -178,7 +220,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductDescription.addTextChangedListener { description ->
             println(description.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductDescriptionChanged(
                     productDescription = description.toString()
                 )
@@ -189,7 +231,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
         binding.etProductStartDateDiscount.addTextChangedListener { start ->
             println(start.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductStartDateDiscountChanged(
                     productStartDateDiscount = start.toString()
                 )
@@ -197,7 +239,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductEndDateDiscount.addTextChangedListener { end ->
             println(end.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductEndDateDiscountChanged(
                     productEndDateDiscount = end.toString()
                 )
@@ -205,7 +247,7 @@ class ProductDetailActivity : AppCompatActivity() {
         }
         binding.etProductDiscountPercent.addTextChangedListener { percent ->
             println(percent.toString())
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.OnProductDiscountPercentChanged(
                     productDiscountPercent = percent.toString()
                 )
@@ -234,13 +276,13 @@ class ProductDetailActivity : AppCompatActivity() {
             resetProductFormData()
         }
         binding.footerActionButton.btnSave.setOnClickListener {
-            productActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.Submit)
+            productDetailActivityViewModel.onProductFormEvent(event = ProductFormStateEvent.Submit)
         }
     }
 
     private fun observerGetProductDetailResponse() {
         lifecycleScope.launch {
-            productActivityViewModel.getProductDetailResponse.collect { result ->
+            productDetailActivityViewModel.getProductDetailResponse.collect { result ->
                 when (result) {
                     is ApiResult.Loading -> {
                         binding.productDetailCircularProgressIndicator.visibility = View.VISIBLE
@@ -269,11 +311,11 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private fun resetProductFormData() {
-        val product = productActivityViewModel.getProductDetailResponse.value.data
+        val product = productDetailActivityViewModel.getProductDetailResponse.value.data
         product?.let {
             setProductData(product = it)
         }
-        productActivityViewModel.cleanProductFormError()
+        productDetailActivityViewModel.cleanProductFormError()
     }
 
     private fun getProductDataIfBackOnline() {
@@ -281,22 +323,22 @@ class ProductDetailActivity : AppCompatActivity() {
             networkListener = NetworkListener()
             networkListener.checkNetworkAvailability(this@ProductDetailActivity)
                 .collect { status ->
-                    productActivityViewModel.networkStatus = status
-                    productActivityViewModel.showNetworkStatus()
-                    if (productActivityViewModel.backOnline) {
-                        productActivityViewModel.getProductDetail(productId = args.productId)
+                    productDetailActivityViewModel.networkStatus = status
+                    productDetailActivityViewModel.showNetworkStatus()
+                    if (productDetailActivityViewModel.backOnline) {
+                        productDetailActivityViewModel.getProductDetail(productId = args.productId)
                     }
                 }
         }
     }
 
     private fun getProductData() {
-        if (productActivityViewModel.networkStatus) {
+        if (productDetailActivityViewModel.networkStatus) {
             lifecycleScope.launchWhenStarted {
-                productActivityViewModel.getProductDetail(productId = args.productId)
+                productDetailActivityViewModel.getProductDetail(productId = args.productId)
             }
         } else {
-            productActivityViewModel.showNetworkStatus()
+            productDetailActivityViewModel.showNetworkStatus()
         }
     }
 
@@ -379,8 +421,8 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private fun updateBackOnlineStatus() {
-        productActivityViewModel.readBackOnline.asLiveData().observe(this) { status ->
-            productActivityViewModel.backOnline = status
+        productDetailActivityViewModel.readBackOnline.asLiveData().observe(this) { status ->
+            productDetailActivityViewModel.backOnline = status
         }
     }
 
@@ -388,7 +430,7 @@ class ProductDetailActivity : AppCompatActivity() {
         networkListener = NetworkListener()
         networkListener.checkNetworkAvailability(this)
             .asLiveData().observeOnce(this) { status ->
-                productActivityViewModel.networkStatus = status
+                productDetailActivityViewModel.networkStatus = status
                 getProductData()
             }
     }
@@ -440,7 +482,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun productDiscountSwitchButtonListener() {
         binding.switchProductDiscount.setOnCheckedChangeListener { _, isChecked ->
-            productActivityViewModel.onProductFormEvent(
+            productDetailActivityViewModel.onProductFormEvent(
                 event = ProductFormStateEvent.IsDiscountChanged(
                     isDiscount = isChecked
                 )

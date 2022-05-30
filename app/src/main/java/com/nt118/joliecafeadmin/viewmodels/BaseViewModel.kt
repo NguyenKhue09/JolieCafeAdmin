@@ -1,8 +1,10 @@
 package com.nt118.joliecafeadmin.viewmodels
 
 import android.app.Application
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
@@ -19,6 +21,8 @@ open class BaseViewModel(
 
     val readBackOnline = dataStoreRepository.readBackOnline
     val readAdminToken = dataStoreRepository.readAdminToken
+
+    val networkMessage = MutableLiveData<String>()
 
     var adminToken = ""
     var networkStatus = false
@@ -45,11 +49,13 @@ open class BaseViewModel(
 
     fun showNetworkStatus() {
         if (!networkStatus) {
-            Toast.makeText(getApplication(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(getApplication(), "No Internet Connection", Toast.LENGTH_SHORT).show()
+            networkMessage.value = "No Internet Connection"
             saveBackOnline(true)
         } else if (networkStatus) {
             if (backOnline) {
-                Toast.makeText(getApplication(), "We're back online", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(getApplication(), "We're back online", Toast.LENGTH_SHORT).show()
+                networkMessage.value = "We're back online"
                 saveBackOnline(false)
             }
         }
@@ -73,4 +79,5 @@ open class BaseViewModel(
             }
         }
     }
+
 }
