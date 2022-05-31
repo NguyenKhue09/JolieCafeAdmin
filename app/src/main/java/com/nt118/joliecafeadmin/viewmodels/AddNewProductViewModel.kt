@@ -6,6 +6,7 @@ import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.data.Repository
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.models.ProductFormState
+import com.nt118.joliecafeadmin.models.ValidationResult
 import com.nt118.joliecafeadmin.use_cases.ProductFormValidationUseCases
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.ProductFormStateEvent
@@ -50,6 +51,9 @@ class AddNewProductViewModel @Inject constructor(
 
     fun onProductFormEvent(event: ProductFormStateEvent) {
         when(event) {
+            is ProductFormStateEvent.OnProductImageChanged -> {
+                productFormState.value = productFormState.value.copy(productImage = event.productImage)
+            }
             is ProductFormStateEvent.OnProductNameChanged -> {
                 productFormState.value = productFormState.value.copy(productName = event.productName)
             }
@@ -84,6 +88,7 @@ class AddNewProductViewModel @Inject constructor(
     }
 
     private fun submitProductFormData() {
+        val imageResult = productFormValidationUseCases.validateProductImageUseCase.execute(productImage = productFormState.value.productImage)
         val nameResult = productFormValidationUseCases.validateProductNameUseCase.execute(productFormState.value.productName)
         val priceResult = productFormValidationUseCases.validateProductPriceUseCase.execute(productFormState.value.productPrice)
         val descriptionResult = productFormValidationUseCases.validateProductDescriptionUseCase.execute(productFormState.value.productDescription)
@@ -91,18 +96,25 @@ class AddNewProductViewModel @Inject constructor(
             startDate = productFormState.value.productStartDateDiscount,
             endDate = productFormState.value.productEndDateDiscount
         )
-        val discountResult = productFormValidationUseCases.validateProductDiscountPercentUseCase.execute(productFormState.value.productDiscountPercent.toInt())
+        val startDateResult = productFormValidationUseCases.validateProductStartDateDiscountUseCase.execute(
+            startDate = productFormState.value.productStartDateDiscount,
+        )
+
+        val discountResult = productFormValidationUseCases.validateProductDiscountPercentUseCase.execute(productFormState.value.productDiscountPercent)
 
         val listResult = if(productFormState.value.isDiscount) {
             listOf(
+                imageResult,
                 nameResult,
                 priceResult,
                 descriptionResult,
+                startDateResult,
                 endDateResult,
                 discountResult
             )
         } else {
             listOf(
+                imageResult,
                 nameResult,
                 priceResult,
                 descriptionResult
@@ -113,9 +125,11 @@ class AddNewProductViewModel @Inject constructor(
 
         if(hasError) {
             productFormState.value = productFormState.value.copy(
+                productImageError = imageResult.errorMessage,
                 productNameError = nameResult.errorMessage,
                 productPriceError = priceResult.errorMessage,
                 productDescriptionError = descriptionResult.errorMessage,
+                productStartDateDiscountError = if(productFormState.value.isDiscount) startDateResult.errorMessage else null,
                 productEndDateDiscountError = if(productFormState.value.isDiscount) endDateResult.errorMessage else null,
                 productDiscountPercentError = if(productFormState.value.isDiscount) discountResult.errorMessage else null,
             )
@@ -130,6 +144,7 @@ class AddNewProductViewModel @Inject constructor(
 
     private fun cleanProductFormError() {
         productFormState.value = productFormState.value.copy(
+            productImageError = null,
             productNameError = null,
             productPriceError = null,
             productDescriptionError = null,

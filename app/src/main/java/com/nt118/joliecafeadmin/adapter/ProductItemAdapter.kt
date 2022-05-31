@@ -64,6 +64,8 @@ class ProductItemAdapter(
 
             holder.binding.productName.text = product.name
 
+            holder.binding.productCategory.text = product.type
+
             productFragment.context?.let { context ->
                 holder.binding.itemPrice.text = context.getString(R.string.product_price, product.originPrice.toString())
             }

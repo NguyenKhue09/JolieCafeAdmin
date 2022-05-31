@@ -1,6 +1,9 @@
 package com.nt118.joliecafeadmin.util
 
+import android.net.Uri
+
 sealed class ProductFormStateEvent {
+    data class OnProductImageChanged(val productImage: Uri): ProductFormStateEvent()
     data class OnProductNameChanged(val productName: String): ProductFormStateEvent()
     data class OnProductTypeChanged(val productType: String): ProductFormStateEvent()
     data class OnProductPriceChanged(val productPrice: String): ProductFormStateEvent()
