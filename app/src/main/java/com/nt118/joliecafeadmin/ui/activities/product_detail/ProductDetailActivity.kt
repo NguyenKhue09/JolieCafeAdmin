@@ -66,6 +66,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
         setUpBackPress()
 
+
         updateBackOnlineStatus()
         updateNetworkStatus()
 
