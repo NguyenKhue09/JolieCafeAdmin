@@ -23,6 +23,7 @@ import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
 import com.nt118.joliecafeadmin.util.Constants
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductComparator
@@ -57,6 +58,9 @@ class ProductsFragment : Fragment() {
     ): View {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
+        updateNetworkStatus()
+        observerNetworkMessage()
+
         initProductAdapter()
         initProductAdapterData()
         setProductAdapterData()
@@ -64,7 +68,6 @@ class ProductsFragment : Fragment() {
         configProductRecyclerView()
         addProductTabText()
         onProductsTabSelected()
-        observerNetworkMessage()
         handleProductPagingAdapterState()
         navigateToAddNewProductScreen()
 
@@ -81,6 +84,15 @@ class ProductsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateNetworkStatus() {
+        networkListener = NetworkListener()
+        networkListener.checkNetworkAvailability(requireContext())
+            .asLiveData().observe(viewLifecycleOwner) { status ->
+                productsViewModel.networkStatus = status
+                productsViewModel.showNetworkStatus()
+            }
     }
 
     private fun showSnackBar(message: String, status: Int, icon: Int) {
@@ -132,8 +144,6 @@ class ProductsFragment : Fragment() {
                             submitProductAdapterData(data = data)
                         }
                     }
-                } else {
-                    productsViewModel.showNetworkStatus()
                 }
             }
     }
@@ -174,7 +184,6 @@ class ProductsFragment : Fragment() {
             networkListener.checkNetworkAvailability(requireContext())
                 .collect { status ->
                     productsViewModel.networkStatus = status
-                    productsViewModel.showNetworkStatus()
                     if (productsViewModel.backOnline) {
                         productsViewModel.getProducts(
                             productQuery = mapOf(
@@ -200,8 +209,6 @@ class ProductsFragment : Fragment() {
                         submitProductAdapterData(data = data)
                     }
                 }
-            } else {
-                productsViewModel.showNetworkStatus()
             }
         }
     }
@@ -231,7 +238,8 @@ class ProductsFragment : Fragment() {
                     else -> null
                 }
                 error?.let {
-                    Toast.makeText(requireContext(), it.error.message, Toast.LENGTH_LONG).show()
+                    if(productsViewModel.networkStatus)
+                    showSnackBar(message = "Can't load product data!", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
                 }
             }
         }

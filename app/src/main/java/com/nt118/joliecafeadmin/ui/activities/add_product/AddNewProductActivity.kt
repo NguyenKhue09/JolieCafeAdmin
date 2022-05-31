@@ -435,7 +435,7 @@ class AddNewProductActivity : AppCompatActivity() {
     }
 
     private fun setProductTypeDropDownMenu() {
-        val listTypes = Constants.listProductTypes.subList(1, Constants.listProductTypes.size - 1)
+        val listTypes = listProductTypes.subList(1, listProductTypes.size - 1)
         val productTypesAdapter = ArrayAdapter(this, R.layout.drop_down_item, listTypes)
         binding.etProductType.setAdapter(productTypesAdapter)
     }
