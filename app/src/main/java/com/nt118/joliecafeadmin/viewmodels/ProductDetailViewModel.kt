@@ -109,7 +109,7 @@ class ProductDetailViewModel @Inject constructor(
             startDate = productFormState.value.productStartDateDiscount,
             endDate = productFormState.value.productEndDateDiscount
         )
-        val discountResult = productFormValidationUseCases.validateProductDiscountPercentUseCase.execute(productFormState.value.productDiscountPercent.toInt())
+        val discountResult = productFormValidationUseCases.validateProductDiscountPercentUseCase.execute(productFormState.value.productDiscountPercent)
 
         val listResult = if(productFormState.value.isDiscount) {
             listOf(

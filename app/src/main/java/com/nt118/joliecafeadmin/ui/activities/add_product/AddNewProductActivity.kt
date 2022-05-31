@@ -6,17 +6,15 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.PorterDuff
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
@@ -31,11 +29,14 @@ import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.databinding.ActivityAddNewProductBinding
 import com.nt118.joliecafeadmin.firebase.firebasefirestore.FirebaseStorage
 import com.nt118.joliecafeadmin.models.ProductFormState
+import com.nt118.joliecafeadmin.models.UploadFileToFirebaseResult
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_DISABLE
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_SUCCESS
+import com.nt118.joliecafeadmin.util.Constants.Companion.listProductStatus
+import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ProductFormStateEvent
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
@@ -62,7 +63,6 @@ class AddNewProductActivity : AppCompatActivity() {
 
     private lateinit var productFormState: MutableStateFlow<ProductFormState>
 
-    private var productImageUri: Uri? = null
     private lateinit var firebaseStorage: FirebaseStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,9 +76,6 @@ class AddNewProductActivity : AppCompatActivity() {
         setUpBackPress()
         setupDatePicker()
 
-        setProductTypeDropDownMenu()
-        setProductStatusDropDownMenu()
-
         updateBackOnlineStatus()
         updateNetworkStatus()
 
@@ -89,12 +86,23 @@ class AddNewProductActivity : AppCompatActivity() {
         observerProductFormValidateSubmitEvent()
         observerNetworkMessage()
 
+        observerUploadImageToFirebase()
+
         productStartDateDiscountOnclickListener()
         productEndDateDiscountOnclickListener()
 
         onTakeImageButtonClicked()
 
         handleDatePickerEvent()
+
+        initDropDownData()
+        setProductTypeDropDownMenu()
+        setProductStatusDropDownMenu()
+    }
+
+    private fun initDropDownData() {
+        binding.etProductType.setText(listProductTypes[1])
+        binding.etProductStatus.setText(listProductStatus[0])
     }
 
     private fun observerNetworkMessage() {
@@ -152,24 +160,11 @@ class AddNewProductActivity : AppCompatActivity() {
                 val data: Uri? = result.data?.data
                 if (data != null) {
                     try {
-                        val fileName = getNameFile(data, this)
-
-                        productImageUri = data
-
+                        saveProductImageChanged(productImage = data)
                         setProductImage(uri = data)
-//                        firebaseStorage.uploadFile(
-//                            file = data,
-//                            fileName = fileName,
-//                            root = getString(R.string.app_name),
-//                            addNewProductActivity = this
-//                        )
                     } catch (e: IOException) {
                         e.printStackTrace()
-                        Toast.makeText(
-                            this,
-                            "Get image failed!",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showSnackBar(message = "Get image failed!", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
                     }
                 }
             }
@@ -182,18 +177,10 @@ class AddNewProductActivity : AppCompatActivity() {
     private var getFilePermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (isGranted) {
-                Toast.makeText(
-                    this,
-                    "Permission granted",
-                    Toast.LENGTH_LONG
-                ).show()
+                showSnackBar(message = "Permission granted", status = SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_success)
                 firebaseStorage.chooseFile(getFile)
             } else {
-                Toast.makeText(
-                    this,
-                    "Oops, you just denied the permission for storage, You can also allow it from settings.",
-                    Toast.LENGTH_LONG
-                ).show()
+                showSnackBar(message = "Oops, you just denied the permission for get image!", status = SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_sad)
             }
         }
 
@@ -229,38 +216,45 @@ class AddNewProductActivity : AppCompatActivity() {
                 when (event) {
                     is AddNewProductViewModel.ValidationEvent.Success -> {
 
-                        val newProductData = if (productFormState.value.isDiscount) {
-                            mapOf(
-                                "name" to productFormState.value.productName,
-                                "status" to productFormState.value.productStatus,
-                                "description" to productFormState.value.productDescription,
-                                "originPrice" to productFormState.value.productPrice,
-                                "type" to productFormState.value.productType,
-                                "startDateDiscount" to productFormState.value.productStartDateDiscount,
-                                "endDateDiscount" to productFormState.value.productEndDateDiscount,
-                                "discountPercent" to productFormState.value.productDiscountPercent
-                            )
-                        } else {
-                            mapOf(
-                                "name" to productFormState.value.productName,
-                                "status" to productFormState.value.productStatus,
-                                "description" to productFormState.value.productDescription,
-                                "originPrice" to productFormState.value.productPrice,
-                                "type" to productFormState.value.productType,
-                            )
-                        }
+                        val fileName = getNameFile(productFormState.value.productImage, this@AddNewProductActivity)
 
-                        addNewProductViewModel.addNewProduct(productData = newProductData)
+                        firebaseStorage.uploadFile(
+                            file = productFormState.value.productImage,
+                            fileName = fileName,
+                            root = getString(R.string.app_name),
+                        )
+
                     }
                 }
             }
         }
     }
 
-    private fun observerFooterActionClickEvent() {
+    private fun observerUploadImageToFirebase() {
+        firebaseStorage.uploadImageResult.asLiveData().observe(this) { uploadResult ->
+            when(uploadResult) {
+                is UploadFileToFirebaseResult.Error -> {
+                    binding.addNewProductCircularProgressIndicator.visibility = View.GONE
+                    showSnackBar(message = uploadResult.errorMessage!!, status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
+                }
+                is UploadFileToFirebaseResult.Success -> {
+                    println(uploadResult.downloadUri.toString())
+                    uploadResult.downloadUri?.let {
+                        addNewProduct(productImage = it)
+                    }
+                }
+                is UploadFileToFirebaseResult.Loading -> {
+                    binding.addNewProductCircularProgressIndicator.visibility = View.VISIBLE
+                }
+                else -> {}
+            }
+        }
+    }
 
+    private fun observerFooterActionClickEvent() {
         binding.footerActionButton.btnAddNewProduct.setOnClickListener {
             addNewProductViewModel.onProductFormEvent(event = ProductFormStateEvent.Submit)
+            observerProductImageError()
         }
     }
 
@@ -269,6 +263,7 @@ class AddNewProductActivity : AppCompatActivity() {
             binding.etProductName.error = productFormState.productNameError
             binding.etProductPrice.error = productFormState.productPriceError
             binding.etProductDescription.error = productFormState.productDescriptionError
+            binding.etProductStartDateDiscount.error = productFormState.productStartDateDiscountError
             binding.etProductEndDateDiscount.error = productFormState.productEndDateDiscountError
             binding.etProductDiscountPercent.error = productFormState.productDiscountPercentError
             if(productFormState.productEndDateDiscountError == null) {
@@ -276,6 +271,17 @@ class AddNewProductActivity : AppCompatActivity() {
             } else {
                 binding.etProductEndDateDiscountLayout.endIconMode = TextInputLayout.GONE
             }
+            if(productFormState.productStartDateDiscountError == null) {
+                binding.etProductStartDateDiscountLayout.endIconMode = TextInputLayout.END_ICON_CUSTOM
+            } else {
+                binding.etProductStartDateDiscountLayout.endIconMode = TextInputLayout.GONE
+            }
+        }
+    }
+
+    private fun observerProductImageError() {
+        if(productFormState.value.productImageError != null) {
+            showSnackBar(message = productFormState.value.productImageError!!, status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_image_error)
         }
     }
 
@@ -359,25 +365,48 @@ class AddNewProductActivity : AppCompatActivity() {
                     }
                     is ApiResult.Error -> {
                         binding.addNewProductCircularProgressIndicator.visibility = View.GONE
-                        Toast.makeText(
-                            this@AddNewProductActivity,
-                            result.message ?: "Unknown error!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnackBar(message = result.message ?: "Unknown error!", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
                     }
                     is ApiResult.Success -> {
                         binding.addNewProductCircularProgressIndicator.visibility = View.GONE
-                        Toast.makeText(
-                            this@AddNewProductActivity,
-                            "Add new product success",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showSnackBar(message = "Add new product success", status = SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_success)
                     }
                     else -> {
                     }
                 }
             }
         }
+    }
+
+    private fun addNewProduct(productImage: String) {
+        val newProductData = if (productFormState.value.isDiscount) {
+            mapOf(
+                "name" to productFormState.value.productName,
+                "thumbnail" to productImage,
+                "status" to productFormState.value.productStatus,
+                "description" to productFormState.value.productDescription,
+                "originPrice" to productFormState.value.productPrice,
+                "type" to productFormState.value.productType,
+                "startDateDiscount" to productFormState.value.productStartDateDiscount,
+                "endDateDiscount" to productFormState.value.productEndDateDiscount,
+                "discountPercent" to productFormState.value.productDiscountPercent
+            )
+        } else {
+            mapOf(
+                "name" to productFormState.value.productName,
+                "thumbnail" to productImage,
+                "status" to productFormState.value.productStatus,
+                "description" to productFormState.value.productDescription,
+                "originPrice" to productFormState.value.productPrice,
+                "type" to productFormState.value.productType,
+            )
+        }
+
+        addNewProductViewModel.addNewProduct(productData = newProductData)
+    }
+
+    private fun saveProductImageChanged(productImage: Uri) {
+        addNewProductViewModel.onProductFormEvent(event = ProductFormStateEvent.OnProductImageChanged(productImage = productImage))
     }
 
     private fun setUpBackPress() {

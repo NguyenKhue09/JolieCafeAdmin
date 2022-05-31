@@ -51,6 +51,7 @@ android {
 
 dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
 
     // paging 3

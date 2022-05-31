@@ -1,24 +1,27 @@
 package com.nt118.joliecafeadmin.use_cases.validation_form
 
+import android.net.Uri
 import com.nt118.joliecafeadmin.models.ValidationResult
+import java.io.File
 
 
-class ValidateProductDiscountPercentUseCase {
+class ValidateProductImageUseCase {
 
-    fun execute(discountPercent: String): ValidationResult {
+    fun execute(productImage: Uri): ValidationResult {
         try {
-            val parseIntDiscountPercent = discountPercent.toInt()
-            if(parseIntDiscountPercent == 0) {
+            if(productImage == Uri.EMPTY) {
                 return ValidationResult(
                     successful = false,
-                    errorMessage = "You can't set discount percent equal 0%"
+                    errorMessage = "You have not selected a product photo!"
                 )
             }
 
-            if(parseIntDiscountPercent > 100) {
+            val imageFile = File(productImage.path!!)
+
+            if(imageFile.exists()) {
                 return ValidationResult(
                     successful = false,
-                    errorMessage = "You can't set discount percent bigger than 100%"
+                    errorMessage = "Product photo not exists in your device!"
                 )
             }
 
@@ -28,9 +31,8 @@ class ValidateProductDiscountPercentUseCase {
         } catch (e: Exception) {
             return ValidationResult(
                 successful = false,
-                errorMessage = "Discount percent is blank!"
+                errorMessage = "Some things wrong with product photo!"
             )
         }
-
     }
 }

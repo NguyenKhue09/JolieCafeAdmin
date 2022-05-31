@@ -16,10 +16,12 @@ object RepositoryModule {
     @Singleton
     fun provideProductFormValidationUseCases(): ProductFormValidationUseCases {
         return ProductFormValidationUseCases(
+            validateProductImageUseCase = ValidateProductImageUseCase(),
             validateProductNameUseCase = ValidateProductNameUseCase(),
             validateProductPriceUseCase = ValidateProductPriceUseCase(),
             validateProductDescriptionUseCase = ValidateProductDescriptionUseCase(),
             validateProductDiscountPercentUseCase = ValidateProductDiscountPercentUseCase(),
+            validateProductStartDateDiscountUseCase = ValidateProductStartDateDiscountUseCase(),
             validateProductEndDateDiscountUseCase = ValidateProductEndDateDiscountUseCase()
         )
     }
