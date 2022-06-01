@@ -59,14 +59,14 @@ class ProductsFragment : Fragment() {
         _binding = FragmentProductsBinding.inflate(inflater, container, false)
 
         updateNetworkStatus()
+        updateBackOnlineStatus()
         observerNetworkMessage()
 
         initProductAdapter()
         initProductAdapterData()
-        setProductAdapterData()
-        updateBackOnlineStatus()
         configProductRecyclerView()
         addProductTabText()
+        setProductAdapterDataWhenTabChange()
         onProductsTabSelected()
         handleProductPagingAdapterState()
         navigateToAddNewProductScreen()
@@ -77,10 +77,18 @@ class ProductsFragment : Fragment() {
     private fun observerNetworkMessage() {
         productsViewModel.networkMessage.observe(viewLifecycleOwner) { message ->
             if (!productsViewModel.networkStatus) {
-                showSnackBar(message = message, status = Constants.SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_wifi_off)
+                showSnackBar(
+                    message = message,
+                    status = Constants.SNACK_BAR_STATUS_DISABLE,
+                    icon = R.drawable.ic_wifi_off
+                )
             } else if (productsViewModel.networkStatus) {
                 if (productsViewModel.backOnline) {
-                    showSnackBar(message = message, status = Constants.SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_wifi)
+                    showSnackBar(
+                        message = message,
+                        status = Constants.SNACK_BAR_STATUS_SUCCESS,
+                        icon = R.drawable.ic_wifi
+                    )
                 }
             }
         }
@@ -92,16 +100,17 @@ class ProductsFragment : Fragment() {
             .asLiveData().observe(viewLifecycleOwner) { status ->
                 productsViewModel.networkStatus = status
                 productsViewModel.showNetworkStatus()
+                backOnlineRecallFavoriteProducts()
             }
     }
 
     private fun showSnackBar(message: String, status: Int, icon: Int) {
         val drawable = requireContext().getDrawable(icon)
 
-        val snackBarContentColor = when(status) {
+        val snackBarContentColor = when (status) {
             Constants.SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
             Constants.SNACK_BAR_STATUS_DISABLE -> R.color.dark_text_color
-            Constants.SNACK_BAR_STATUS_ERROR -> R.color.error_color
+            SNACK_BAR_STATUS_ERROR -> R.color.error_color
             else -> R.color.text_color_2
         }
 
@@ -128,13 +137,12 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initProductAdapterData() {
-        networkListener = NetworkListener()
         networkListener.checkNetworkAvailability(requireContext())
             .asLiveData().observeOnce(viewLifecycleOwner) { status ->
                 productsViewModel.networkStatus = status
                 if (productsViewModel.networkStatus) {
                     lifecycleScope.launchWhenStarted {
-                        println("call init daa")
+                        println("call init daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                         productsViewModel.getProducts(
                             productQuery = mapOf(
                                 "type" to listProductTypes[0]
@@ -169,7 +177,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun onProductClicked(productId: String, isEdit: Boolean) {
-        if(productsViewModel.networkStatus) {
+        if (productsViewModel.networkStatus) {
             val action = ProductsFragmentDirections.actionNavigationProductsToProductDetailActivity(
                 productId = productId,
                 isEdit = isEdit
@@ -178,25 +186,23 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun setProductAdapterData() {
+    private fun backOnlineRecallFavoriteProducts() {
         lifecycleScope.launchWhenStarted {
-            networkListener = NetworkListener()
-            networkListener.checkNetworkAvailability(requireContext())
-                .collect { status ->
-                    productsViewModel.networkStatus = status
-                    if (productsViewModel.backOnline) {
-                        productsViewModel.getProducts(
-                            productQuery = mapOf(
-                                "type" to listProductTypes[binding.productsTabLayout.selectedTabPosition]
-                            )
-                        ).collectLatest { data ->
-                            selectedTab = listProductTypes[binding.productsTabLayout.selectedTabPosition]
-                            submitProductAdapterData(data = data)
-                        }
-                    }
+            if (productsViewModel.backOnline) {
+                productsViewModel.getProducts(
+                    productQuery = mapOf(
+                        "type" to listProductTypes[binding.productsTabLayout.selectedTabPosition]
+                    )
+                ).collectLatest { data ->
+                    selectedTab = listProductTypes[binding.productsTabLayout.selectedTabPosition]
+                    submitProductAdapterData(data = data)
                 }
-        }
+            }
 
+        }
+    }
+
+    private fun setProductAdapterDataWhenTabChange() {
         productsViewModel.tabSelected.observe(viewLifecycleOwner) { tab ->
             if (productsViewModel.networkStatus) {
                 lifecycleScope.launchWhenStarted {
@@ -225,10 +231,9 @@ class ProductsFragment : Fragment() {
 
     private fun handleProductPagingAdapterState() {
         productItemAdapter.addLoadStateListener { loadState ->
-            if (loadState.refresh is LoadState.Loading){
+            if (loadState.refresh is LoadState.Loading) {
                 binding.productCircularProgressIndicator.visibility = View.VISIBLE
-            }
-            else{
+            } else {
                 binding.productCircularProgressIndicator.visibility = View.GONE
                 // getting the error
                 val error = when {
@@ -238,8 +243,12 @@ class ProductsFragment : Fragment() {
                     else -> null
                 }
                 error?.let {
-                    if(productsViewModel.networkStatus)
-                    showSnackBar(message = "Can't load product data!", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
+                    if (productsViewModel.networkStatus)
+                        showSnackBar(
+                            message = "Can't load product data!",
+                            status = SNACK_BAR_STATUS_ERROR,
+                            icon = R.drawable.ic_error
+                        )
                 }
             }
         }
