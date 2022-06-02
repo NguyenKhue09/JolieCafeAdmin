@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_order_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="9dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/profile_button_custom_bg"
+            android:padding="18dp">
+
+            <TextView
+                android:id="@+id/tv_notification_title"
+                style="@style/RegularText2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="SAVE THE LAST DEAL!"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/title_text_color"
+                app:layout_constraintEnd_toStartOf="@+id/btn_edit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </TextView>
+
+
+            <ImageView
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                android:padding="15dp"
+                android:tint="@color/text_color"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_notification_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_notification_title">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/tv_update_status"
+                style="@style/SmallText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Last update: 22/02/2022"
+                android:layout_marginTop="@dimen/extra_large_margin"
+                app:layout_constraintStart_toStartOf="@+id/tv_notification_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notification_title">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_notification_body"
+                style="@style/SmallText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_regular"
+                android:maxLines="6"
+                android:text="Keep your readers updated. Always. No one wants to be the last one to know The backdrop’s back layer is persistent, displaying controls and content that relate to the front layer. The backdrop’s back layer can be accessed from any scroll position. The backdrop focuses attention on one layer at a time."
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_update_status"
+                app:layout_constraintTop_toBottomOf="@+id/tv_update_status">
+
+            </TextView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

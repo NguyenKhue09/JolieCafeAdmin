@@ -32,6 +32,7 @@
         android:textColor="@color/title_text_color"/>
 
     <ImageButton
+        android:id="@+id/btn_notifications"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:layout_constraintTop_toTopOf="@id/iv_avatar"

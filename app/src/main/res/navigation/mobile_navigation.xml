@@ -9,7 +9,11 @@
         android:id="@+id/navigation_revenue"
         android:name="com.nt118.joliecafeadmin.ui.fragments.revenue.RevenueFragment"
         android:label="@string/revenue"
-        tools:layout="@layout/fragment_revenue" />
+        tools:layout="@layout/fragment_revenue" >
+        <action
+            android:id="@+id/action_navigation_revenue_to_notificationsFragment"
+            app:destination="@id/notificationsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_products"
@@ -44,4 +48,9 @@
             app:argType="boolean"
             android:defaultValue="false" />
     </activity>
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.nt118.joliecafeadmin.ui.fragments.notifications.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" />
 </navigation>

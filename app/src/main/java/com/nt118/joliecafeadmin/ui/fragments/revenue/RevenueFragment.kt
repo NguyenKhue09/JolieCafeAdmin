@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -50,7 +51,16 @@ class RevenueFragment : Fragment() {
 
         println(revenueViewModel.adminToken)
 
+        buttonClickListener()
+
         return binding.root
+    }
+
+    private fun buttonClickListener() {
+        binding.btnNotifications.setOnClickListener {
+            val action = RevenueFragmentDirections.actionNavigationRevenueToNotificationsFragment()
+            findNavController().navigate(action)
+        }
     }
 
     private fun initViews() {
