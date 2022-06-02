@@ -39,6 +39,7 @@ class ProductsFragment : Fragment() {
 
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
+
     private val productsViewModel: ProductsViewModel by viewModels()
 
     private lateinit var productItemAdapter: ProductItemAdapter

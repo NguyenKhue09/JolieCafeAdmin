@@ -98,6 +98,7 @@ class ProductDetailViewModel @Inject constructor(
             is ProductFormStateEvent.Submit -> {
                 submitProductFormData()
             }
+            else -> {}
         }
     }
 

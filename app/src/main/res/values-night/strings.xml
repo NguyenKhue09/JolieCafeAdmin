@@ -36,4 +36,10 @@
     <string name="enter_product_discount_percent">Enter product discount percent</string>
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
+    <string name="notifications">Notifications</string>
+    <string name="create_new_notification">Create new notification</string>
+    <string name="enter_notification_title_here">Enter notification title here</string>
+    <string name="notification_title">Notification title</string>
+    <string name="notification_content">Notification content</string>
+    <string name="enter_notification_content_here">Enter notification content here</string>
 </resources>
