@@ -22,8 +22,9 @@
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_product_detail.xml" value="0.46647230320699706" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/add_new_product_footer_action_button.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/drop_down_item.xml" value="0.6" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_notification_detail.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_notifications.xml" value="0.4" />
-        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/notification_item_layout.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_detail_footer_action_button.xml" value="0.4878048780487805" />

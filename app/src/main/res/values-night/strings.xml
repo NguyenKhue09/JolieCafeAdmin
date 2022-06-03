@@ -42,4 +42,6 @@
     <string name="notification_title">Notification title</string>
     <string name="notification_content">Notification content</string>
     <string name="enter_notification_content_here">Enter notification content here</string>
+    <string name="all">All</string>
+    <string name="for_you">For you</string>
 </resources>
