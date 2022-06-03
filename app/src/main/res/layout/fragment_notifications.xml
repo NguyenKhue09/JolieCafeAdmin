@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.notifications.NotificationsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -17,15 +17,16 @@
 
         <TextView
             android:id="@+id/tv_title"
+            style="@style/BigText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/raleway_medium"
             android:gravity="center_vertical"
             android:text="@string/notifications"
-            style="@style/BigText"
-            android:textColor="@color/title_text_color"/>
+            android:textColor="@color/title_text_color" />
 
     </androidx.appcompat.widget.Toolbar>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -35,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_notifications_fragment"
         tools:itemCount="10"
-        tools:listitem="@layout/notification_item_layout"/>
+        tools:listitem="@layout/notification_item_layout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_create_new_notification"
@@ -44,11 +45,12 @@
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
         android:backgroundTint="@color/title_text_color"
-        app:srcCompat="@drawable/ic_add"
-        app:tint="@color/text_color"
         android:contentDescription="@string/create_new_notification"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/text_color">
+
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
