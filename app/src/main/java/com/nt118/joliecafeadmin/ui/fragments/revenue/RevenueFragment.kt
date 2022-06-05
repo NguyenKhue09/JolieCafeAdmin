@@ -14,6 +14,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -25,13 +27,16 @@ import com.nt118.joliecafeadmin.adapter.BestSellerAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
 import com.nt118.joliecafeadmin.util.ScreenUtils.spToPx
 import com.nt118.joliecafeadmin.viewmodels.RevenueViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class RevenueFragment : Fragment() {
 
     private var _binding: FragmentRevenueBinding? = null
     private val binding get() = _binding!!
     private val revenueViewModel: RevenueViewModel by viewModels()
+    private lateinit var rvBestSeller: RecyclerView
+    private lateinit var chart: LineChart
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,15 +46,29 @@ class RevenueFragment : Fragment() {
 
         _binding = FragmentRevenueBinding.inflate(inflater, container, false)
 
-        // Views
-        val rvBestSeller = binding.rvBestSeller
-        val chart = binding.chart
-
+        initViews()
         initData(chart, requireContext())
 
-        rvBestSeller.adapter = BestSellerAdapter()
+        println(revenueViewModel.adminToken)
+
+        buttonClickListener()
 
         return binding.root
+    }
+
+    private fun buttonClickListener() {
+        binding.btnNotifications.setOnClickListener {
+            val action = RevenueFragmentDirections.actionNavigationRevenueToNotificationsFragment()
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun initViews() {
+        // Views
+        rvBestSeller = binding.rvBestSeller
+        chart = binding.chart
+
+        rvBestSeller.adapter = BestSellerAdapter()
     }
 
     override fun onDestroyView() {

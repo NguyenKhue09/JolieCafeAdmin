@@ -23,5 +23,6 @@ data class Product(
     @SerialName("updatedAt")
     val updatedAt: String? = null,
     @SerialName("createdAt")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+    val __v: Int? = null
 )
