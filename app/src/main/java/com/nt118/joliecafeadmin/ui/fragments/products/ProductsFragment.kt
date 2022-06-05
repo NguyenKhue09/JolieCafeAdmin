@@ -64,14 +64,13 @@ class ProductsFragment : Fragment() {
         observerNetworkMessage()
 
         initProductAdapter()
-        initProductAdapterData()
         configProductRecyclerView()
         addProductTabText()
+        initProductAdapterData()
         setProductAdapterDataWhenTabChange()
         onProductsTabSelected()
         handleProductPagingAdapterState()
         navigateToAddNewProductScreen()
-
         return binding.root
     }
 
@@ -138,23 +137,8 @@ class ProductsFragment : Fragment() {
     }
 
     private fun initProductAdapterData() {
-        networkListener.checkNetworkAvailability(requireContext())
-            .asLiveData().observeOnce(viewLifecycleOwner) { status ->
-                productsViewModel.networkStatus = status
-                if (productsViewModel.networkStatus) {
-                    lifecycleScope.launchWhenStarted {
-                        println("call init daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                        productsViewModel.getProducts(
-                            productQuery = mapOf(
-                                "type" to listProductTypes[0]
-                            ),
-                        ).collectLatest { data ->
-                            selectedTab = listProductTypes[0]
-                            submitProductAdapterData(data = data)
-                        }
-                    }
-                }
-            }
+        val tabIndex = listProductTypes.indexOf(productsViewModel.tabSelected.value)
+        binding.productsTabLayout.selectTab(binding.productsTabLayout.getTabAt(tabIndex), true)
     }
 
     private fun updateBackOnlineStatus() {
@@ -205,6 +189,7 @@ class ProductsFragment : Fragment() {
 
     private fun setProductAdapterDataWhenTabChange() {
         productsViewModel.tabSelected.observe(viewLifecycleOwner) { tab ->
+            println(tab)
             if (productsViewModel.networkStatus) {
                 lifecycleScope.launchWhenStarted {
                     productsViewModel.getProducts(
