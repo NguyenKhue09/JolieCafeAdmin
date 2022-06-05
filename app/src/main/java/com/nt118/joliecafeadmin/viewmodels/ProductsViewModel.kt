@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.data.Repository
 import com.nt118.joliecafeadmin.models.Product
+import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -24,6 +25,9 @@ class ProductsViewModel @Inject constructor(
     private var _tabSelected = MutableLiveData<String>()
     val tabSelected: LiveData<String> = _tabSelected
 
+    init {
+        setTabSelected(listProductTypes[0])
+    }
 
     fun getProducts(
         productQuery: Map<String, String>
