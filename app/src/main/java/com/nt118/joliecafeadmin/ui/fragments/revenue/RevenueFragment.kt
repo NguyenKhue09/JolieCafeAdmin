@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
@@ -22,10 +23,17 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.adapter.BestSellerAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
+import com.nt118.joliecafeadmin.util.ApiResult
+import com.nt118.joliecafeadmin.util.Constants
+import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.ScreenUtils.spToPx
+import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
+import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.RevenueViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -37,6 +45,8 @@ class RevenueFragment : Fragment() {
     private val revenueViewModel: RevenueViewModel by viewModels()
     private lateinit var rvBestSeller: RecyclerView
     private lateinit var chart: LineChart
+    private lateinit var revenueProgressIndicator: CircularProgressIndicator
+    private lateinit var networkListener: NetworkListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,14 +56,87 @@ class RevenueFragment : Fragment() {
 
         _binding = FragmentRevenueBinding.inflate(inflater, container, false)
 
+        updateNetworkStatus()
+        observerNetworkMessage()
         initViews()
         initData(chart, requireContext())
-
-        println(revenueViewModel.adminToken)
-
+        observe()
         buttonClickListener()
 
         return binding.root
+    }
+
+    private fun updateNetworkStatus() {
+        networkListener = NetworkListener()
+        networkListener.checkNetworkAvailability(requireContext())
+            .asLiveData().observe(viewLifecycleOwner) { status ->
+                revenueViewModel.networkStatus = status
+                revenueViewModel.showNetworkStatus()
+                revenueViewModel.getRevenue()
+            }
+    }
+
+    private fun observe() = revenueViewModel.apply {
+        revenueResponse.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ApiResult.Loading -> {
+                    revenueProgressIndicator.visibility = View.VISIBLE
+                }
+                is ApiResult.Success -> {
+                    revenueProgressIndicator.visibility = View.GONE
+                }
+                is ApiResult.Error -> {
+
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun observerNetworkMessage() {
+        revenueViewModel.networkMessage.observe(viewLifecycleOwner) { message ->
+            if (!revenueViewModel.networkStatus) {
+                showSnackBar(
+                    message = message,
+                    status = Constants.SNACK_BAR_STATUS_DISABLE,
+                    icon = R.drawable.ic_wifi_off
+                )
+            } else if (revenueViewModel.networkStatus) {
+                if (revenueViewModel.backOnline) {
+                    showSnackBar(
+                        message = message,
+                        status = Constants.SNACK_BAR_STATUS_SUCCESS,
+                        icon = R.drawable.ic_wifi
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showSnackBar(message: String, status: Int, icon: Int) {
+        val drawable = requireContext().getDrawable(icon)
+
+        val snackBarContentColor = when (status) {
+            Constants.SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
+            Constants.SNACK_BAR_STATUS_DISABLE -> R.color.dark_text_color
+            Constants.SNACK_BAR_STATUS_ERROR -> R.color.error_color
+            else -> R.color.text_color_2
+        }
+
+
+        val snackBar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setAction("Ok") {
+            }
+            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.grey_primary))
+            .setTextColor(ContextCompat.getColor(requireContext(), snackBarContentColor))
+            .setIcon(
+                drawable = drawable!!,
+                colorTint = ContextCompat.getColor(requireContext(), snackBarContentColor),
+                iconPadding = resources.getDimensionPixelOffset(R.dimen.small_margin)
+            )
+            .setCustomBackground(requireContext().getDrawable(R.drawable.snackbar_normal_custom_bg)!!)
+
+        snackBar.show()
     }
 
     private fun buttonClickListener() {
@@ -67,6 +150,7 @@ class RevenueFragment : Fragment() {
         // Views
         rvBestSeller = binding.rvBestSeller
         chart = binding.chart
+        revenueProgressIndicator = binding.revenueProgressIndicator
 
         rvBestSeller.adapter = BestSellerAdapter()
     }

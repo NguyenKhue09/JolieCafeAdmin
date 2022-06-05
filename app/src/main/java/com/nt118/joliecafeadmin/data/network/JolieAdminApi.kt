@@ -2,6 +2,7 @@ package com.nt118.joliecafeadmin.data.network
 
 import com.nt118.joliecafeadmin.models.ApiResponseMultiData
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
+import com.nt118.joliecafeadmin.models.MonthlyRevenue
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.util.Constants.Companion.API_GATEWAY
 import retrofit2.Response
@@ -35,4 +36,8 @@ interface JolieAdminApi {
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Product>>
 
+    @GET("$API_GATEWAY/revenue/yearly")
+    suspend fun getMonthlyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<MonthlyRevenue>>
 }
