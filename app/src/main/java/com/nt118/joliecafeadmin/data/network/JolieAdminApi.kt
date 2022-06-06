@@ -1,9 +1,6 @@
 package com.nt118.joliecafeadmin.data.network
 
-import com.nt118.joliecafeadmin.models.ApiResponseMultiData
-import com.nt118.joliecafeadmin.models.ApiResponseSingleData
-import com.nt118.joliecafeadmin.models.MonthlyRevenue
-import com.nt118.joliecafeadmin.models.Product
+import com.nt118.joliecafeadmin.models.*
 import com.nt118.joliecafeadmin.util.Constants.Companion.API_GATEWAY
 import retrofit2.Response
 import retrofit2.http.*
@@ -40,4 +37,12 @@ interface JolieAdminApi {
     suspend fun getMonthlyRevenue(
         @Header("Authorization") token: String
     ): Response<ApiResponseMultiData<MonthlyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/weekly")
+    suspend fun getWeeklyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<WeeklyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/best-seller")
+    suspend fun getBestSeller(): Response<ApiResponseMultiData<BestSeller>>
 }
