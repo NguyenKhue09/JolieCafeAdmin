@@ -124,7 +124,19 @@
         android:textColor="@color/title_text_color"
         android:text="@string/best_sellers"
         android:layout_marginTop="@dimen/extra_large_margin"/>
-    
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/best_seller_progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:indicatorColor="@color/text_color_2"
+        app:layout_constraintTop_toBottomOf="@id/tv_best_seller"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_best_seller"
         android:layout_width="match_parent"
