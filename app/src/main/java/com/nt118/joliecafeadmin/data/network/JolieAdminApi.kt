@@ -45,4 +45,19 @@ interface JolieAdminApi {
 
     @GET("$API_GATEWAY/revenue/best-seller")
     suspend fun getBestSeller(): Response<ApiResponseMultiData<BestSeller>>
+
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/notification/create-new-user-notification")
+    suspend fun addNewUserNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
+
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/notification/create-new-admin-notification")
+    suspend fun addNewAdminNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
+
 }

@@ -45,4 +45,5 @@
     <string name="all">All</string>
     <string name="for_you">For you</string>
     <string name="sold">Sold: %1$d</string>
+    <string name="push_notification">Push notification</string>
 </resources>

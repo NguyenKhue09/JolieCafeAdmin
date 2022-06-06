@@ -1,18 +1,15 @@
-package com.nt118.joliecafeadmin.ui.fragments.notifications
+package com.nt118.joliecafeadmin.ui.activities.notifications
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import com.google.android.material.snackbar.Snackbar
 import com.nt118.joliecafeadmin.R
-import com.nt118.joliecafeadmin.databinding.FragmentNotificationsBinding
+import com.nt118.joliecafeadmin.databinding.ActivityNotificationsBinding
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
@@ -21,9 +18,9 @@ import com.nt118.joliecafeadmin.viewmodels.NotificationsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NotificationsFragment : Fragment() {
+class NotificationsActivity : AppCompatActivity() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: ActivityNotificationsBinding? = null
     private val binding get() = _binding!!
 
     private val notificationsViewModel: NotificationsViewModel by viewModels()
@@ -32,14 +29,8 @@ class NotificationsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentNotificationsBinding.inflate(layoutInflater, container, false)
+        _binding = ActivityNotificationsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupActionBar()
 
@@ -47,17 +38,19 @@ class NotificationsFragment : Fragment() {
         updateBackOnlineStatus()
         observerNetworkMessage()
 
-        return binding.root
+        onAddNotificationButtonClicked()
     }
 
     private fun onAddNotificationButtonClicked() {
         binding.btnCreateNewNotification.setOnClickListener {
-            
+            val intend = Intent(this, NotificationActivity::class.java)
+            intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+            startActivity(intend)
         }
     }
 
     private fun observerNetworkMessage() {
-        notificationsViewModel.networkMessage.observe(viewLifecycleOwner) { message ->
+        notificationsViewModel.networkMessage.observe(this) { message ->
             if (!notificationsViewModel.networkStatus) {
                 showSnackBar(
                     message = message,
@@ -77,34 +70,36 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun updateBackOnlineStatus() {
-        notificationsViewModel.readBackOnline.asLiveData().observe(viewLifecycleOwner) { status ->
+        notificationsViewModel.readBackOnline.asLiveData().observe(this) { status ->
             notificationsViewModel.backOnline = status
         }
     }
 
     private fun updateNetworkStatus() {
         networkListener = NetworkListener()
-        networkListener.checkNetworkAvailability(requireContext())
-            .asLiveData().observe(viewLifecycleOwner) { status ->
+        networkListener.checkNetworkAvailability(this)
+            .asLiveData().observe(this) { status ->
                 notificationsViewModel.networkStatus = status
                 notificationsViewModel.showNetworkStatus()
             }
     }
 
     private fun setupActionBar() {
-        (activity as AppCompatActivity?)!!.setSupportActionBar(binding.toolbarNotificationsFragment)
+        setSupportActionBar(binding.toolbarNotificationsFragment)
 
-        val actionBar =  (activity as AppCompatActivity?)!!.supportActionBar
+        val actionBar = supportActionBar
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
         }
 
-        binding.toolbarNotificationsFragment.setNavigationOnClickListener { (activity as AppCompatActivity?)!!.onBackPressed() }
+        binding.toolbarNotificationsFragment.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun showSnackBar(message: String, status: Int, icon: Int) {
-        val drawable = ResourcesCompat.getDrawable(requireActivity().resources, icon, null)
+        val drawable = ResourcesCompat.getDrawable(resources, icon, null)
 
         val snackBarContentColor = when (status) {
             Constants.SNACK_BAR_STATUS_SUCCESS -> R.color.text_color_2
@@ -117,14 +112,14 @@ class NotificationsFragment : Fragment() {
         val snackBar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
             .setAction("Ok") {
             }
-            .setActionTextColor(ContextCompat.getColor(requireContext(), R.color.grey_primary))
-            .setTextColor(ContextCompat.getColor(requireContext(), snackBarContentColor))
+            .setActionTextColor(ContextCompat.getColor(this, R.color.grey_primary))
+            .setTextColor(ContextCompat.getColor(this, snackBarContentColor))
             .setIcon(
                 drawable = drawable!!,
-                colorTint = ContextCompat.getColor(requireContext(), snackBarContentColor),
+                colorTint = ContextCompat.getColor(this, snackBarContentColor),
                 iconPadding = resources.getDimensionPixelOffset(R.dimen.small_margin)
             )
-            .setCustomBackground(ResourcesCompat.getDrawable(requireActivity().resources, R.drawable.snackbar_normal_custom_bg, null)!!)
+            .setCustomBackground(ResourcesCompat.getDrawable(resources, R.drawable.snackbar_normal_custom_bg, null)!!)
 
         snackBar.show()
     }

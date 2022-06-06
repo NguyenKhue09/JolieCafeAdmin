@@ -3,9 +3,11 @@ package com.nt118.joliecafeadmin.util
 class Constants {
 
     companion object {
-        const val BASE_SEND_NOTICE_URL = "https://fcm.googleapis.com"
+
         const val SERVER_KEY = "AAAAsTUp0FM:APA91bHv_RMOReZTpvGleS8A_DrjejSziUGEFv9he4s0pFKzy4G_PYU5Snn6ABhdR_ihS9E5rDOorPpfNtzGAuOTiw1v-MlUuTbGrPH0bdDZQq1y5drjXh6rS2gRpI-0UH8DeWO_4Kdq"
         const val BASE_URL = "https://joliecafe.herokuapp.com"
+        const val FCM_BASE_URL = "https://fcm.googleapis.com"
+
         val listProductTypes = listOf("All", "Coffee", "Tea", "Juice", "Pasty", "Milk shake", "Milk tea")
         val listProductStatus = listOf("Avaiable", "Coming soon", "Not available")
         const val API_GATEWAY = "/api/v1/jolie-cafe"
@@ -23,5 +25,11 @@ class Constants {
         const val SNACK_BAR_STATUS_SUCCESS = 1
         const val SNACK_BAR_STATUS_DISABLE = 0
         const val SNACK_BAR_STATUS_ERROR = -1
+
+        const val ACTION_TYPE_VIEW = 1
+        const val ACTION_TYPE_EDIT = 0
+        const val ACTION_TYPE_ADD = -1
+        const val ACTION_TYPE = "actionTypeKey"
+        const val NOTIFICATION_ID = "notificationId"
     }
 }
