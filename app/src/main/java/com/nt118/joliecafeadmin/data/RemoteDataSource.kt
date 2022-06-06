@@ -5,7 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nt118.joliecafeadmin.data.network.JolieAdminApi
 import com.nt118.joliecafeadmin.data.paging_source.ProductPagingSource
+import com.nt118.joliecafeadmin.models.ApiResponseMultiData
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
+import com.nt118.joliecafeadmin.models.MonthlyRevenue
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.util.Constants.Companion.PAGE_SIZE
 import kotlinx.coroutines.flow.Flow
@@ -47,5 +49,11 @@ class RemoteDataSource @Inject constructor(
         token: String
     ): Response<ApiResponseSingleData<Product>> {
         return jolieAdminApi.getProductDetail(productId = productId, token = "Bearer $token")
+    }
+
+    suspend fun getMonthlyRevenue(
+        token: String
+    ): Response<ApiResponseMultiData<MonthlyRevenue>> {
+        return jolieAdminApi.getMonthlyRevenue(token = "Bearer $token")
     }
 }

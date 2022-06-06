@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
+import com.nt118.joliecafeadmin.models.ApiResponseMultiData
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
 import com.nt118.joliecafeadmin.util.ApiResult
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,25 @@ open class BaseViewModel(
     }
 
     fun <T> handleApiResponse(response: Response<ApiResponseSingleData<T>>): ApiResult<T> {
+        val result = response.body()
+        println(response)
+        return when {
+            response.message().toString().contains("timeout") -> {
+                ApiResult.Error("Timeout")
+            }
+            response.code() == 500 -> {
+                ApiResult.Error(response.message())
+            }
+            response.isSuccessful -> {
+                ApiResult.Success(result?.data!!)
+            }
+            else -> {
+                ApiResult.Error(response.message())
+            }
+        }
+    }
+
+    fun <T> handleApiMultiResponse(response: Response<ApiResponseMultiData<T>>): ApiResult<List<T>> {
         val result = response.body()
         println(response)
         return when {
