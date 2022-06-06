@@ -1,6 +1,7 @@
 package com.nt118.joliecafeadmin.ui.fragments.revenue
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -27,6 +28,7 @@ import com.nt118.joliecafeadmin.adapter.BestSellerAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
 import com.nt118.joliecafeadmin.models.MonthlyRevenue
 import com.nt118.joliecafeadmin.models.WeeklyRevenue
+import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationsActivity
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.NetworkListener
@@ -239,8 +241,7 @@ class RevenueFragment : Fragment() {
 
     private fun buttonClickListener() {
         binding.btnNotifications.setOnClickListener {
-            val action = RevenueFragmentDirections.actionNavigationRevenueToNotificationsFragment()
-            findNavController().navigate(action)
+            startActivity(Intent(requireContext(), NotificationsActivity::class.java))
         }
     }
 

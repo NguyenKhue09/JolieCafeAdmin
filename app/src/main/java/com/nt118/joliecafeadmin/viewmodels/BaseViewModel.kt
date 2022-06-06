@@ -30,7 +30,7 @@ open class BaseViewModel(
     var backOnline = false
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             readAdminToken.collectLatest { token ->
                 println(token)
                 adminToken = token
@@ -93,6 +93,25 @@ open class BaseViewModel(
             }
             response.isSuccessful -> {
                 ApiResult.Success(result?.data!!)
+            }
+            else -> {
+                ApiResult.Error(response.message())
+            }
+        }
+    }
+
+    fun <T> handleApiNullDataSuccessResponse(response: Response<ApiResponseSingleData<T>>): ApiResult<T> {
+        val result = response.body()
+        println(response)
+        return when {
+            response.message().toString().contains("timeout") -> {
+                ApiResult.Error("Timeout")
+            }
+            response.code() == 500 -> {
+                ApiResult.Error(response.message())
+            }
+            response.isSuccessful -> {
+                ApiResult.NullDataSuccess()
             }
             else -> {
                 ApiResult.Error(response.message())

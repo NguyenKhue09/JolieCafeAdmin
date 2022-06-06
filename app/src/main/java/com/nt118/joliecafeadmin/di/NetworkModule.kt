@@ -1,6 +1,7 @@
 package com.nt118.joliecafeadmin.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.nt118.joliecafeadmin.data.network.FCMApi
 import com.nt118.joliecafeadmin.data.network.JolieAdminApi
 import com.nt118.joliecafeadmin.util.Constants.Companion.BASE_URL
 import dagger.Module
@@ -58,5 +59,11 @@ object NetworkModule {
     @Provides
     fun provideApiService(retrofit: Retrofit): JolieAdminApi {
         return retrofit.create(JolieAdminApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideFCMApiService(retrofit: Retrofit): FCMApi {
+        return retrofit.create(FCMApi::class.java)
     }
 }

@@ -44,4 +44,5 @@
     <string name="enter_notification_content_here">Enter notification content here</string>
     <string name="all">All</string>
     <string name="for_you">For you</string>
+    <string name="push_notification">Push notification</string>
 </resources>

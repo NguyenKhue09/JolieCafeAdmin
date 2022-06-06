@@ -9,5 +9,5 @@ data class ProductFormValidationUseCases(
     val validateProductDescriptionUseCase: ValidateProductDescriptionUseCase,
     val validateProductStartDateDiscountUseCase: ValidateProductStartDateDiscountUseCase,
     val validateProductEndDateDiscountUseCase: ValidateProductEndDateDiscountUseCase,
-    val validateProductDiscountPercentUseCase: ValidateProductDiscountPercentUseCase
+    val validateProductDiscountPercentUseCase: ValidateProductDiscountPercentUseCase,
 )

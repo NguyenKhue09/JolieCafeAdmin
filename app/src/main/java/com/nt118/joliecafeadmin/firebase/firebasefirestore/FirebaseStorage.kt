@@ -2,15 +2,10 @@ package com.nt118.joliecafeadmin.firebase.firebasefirestore
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.storage.FirebaseStorage
 import com.nt118.joliecafeadmin.models.UploadFileToFirebaseResult
-import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 
 class FirebaseStorage {
 
