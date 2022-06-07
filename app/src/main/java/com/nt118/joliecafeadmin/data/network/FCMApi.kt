@@ -11,7 +11,7 @@ import retrofit2.http.POST
 interface FCMApi {
 
     @Headers("Content-Type: application/json")
-    @POST("/send")
+    @POST("fcm/send")
     suspend fun sendNotification(
         @Body notificationData: PushNotification,
         @Header("Authorization") key: String

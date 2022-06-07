@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.databinding.ActivityNotificationsBinding
 import com.nt118.joliecafeadmin.util.Constants
+import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_TYPE
+import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
@@ -45,6 +47,7 @@ class NotificationsActivity : AppCompatActivity() {
         binding.btnCreateNewNotification.setOnClickListener {
             val intend = Intent(this, NotificationActivity::class.java)
             intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+            intend.putExtra(NOTIFICATION_TYPE, listNotificationType[0])
             startActivity(intend)
         }
     }
