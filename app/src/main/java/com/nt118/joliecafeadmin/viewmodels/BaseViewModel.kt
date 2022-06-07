@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.models.ApiResponseMultiData
 import com.nt118.joliecafeadmin.models.ApiResponseSingleData
+import com.nt118.joliecafeadmin.models.CommonFCMResponse
+import com.nt118.joliecafeadmin.models.SingleFCMResponse
 import com.nt118.joliecafeadmin.util.ApiResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -103,6 +105,42 @@ open class BaseViewModel(
     fun <T> handleApiNullDataSuccessResponse(response: Response<ApiResponseSingleData<T>>): ApiResult<T> {
         val result = response.body()
         println(response)
+        return when {
+            response.message().toString().contains("timeout") -> {
+                ApiResult.Error("Timeout")
+            }
+            response.code() == 500 -> {
+                ApiResult.Error(response.message())
+            }
+            response.isSuccessful -> {
+                ApiResult.NullDataSuccess()
+            }
+            else -> {
+                ApiResult.Error(response.message())
+            }
+        }
+    }
+
+    fun <T> handleFCMCommonApiResponse(response: Response<CommonFCMResponse>): ApiResult<T> {
+        val result = response.body()
+        return when {
+            response.message().toString().contains("timeout") -> {
+                ApiResult.Error("Timeout")
+            }
+            response.code() == 500 -> {
+                ApiResult.Error(response.message())
+            }
+            response.isSuccessful -> {
+                ApiResult.NullDataSuccess()
+            }
+            else -> {
+                ApiResult.Error(response.message())
+            }
+        }
+    }
+
+    fun <T> handleFCMSingleApiResponse(response: Response<SingleFCMResponse>): ApiResult<T> {
+        val result = response.body()
         return when {
             response.message().toString().contains("timeout") -> {
                 ApiResult.Error("Timeout")

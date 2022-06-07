@@ -54,16 +54,23 @@ class NotificationViewModel @Inject constructor(
         viewModelScope.launch {
             _addNewNotificationResponse.value = ApiResult.Loading()
             val result = repository.remote.addNewAdminNotification(token = adminToken, notificationData = notificationData)
-            println(result)
             _addNewNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
         }
     }
 
-    fun sendNotification(pushNotification: PushNotification) {
+    fun sendCommonNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
             _sendNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.sendNotification(notificationData = pushNotification)
-            _sendNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
+            val result = repository.remote.sendCommonNotification(notificationData = pushNotification)
+            _sendNotificationResponse.value = handleFCMCommonApiResponse(response = result)
+        }
+    }
+
+    fun sendSingleNotification(pushNotification: PushNotification) {
+        viewModelScope.launch {
+            _sendNotificationResponse.value = ApiResult.Loading()
+            val result = repository.remote.sendSingleNotification(notificationData = pushNotification)
+            _sendNotificationResponse.value = handleFCMSingleApiResponse(response = result)
         }
     }
 
@@ -84,8 +91,14 @@ class NotificationViewModel @Inject constructor(
             is NotificationFormStateEvent.OnProductIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(productId = event.productId)
             }
+            is NotificationFormStateEvent.OnProductNameChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(productName = event.productName)
+            }
             is NotificationFormStateEvent.OnVoucherIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(voucherId = event.voucherId)
+            }
+            is NotificationFormStateEvent.OnVoucherCodeChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(voucherCode = event.voucherCode)
             }
             is NotificationFormStateEvent.OnBillIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(billId = event.billId)
