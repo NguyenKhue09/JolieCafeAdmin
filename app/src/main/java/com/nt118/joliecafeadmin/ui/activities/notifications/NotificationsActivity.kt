@@ -23,6 +23,7 @@ import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_ID
 import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_TYPE
 import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
+import com.nt118.joliecafeadmin.util.Constants.Companion.listTabNotificationType
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.NotificationComparator
 import com.nt118.joliecafeadmin.util.ProductComparator
@@ -31,6 +32,7 @@ import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.NotificationsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -96,6 +98,7 @@ class NotificationsActivity : AppCompatActivity() {
         binding.notificationsTabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                println(binding.notificationsTabLayout.selectedTabPosition)
                 if (tab != null) {
                     notificationsViewModel.setTabSelected(tab = tab.text.toString())
                 }
@@ -137,7 +140,7 @@ class NotificationsActivity : AppCompatActivity() {
     }
 
     private fun addProductTabText() {
-        Constants.listTabNotificationType.forEach {
+        listTabNotificationType.forEach {
             binding.notificationsTabLayout.addTab(binding.notificationsTabLayout.newTab().apply {
                 tag = it
                 text = it
@@ -219,14 +222,15 @@ class NotificationsActivity : AppCompatActivity() {
     private fun backOnlineRecallNotifications() {
         lifecycleScope.launchWhenStarted {
             if (notificationsViewModel.backOnline) {
+                println(binding.notificationsTabLayout.selectedTabPosition)
                 notificationsViewModel.getNotifications(
                     notificationQuery = mapOf(
-                        "type" to Constants.listProductTypes[binding.notificationsTabLayout.selectedTabPosition].uppercase(
+                        "type" to listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition].uppercase(
                             Locale.getDefault()
                         )
                     )
                 ).collectLatest { data ->
-                    selectedTab = Constants.listProductTypes[binding.notificationsTabLayout.selectedTabPosition]
+                    selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
                     submitProductAdapterData(data = data)
                 }
             }
@@ -272,6 +276,22 @@ class NotificationsActivity : AppCompatActivity() {
             .setCustomBackground(ResourcesCompat.getDrawable(resources, R.drawable.snackbar_normal_custom_bg, null)!!)
 
         snackBar.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            notificationsViewModel.getNotifications(
+                notificationQuery = mapOf(
+                    "type" to listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition].uppercase(
+                        Locale.getDefault()
+                    )
+                )
+            ).collectLatest { data ->
+                selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
+                submitProductAdapterData(data = data)
+            }
+        }
     }
 
     override fun onDestroy() {

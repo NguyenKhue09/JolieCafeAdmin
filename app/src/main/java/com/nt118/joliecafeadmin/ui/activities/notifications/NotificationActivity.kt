@@ -38,7 +38,6 @@ import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
 import com.nt118.joliecafeadmin.util.extenstions.isValidUrl
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
-import com.nt118.joliecafeadmin.viewmodels.AddNewProductViewModel
 import com.nt118.joliecafeadmin.viewmodels.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -61,6 +60,7 @@ class NotificationActivity : AppCompatActivity() {
     private var notificationType: String? = null
     private var notificationId: String? = null
     private var actionType: Int? = null
+    private var image: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,7 +155,7 @@ class NotificationActivity : AppCompatActivity() {
 
     private fun getValueFromIntent() {
         actionType = intent.extras?.getInt(ACTION_TYPE)
-        val image = intent.extras?.getString(NOTIFICATION_IMAGE)
+        image = intent.extras?.getString(NOTIFICATION_IMAGE)
 
         actionType?.let {
             when (it) {
@@ -291,7 +291,7 @@ class NotificationActivity : AppCompatActivity() {
                     is ApiResult.Error -> {
                         binding.notificationDetailCircularProgressIndicator.visibility =
                             View.INVISIBLE
-                        showSnackBar(
+                        if (notificationViewModel.networkStatus) showSnackBar(
                             message = it.message!!,
                             status = SNACK_BAR_STATUS_ERROR,
                             icon = R.drawable.ic_error
@@ -496,6 +496,8 @@ class NotificationActivity : AppCompatActivity() {
                     val productId = intent.extras?.getString(Constants.PRODUCT_ID)
                     val productName = intent.extras?.getString(Constants.PRODUCT_NAME)
 
+                    println("$productId $productName")
+
                     if (productId.isNullOrEmpty() || productName.isNullOrEmpty()) {
                         binding.footerActionButton.btnAddNewNotification.isEnabled = false
                         showSnackBar(
@@ -506,6 +508,7 @@ class NotificationActivity : AppCompatActivity() {
                     } else {
                         setProductId(productId)
                         setProductName(productName = productName)
+                        setPredictProductNotificationContent(productName = productName, image = image)
                     }
                 }
                 listNotificationType[2] -> {
@@ -543,6 +546,21 @@ class NotificationActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setPredictProductNotificationContent(productName: String, image: String?) {
+        binding.etNotificationTitle.setText(productName)
+        binding.etNotificationMessage.setText(productName)
+        image?.let {
+            binding.notificationImg.load(
+                Uri.parse(image)
+            ) {
+                crossfade(300)
+                placeholder(R.drawable.image_logo)
+                error(R.drawable.image_logo)
+            }
+        }
+
     }
 
     @SuppressLint("Range")
@@ -669,7 +687,16 @@ class NotificationActivity : AppCompatActivity() {
             .asLiveData().observe(this) { status ->
                 notificationViewModel.networkStatus = status
                 notificationViewModel.showNetworkStatus()
+                recallDataIfBackOnline()
             }
+    }
+
+    private fun recallDataIfBackOnline() {
+        if (actionType == ACTION_TYPE_EDIT || actionType == ACTION_TYPE_VIEW) {
+            notificationId?.let { id ->
+                notificationViewModel.getNotificationDetail(id)
+            }
+        }
     }
 
     private fun observerNetworkMessage() {
