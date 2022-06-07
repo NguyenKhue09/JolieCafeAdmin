@@ -34,6 +34,11 @@ interface JolieAdminApi {
     ): Response<ApiResponseSingleData<Product>>
 
     @GET("$API_GATEWAY/revenue/yearly")
+    suspend fun getYearlyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<YearlyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/monthly")
     suspend fun getMonthlyRevenue(
         @Header("Authorization") token: String
     ): Response<ApiResponseMultiData<MonthlyRevenue>>
@@ -45,6 +50,21 @@ interface JolieAdminApi {
 
     @GET("$API_GATEWAY/revenue/best-seller")
     suspend fun getBestSeller(): Response<ApiResponseMultiData<BestSeller>>
+
+    @GET("$API_GATEWAY/revenue/current-week")
+    suspend fun getCurrentWeekRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
+
+    @GET("$API_GATEWAY/revenue/current-month")
+    suspend fun getCurrentMonthRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
+
+    @GET("$API_GATEWAY/revenue/current-year")
+    suspend fun getCurrentYearRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
 
     @Headers("Content-Type: application/json")
     @POST("$API_GATEWAY/notification/create-new-user-notification")
