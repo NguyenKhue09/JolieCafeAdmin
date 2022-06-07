@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".JolieAdminApplication"
@@ -15,17 +15,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JolieCafeAdmin">
         <activity
+            android:name=".ui.activities.add_voucher.AddVoucherActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true" >
+
+        </activity>
+        <activity
+            android:name=".ui.activities.notifications.NotificationActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activities.notifications.NotificationsActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.add_product.AddNewProductActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.product_detail.ProductDetailActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="false" />
         <activity
             android:name=".ui.activities.login.LoginActivity"
-            android:exported="false">
-        </activity>
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

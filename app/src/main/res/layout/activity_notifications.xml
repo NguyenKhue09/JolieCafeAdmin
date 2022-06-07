@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.notifications.NotificationsFragment">
+    tools:context=".ui.activities.notifications.NotificationsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_notifications_fragment"
@@ -27,14 +27,51 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <SearchView
+        android:id="@+id/search_notification_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/searchview_background"
+        android:backgroundTint="@color/grey_opacity60_primary"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@null"
+        android:layout_marginHorizontal="@dimen/large_margin"
+        android:queryHint="Search for your notifications..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_notifications_fragment"
+        app:theme="@style/SearchViewStyle" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/notifications_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_notification_box"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/grey_primary_variant"
+        android:textAlignment="textStart"
+        app:tabIndicatorColor="@color/grey_primary_variant"
+        android:layout_marginTop="25dp"
+        app:tabPaddingStart="10dp"
+        app:tabIndicatorFullWidth="false"
+        android:contentDescription="@string/products_tab_page"
+        app:tabTextColor="@color/text_color"
+        app:tabTextAppearance="@style/MyCustomTabTextAppearance">
+
+    </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/notification_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_notifications_fragment"
+        app:layout_constraintTop_toBottomOf="@+id/notifications_tab_layout"
         tools:itemCount="10"
         tools:listitem="@layout/notification_item_layout" />
 

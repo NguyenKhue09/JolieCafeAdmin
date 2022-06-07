@@ -1,8 +1,6 @@
 package com.nt118.joliecafeadmin.data.network
 
-import com.nt118.joliecafeadmin.models.ApiResponseMultiData
-import com.nt118.joliecafeadmin.models.ApiResponseSingleData
-import com.nt118.joliecafeadmin.models.Product
+import com.nt118.joliecafeadmin.models.*
 import com.nt118.joliecafeadmin.util.Constants.Companion.API_GATEWAY
 import retrofit2.Response
 import retrofit2.http.*
@@ -35,4 +33,62 @@ interface JolieAdminApi {
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Product>>
 
+    @GET("$API_GATEWAY/revenue/yearly")
+    suspend fun getYearlyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<YearlyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/monthly")
+    suspend fun getMonthlyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<MonthlyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/weekly")
+    suspend fun getWeeklyRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<WeeklyRevenue>>
+
+    @GET("$API_GATEWAY/revenue/best-seller")
+    suspend fun getBestSeller(): Response<ApiResponseMultiData<BestSeller>>
+
+    @GET("$API_GATEWAY/revenue/current-week")
+    suspend fun getCurrentWeekRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
+
+    @GET("$API_GATEWAY/revenue/current-month")
+    suspend fun getCurrentMonthRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
+
+    @GET("$API_GATEWAY/revenue/current-year")
+    suspend fun getCurrentYearRevenue(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Int>>
+
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/notification/create-new-user-notification")
+    suspend fun addNewUserNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
+
+    @Headers("Content-Type: application/json")
+    @POST("$API_GATEWAY/notification/create-new-admin-notification")
+    suspend fun addNewAdminNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
+
+    @GET("$API_GATEWAY/notification/get-admin-notification")
+    suspend fun getNotification(
+        @QueryMap notificationQuery: Map<String, String>,
+        @Header("Authorization") token: String
+    ): ApiResponseMultiData<Notification>
+
+    @GET("$API_GATEWAY/notification/get-detail")
+    suspend fun getNotificationDetail(
+        @Query("notificationId") notificationId: String,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Notification>>
 }

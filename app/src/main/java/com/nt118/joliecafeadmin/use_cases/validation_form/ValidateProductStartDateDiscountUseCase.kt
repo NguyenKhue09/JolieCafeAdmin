@@ -18,7 +18,7 @@ class ValidateProductStartDateDiscountUseCase {
                 timeZone = TimeZone.getDefault()
             )?: return ValidationResult(
                 successful = false,
-                errorMessage = "Valid date!"
+                errorMessage = "Invalid date!"
             )
 
             return ValidationResult(
