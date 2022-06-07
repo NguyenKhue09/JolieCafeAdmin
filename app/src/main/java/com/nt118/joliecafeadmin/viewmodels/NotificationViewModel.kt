@@ -5,9 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.data.Repository
-import com.nt118.joliecafeadmin.models.NotificationFormState
-import com.nt118.joliecafeadmin.models.PushNotification
-import com.nt118.joliecafeadmin.models.ValidationResult
+import com.nt118.joliecafeadmin.models.*
 import com.nt118.joliecafeadmin.use_cases.NotificationFormValidationUseCases
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.NotificationFormStateEvent
@@ -36,6 +34,9 @@ class NotificationViewModel @Inject constructor(
     val sendNotificationResponse: StateFlow<ApiResult<Unit>> = _sendNotificationResponse
 
 
+    private val _getNotificationDetailResponse =
+        MutableStateFlow<ApiResult<Notification>>(ApiResult.Idle())
+    val getNotificationDetailResponse: StateFlow<ApiResult<Notification>> = _getNotificationDetailResponse
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
@@ -71,6 +72,20 @@ class NotificationViewModel @Inject constructor(
             _sendNotificationResponse.value = ApiResult.Loading()
             val result = repository.remote.sendSingleNotification(notificationData = pushNotification)
             _sendNotificationResponse.value = handleFCMSingleApiResponse(response = result)
+        }
+    }
+
+    fun getNotificationDetail(notificationId: String) {
+        viewModelScope.launch {
+            _getNotificationDetailResponse.value = ApiResult.Loading()
+            try {
+                val response =
+                    repository.remote.getNotificationDetail(token = adminToken, notificationId = notificationId)
+                _getNotificationDetailResponse.value = handleApiResponse(response = response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _getNotificationDetailResponse.value = ApiResult.Error(e.message)
+            }
         }
     }
 

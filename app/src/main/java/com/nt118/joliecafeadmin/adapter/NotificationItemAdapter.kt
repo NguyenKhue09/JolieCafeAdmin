@@ -57,9 +57,11 @@ class NotificationItemAdapter(
                 notificationActivity.getString(R.string.create_at, notification.createdAt.toDate()?.formatTo(LOCAL_TIME_FORMAT))
 
             holder.binding.cardNotification.setOnClickListener {
+                println("View notification ${notification.id}")
                 onNotificationClicked(notification.id)
             }
             holder.binding.btnEdit.setOnClickListener {
+                println("Edit notification ${notification.id}")
                 onEditNotificationClicked(notification.id)
             }
         }
