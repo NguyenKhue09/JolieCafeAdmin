@@ -15,4 +15,5 @@ data class NotificationFormState(
     val voucherId: String = "",
     val billId: String = "",
     val userId: String = "",
+    val notificationId: String = ""
 )

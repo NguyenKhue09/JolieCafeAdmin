@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.data.Repository
 import com.nt118.joliecafeadmin.models.NotificationFormState
-import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.models.PushNotification
 import com.nt118.joliecafeadmin.models.ValidationResult
 import com.nt118.joliecafeadmin.use_cases.NotificationFormValidationUseCases
@@ -54,7 +53,8 @@ class NotificationViewModel @Inject constructor(
     fun addNewAdminNotification(notificationData: Map<String, String>) {
         viewModelScope.launch {
             _addNewNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.addNewUserNotification(token = adminToken, notificationData = notificationData)
+            val result = repository.remote.addNewAdminNotification(token = adminToken, notificationData = notificationData)
+            println(result)
             _addNewNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
         }
     }
@@ -69,29 +69,32 @@ class NotificationViewModel @Inject constructor(
 
     fun onNotificationFormEvent(event: NotificationFormStateEvent) {
         when(event) {
-            is NotificationFormStateEvent.onTitleChanged -> {
+            is NotificationFormStateEvent.OnTitleChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(title = event.title)
             }
-            is NotificationFormStateEvent.onMessageChanged -> {
+            is NotificationFormStateEvent.OnMessageChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(message = event.message)
             }
-            is NotificationFormStateEvent.onImageChanged -> {
+            is NotificationFormStateEvent.OnImageChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(image = event.imageUri)
             }
-            is NotificationFormStateEvent.onTypeChanged -> {
+            is NotificationFormStateEvent.OnTypeChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(type = event.type)
             }
-            is NotificationFormStateEvent.onProductIdChanged -> {
+            is NotificationFormStateEvent.OnProductIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(productId = event.productId)
             }
-            is NotificationFormStateEvent.onVoucherIdChanged -> {
+            is NotificationFormStateEvent.OnVoucherIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(voucherId = event.voucherId)
             }
-            is NotificationFormStateEvent.onBillIdChanged -> {
+            is NotificationFormStateEvent.OnBillIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(billId = event.billId)
             }
-            is NotificationFormStateEvent.onUserIdChanged -> {
+            is NotificationFormStateEvent.OnUserIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(userId = event.userId)
+            }
+            is NotificationFormStateEvent.OnNotificationIdChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(notificationId = event.notificationId)
             }
             is NotificationFormStateEvent.Submit -> {
                 submitNotificationFormData()
