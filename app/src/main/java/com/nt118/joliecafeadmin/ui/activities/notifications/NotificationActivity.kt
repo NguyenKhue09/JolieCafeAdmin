@@ -450,10 +450,19 @@ class NotificationActivity : AppCompatActivity() {
         var pushNotification = PushNotification(
             data = NotificationData(
                 title = notificationFormState.value.title,
-                message = notificationFormState.value.message
+                message = notificationFormState.value.message,
+                type = notificationFormState.value.type,
+                image = notificationFormState.value.image.toString(),
+                productId = notificationFormState.value.productId,
+                productName = notificationFormState.value.productName,
+                voucherId = notificationFormState.value.voucherId,
+                voucherCode = notificationFormState.value.voucherCode,
+                billId = notificationFormState.value.billId,
+                userId = notificationFormState.value.userId,
             ),
             to = "/topics/$COMMON_NOTIFICATION_TOPIC",
         )
+
 
         notificationType?.let {
             when (it) {
