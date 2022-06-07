@@ -38,7 +38,6 @@ import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
 import com.nt118.joliecafeadmin.util.extenstions.isValidUrl
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
-import com.nt118.joliecafeadmin.viewmodels.AddNewProductViewModel
 import com.nt118.joliecafeadmin.viewmodels.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -59,6 +58,9 @@ class NotificationActivity : AppCompatActivity() {
     private lateinit var notificationFormState: MutableStateFlow<NotificationFormState>
     private lateinit var networkListener: NetworkListener
     private var notificationType: String? = null
+    private var notificationId: String? = null
+    private var actionType: Int? = null
+    private var image: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,8 +154,8 @@ class NotificationActivity : AppCompatActivity() {
 
 
     private fun getValueFromIntent() {
-        val actionType = intent.extras?.getInt(ACTION_TYPE)
-        val image = intent.extras?.getString(NOTIFICATION_IMAGE)
+        actionType = intent.extras?.getInt(ACTION_TYPE)
+        image = intent.extras?.getString(NOTIFICATION_IMAGE)
 
         actionType?.let {
             when (it) {
@@ -173,24 +175,32 @@ class NotificationActivity : AppCompatActivity() {
                 }
                 ACTION_TYPE_EDIT -> {
                     println("ACTION_TYPE_EDIT")
+
+                    binding.footerActionButton.btnAddNewNotification.text = "Update notification"
+
                     enableViewToADDOrEdit()
 
                     observerFormFieldChanged()
                     observerFormFieldError()
-                    //observerAddNewNotification()
+
                     observerSendNotification()
                     observerFooterActionClickEvent()
                     observerNotificationFormValidateSubmitEvent()
                     observerUploadImageToFirebase()
+                    observerUpdateNotification()
+                    observerGetDetailNotification()
+                    notificationId = intent.extras?.getString(Constants.NOTIFICATION_ID)
+                    notificationId?.let { id ->
+                        notificationViewModel.getNotificationDetail(id)
+                    }
                 }
                 ACTION_TYPE_VIEW -> {
                     println("ACTION_TYPE_VIEW")
-
                     binding.footerActionButtonContainer.visibility = View.GONE
                     binding.btnGetImage.visibility = View.GONE
 
                     observerGetDetailNotification()
-                    val notificationId = intent.extras?.getString(Constants.NOTIFICATION_ID)
+                    notificationId = intent.extras?.getString(Constants.NOTIFICATION_ID)
                     notificationId?.let { id ->
                         notificationViewModel.getNotificationDetail(id)
                     }
@@ -205,15 +215,64 @@ class NotificationActivity : AppCompatActivity() {
 
     }
 
+    // Action edit
+    private fun updateNotification() {
+        notificationId?.let { id ->
+            val notificationData = mutableMapOf(
+                "notificationId" to id ,
+                "title" to notificationFormState.value.title,
+                "message" to notificationFormState.value.message,
+                "type" to notificationFormState.value.type,
+                "image" to notificationFormState.value.image.toString(),
+            )
+            notificationViewModel.updateNotification(notificationData)
+        }
+    }
+    private fun observerUpdateNotification() {
+        lifecycleScope.launch {
+            notificationViewModel.updateNotificationResponse.collectLatest {
+                when (it) {
+                    is ApiResult.Loading -> {
+                        binding.notificationDetailCircularProgressIndicator.visibility =
+                            View.VISIBLE
+                    }
+                    is ApiResult.Success -> {
+                        binding.notificationDetailCircularProgressIndicator.visibility =
+                            View.INVISIBLE
+                        showSnackBar(
+                            message = "Update notification success!",
+                            status = SNACK_BAR_STATUS_SUCCESS,
+                            icon = R.drawable.ic_success
+                        )
+                    }
+                    is ApiResult.Error -> {
+                        binding.notificationDetailCircularProgressIndicator.visibility =
+                            View.INVISIBLE
+                        showSnackBar(
+                            message = it.message!!,
+                            status = SNACK_BAR_STATUS_ERROR,
+                            icon = R.drawable.ic_error
+                        )
+                    }
+                    else -> {}
+                }
+            }
+        }
+
+    }
+
     //Action View
     private fun setDataToView(notification: Notification) {
         binding.etNotificationTitle.setText(notification.title)
         binding.etNotificationMessage.setText(notification.message)
         binding.etNotificationType.setText(notification.type)
-        binding.notificationImg.load(Uri.parse(notification.image)) {
-            crossfade(600)
-            error(R.drawable.image_logo)
-            placeholder(R.drawable.image_logo)
+        notification.image?.let {
+            setImage(Uri.parse(it))
+            binding.notificationImg.load(it) {
+                crossfade(300)
+                error(R.drawable.image_logo)
+                placeholder(R.drawable.image_logo)
+            }
         }
     }
     private fun observerGetDetailNotification() {
@@ -232,7 +291,7 @@ class NotificationActivity : AppCompatActivity() {
                     is ApiResult.Error -> {
                         binding.notificationDetailCircularProgressIndicator.visibility =
                             View.INVISIBLE
-                        showSnackBar(
+                        if (notificationViewModel.networkStatus) showSnackBar(
                             message = it.message!!,
                             status = SNACK_BAR_STATUS_ERROR,
                             icon = R.drawable.ic_error
@@ -312,7 +371,6 @@ class NotificationActivity : AppCompatActivity() {
     private fun observerFooterActionClickEvent() {
         binding.footerActionButton.btnAddNewNotification.setOnClickListener {
             notificationViewModel.onNotificationFormEvent(event = NotificationFormStateEvent.Submit)
-            //observerProductImageError()
         }
     }
 
@@ -321,10 +379,14 @@ class NotificationActivity : AppCompatActivity() {
             notificationViewModel.validationEvents.collect { event ->
                 when (event) {
                     is NotificationViewModel.ValidationEvent.Success -> {
+                        println(notificationFormState.value.image)
+                        println(notificationFormState.value.image != Uri.EMPTY)
+                        println(notificationFormState.value.image.toString()
+                            .isValidUrl())
                         if (notificationFormState.value.image != Uri.EMPTY && notificationFormState.value.image.toString()
                                 .isValidUrl()
                         ) {
-                            addNewNotification()
+                            apiAction()
                         } else {
                             val fileName = getNameFile(
                                 notificationFormState.value.image,
@@ -343,6 +405,14 @@ class NotificationActivity : AppCompatActivity() {
         }
     }
 
+    private fun apiAction () {
+        if(actionType == ACTION_TYPE_ADD) {
+            addNewNotification()
+        } else if(actionType == ACTION_TYPE_EDIT) {
+            updateNotification()
+        }
+    }
+
     private fun observerUploadImageToFirebase() {
         firebaseStorage.uploadImageResult.asLiveData().observe(this) { uploadResult ->
             when (uploadResult) {
@@ -358,7 +428,7 @@ class NotificationActivity : AppCompatActivity() {
                     println(uploadResult.downloadUri.toString())
                     uploadResult.downloadUri?.let {
                         setImage(image = Uri.parse(it))
-                        addNewNotification()
+                        apiAction()
                     }
                 }
                 is UploadFileToFirebaseResult.Loading -> {
@@ -380,10 +450,19 @@ class NotificationActivity : AppCompatActivity() {
         var pushNotification = PushNotification(
             data = NotificationData(
                 title = notificationFormState.value.title,
-                message = notificationFormState.value.message
+                message = notificationFormState.value.message,
+                type = notificationFormState.value.type,
+                image = notificationFormState.value.image.toString(),
+                productId = notificationFormState.value.productId,
+                productName = notificationFormState.value.productName,
+                voucherId = notificationFormState.value.voucherId,
+                voucherCode = notificationFormState.value.voucherCode,
+                billId = notificationFormState.value.billId,
+                userId = notificationFormState.value.userId,
             ),
             to = "/topics/$COMMON_NOTIFICATION_TOPIC",
         )
+
 
         notificationType?.let {
             when (it) {
@@ -426,6 +505,8 @@ class NotificationActivity : AppCompatActivity() {
                     val productId = intent.extras?.getString(Constants.PRODUCT_ID)
                     val productName = intent.extras?.getString(Constants.PRODUCT_NAME)
 
+                    println("$productId $productName")
+
                     if (productId.isNullOrEmpty() || productName.isNullOrEmpty()) {
                         binding.footerActionButton.btnAddNewNotification.isEnabled = false
                         showSnackBar(
@@ -436,6 +517,7 @@ class NotificationActivity : AppCompatActivity() {
                     } else {
                         setProductId(productId)
                         setProductName(productName = productName)
+                        setPredictProductNotificationContent(productName = productName, image = image)
                     }
                 }
                 listNotificationType[2] -> {
@@ -473,6 +555,21 @@ class NotificationActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setPredictProductNotificationContent(productName: String, image: String?) {
+        binding.etNotificationTitle.setText(productName)
+        binding.etNotificationMessage.setText(productName)
+        image?.let {
+            binding.notificationImg.load(
+                Uri.parse(image)
+            ) {
+                crossfade(300)
+                placeholder(R.drawable.image_logo)
+                error(R.drawable.image_logo)
+            }
+        }
+
     }
 
     @SuppressLint("Range")
@@ -599,7 +696,16 @@ class NotificationActivity : AppCompatActivity() {
             .asLiveData().observe(this) { status ->
                 notificationViewModel.networkStatus = status
                 notificationViewModel.showNetworkStatus()
+                recallDataIfBackOnline()
             }
+    }
+
+    private fun recallDataIfBackOnline() {
+        if (actionType == ACTION_TYPE_EDIT || actionType == ACTION_TYPE_VIEW) {
+            notificationId?.let { id ->
+                notificationViewModel.getNotificationDetail(id)
+            }
+        }
     }
 
     private fun observerNetworkMessage() {

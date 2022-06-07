@@ -22,6 +22,7 @@ import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
+import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationActivity
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
@@ -157,6 +158,15 @@ class ProductsFragment : Fragment() {
             },
             onEditProductClicked = { productId ->
                 onProductClicked(productId = productId, isEdit = true)
+            },
+            onNotificationClicked = { id, name, image ->
+                val intend = Intent(requireContext(), NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+                intend.putExtra(Constants.NOTIFICATION_TYPE, Constants.listNotificationType[1])
+                intend.putExtra(Constants.PRODUCT_NAME, name)
+                intend.putExtra(Constants.PRODUCT_ID, id)
+                intend.putExtra(Constants.NOTIFICATION_IMAGE, image)
+                startActivity(intend)
             }
         )
     }
