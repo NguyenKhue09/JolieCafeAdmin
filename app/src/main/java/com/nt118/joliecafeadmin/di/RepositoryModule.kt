@@ -2,6 +2,7 @@ package com.nt118.joliecafeadmin.di
 
 import com.nt118.joliecafeadmin.use_cases.NotificationFormValidationUseCases
 import com.nt118.joliecafeadmin.use_cases.ProductFormValidationUseCases
+import com.nt118.joliecafeadmin.use_cases.VoucherFormValidationUseCase
 import com.nt118.joliecafeadmin.use_cases.validation_form.*
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,20 @@ object RepositoryModule {
             validateNotificationImageUseCase = ValidateNotificationImageUseCase(),
             validateNotificationMessageUseCase = ValidateNotificationMessageUseCase(),
             validateNotificationTitleUseCase = ValidateNotificationTitleUseCase(),
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideVoucherFormValidationUseCase(): VoucherFormValidationUseCase {
+        return VoucherFormValidationUseCase(
+            validateVoucherCodeUseCase = ValidateVoucherCodeUseCase(),
+            validateVoucherDescriptionUseCase = ValidateVoucherDescriptionUseCase(),
+            validateVoucherStartDateUseCase = ValidateVoucherStartDateUseCase(),
+            validateVoucherEndDateUseCase = ValidateVoucherEndDateUseCase(),
+            validateVoucherDiscountPercentUseCase = ValidateVoucherDiscountPercentUseCase(),
+            validateVoucherConditionUseCase = ValidateVoucherConditionUseCase(),
+            validateVoucherQuantityUseCase = ValidateVoucherQuantityUseCase()
         )
     }
 

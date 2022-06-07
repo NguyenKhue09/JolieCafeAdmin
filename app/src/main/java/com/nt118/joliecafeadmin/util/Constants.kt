@@ -10,6 +10,7 @@ class Constants {
 
         val listProductTypes = listOf("All", "Coffee", "Tea", "Juice", "Pasty", "Milk shake", "Milk tea")
         val listProductStatus = listOf("Avaiable", "Coming soon", "Not available")
+        val listVoucherTypes = listOf("Discount", "Ship")
         const val API_GATEWAY = "/api/v1/jolie-cafe"
         const val PAGE_SIZE = 20
 
