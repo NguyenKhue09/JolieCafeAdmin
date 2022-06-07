@@ -30,6 +30,18 @@ class Constants {
         const val ACTION_TYPE_EDIT = 0
         const val ACTION_TYPE_ADD = -1
         const val ACTION_TYPE = "actionTypeKey"
+        const val NOTIFICATION_TYPE = "notificationType"
         const val NOTIFICATION_ID = "notificationId"
+        const val NOTIFICATION_IMAGE = "notificationImage"
+        const val PRODUCT_ID = "productId"
+        const val PRODUCT_NAME = "productName"
+        const val VOUCHER_ID = "voucherId"
+        const val VOUCHER_CODE = "voucherCode"
+        const val USER_ID = "userId"
+        const val USER_NOTICE_TOKEN = "userNoticeToken"
+        const val COMMON_NOTIFICATION_TOPIC = "JolieCafeNotificationMainTopic"
+
+        val listNotificationType = listOf("COMMON", "PRODUCT", "VOUCHER", "BILL")
+        val listTabNotificationType = listOf("All", "Common", "Product", "Voucher", "Bill")
     }
 }

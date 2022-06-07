@@ -5,10 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.nt118.joliecafeadmin.data.DataStoreRepository
 import com.nt118.joliecafeadmin.data.Repository
-import com.nt118.joliecafeadmin.models.NotificationFormState
-import com.nt118.joliecafeadmin.models.Product
-import com.nt118.joliecafeadmin.models.PushNotification
-import com.nt118.joliecafeadmin.models.ValidationResult
+import com.nt118.joliecafeadmin.models.*
 import com.nt118.joliecafeadmin.use_cases.NotificationFormValidationUseCases
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.NotificationFormStateEvent
@@ -37,6 +34,9 @@ class NotificationViewModel @Inject constructor(
     val sendNotificationResponse: StateFlow<ApiResult<Unit>> = _sendNotificationResponse
 
 
+    private val _getNotificationDetailResponse =
+        MutableStateFlow<ApiResult<Notification>>(ApiResult.Idle())
+    val getNotificationDetailResponse: StateFlow<ApiResult<Notification>> = _getNotificationDetailResponse
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
@@ -54,44 +54,75 @@ class NotificationViewModel @Inject constructor(
     fun addNewAdminNotification(notificationData: Map<String, String>) {
         viewModelScope.launch {
             _addNewNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.addNewUserNotification(token = adminToken, notificationData = notificationData)
+            val result = repository.remote.addNewAdminNotification(token = adminToken, notificationData = notificationData)
             _addNewNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
         }
     }
 
-    fun sendNotification(pushNotification: PushNotification) {
+    fun sendCommonNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
             _sendNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.sendNotification(notificationData = pushNotification)
-            _sendNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
+            val result = repository.remote.sendCommonNotification(notificationData = pushNotification)
+            _sendNotificationResponse.value = handleFCMCommonApiResponse(response = result)
+        }
+    }
+
+    fun sendSingleNotification(pushNotification: PushNotification) {
+        viewModelScope.launch {
+            _sendNotificationResponse.value = ApiResult.Loading()
+            val result = repository.remote.sendSingleNotification(notificationData = pushNotification)
+            _sendNotificationResponse.value = handleFCMSingleApiResponse(response = result)
+        }
+    }
+
+    fun getNotificationDetail(notificationId: String) {
+        viewModelScope.launch {
+            _getNotificationDetailResponse.value = ApiResult.Loading()
+            try {
+                val response =
+                    repository.remote.getNotificationDetail(token = adminToken, notificationId = notificationId)
+                _getNotificationDetailResponse.value = handleApiResponse(response = response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _getNotificationDetailResponse.value = ApiResult.Error(e.message)
+            }
         }
     }
 
     fun onNotificationFormEvent(event: NotificationFormStateEvent) {
         when(event) {
-            is NotificationFormStateEvent.onTitleChanged -> {
+            is NotificationFormStateEvent.OnTitleChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(title = event.title)
             }
-            is NotificationFormStateEvent.onMessageChanged -> {
+            is NotificationFormStateEvent.OnMessageChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(message = event.message)
             }
-            is NotificationFormStateEvent.onImageChanged -> {
+            is NotificationFormStateEvent.OnImageChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(image = event.imageUri)
             }
-            is NotificationFormStateEvent.onTypeChanged -> {
+            is NotificationFormStateEvent.OnTypeChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(type = event.type)
             }
-            is NotificationFormStateEvent.onProductIdChanged -> {
+            is NotificationFormStateEvent.OnProductIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(productId = event.productId)
             }
-            is NotificationFormStateEvent.onVoucherIdChanged -> {
+            is NotificationFormStateEvent.OnProductNameChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(productName = event.productName)
+            }
+            is NotificationFormStateEvent.OnVoucherIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(voucherId = event.voucherId)
             }
-            is NotificationFormStateEvent.onBillIdChanged -> {
+            is NotificationFormStateEvent.OnVoucherCodeChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(voucherCode = event.voucherCode)
+            }
+            is NotificationFormStateEvent.OnBillIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(billId = event.billId)
             }
-            is NotificationFormStateEvent.onUserIdChanged -> {
+            is NotificationFormStateEvent.OnUserIdChanged -> {
                 notificationFormState.value = notificationFormState.value.copy(userId = event.userId)
+            }
+            is NotificationFormStateEvent.OnNotificationIdChanged -> {
+                notificationFormState.value = notificationFormState.value.copy(notificationId = event.notificationId)
             }
             is NotificationFormStateEvent.Submit -> {
                 submitNotificationFormData()

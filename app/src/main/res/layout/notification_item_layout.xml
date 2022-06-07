@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_order_history"
+        android:id="@+id/card_notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -40,18 +40,40 @@
             </TextView>
 
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_edit"
-                android:padding="15dp"
-                android:tint="@color/text_color"
+                style="@style/Button.Rounded"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                app:icon="@drawable/ic_edit"
+                app:iconSize="24dp"
+                app:iconTint="@color/text_color"
+                android:backgroundTint="@color/grey_opacity60_primary"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_notification_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_notification_title">
 
-            </ImageView>
+            </com.google.android.material.button.MaterialButton>
+
+
+
+            <TextView
+                android:id="@+id/tv_notification_body"
+                style="@style/SmallText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_margin"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_regular"
+                android:maxLines="6"
+                android:text="Keep your readers updated. Always. No one wants to be the last one to know The backdrop’s back layer is persistent, displaying controls and content that relate to the front layer. The backdrop’s back layer can be accessed from any scroll position. The backdrop focuses attention on one layer at a time."
+                app:layout_constraintStart_toStartOf="@+id/tv_notification_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notification_title">
+
+            </TextView>
+
 
             <TextView
                 android:id="@+id/tv_update_status"
@@ -59,29 +81,26 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="Last update: 22/02/2022"
-                android:layout_marginTop="@dimen/extra_large_margin"
-                app:layout_constraintStart_toStartOf="@+id/tv_notification_title"
-                app:layout_constraintTop_toBottomOf="@+id/tv_notification_title">
+                android:text="@string/last_update"
+                android:layout_marginTop="@dimen/small_margin"
+                app:layout_constraintStart_toStartOf="@+id/tv_notification_body"
+                app:layout_constraintTop_toBottomOf="@+id/tv_notification_body">
 
             </TextView>
 
             <TextView
-                android:id="@+id/tv_notification_body"
+                android:id="@+id/tv_create_status"
                 style="@style/SmallText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_margin"
-                android:ellipsize="end"
                 android:fontFamily="@font/montserrat_regular"
-                android:maxLines="6"
-                android:text="Keep your readers updated. Always. No one wants to be the last one to know The backdrop’s back layer is persistent, displaying controls and content that relate to the front layer. The backdrop’s back layer can be accessed from any scroll position. The backdrop focuses attention on one layer at a time."
+                android:text="@string/create_at"
+                android:layout_marginTop="@dimen/small_margin"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_update_status"
                 app:layout_constraintTop_toBottomOf="@+id/tv_update_status">
 
             </TextView>
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

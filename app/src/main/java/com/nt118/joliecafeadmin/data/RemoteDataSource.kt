@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nt118.joliecafeadmin.data.network.FCMApi
 import com.nt118.joliecafeadmin.data.network.JolieAdminApi
+import com.nt118.joliecafeadmin.data.paging_source.NotificationPagingSource
 import com.nt118.joliecafeadmin.data.paging_source.ProductPagingSource
 import com.nt118.joliecafeadmin.models.*
 import com.nt118.joliecafeadmin.util.Constants.Companion.PAGE_SIZE
@@ -105,10 +106,33 @@ class RemoteDataSource @Inject constructor(
         return jolieAdminApi.addNewAdminNotification(token = "Bearer $token", notificationData = notificationData)
     }
 
-    suspend fun sendNotification(
+    suspend fun sendCommonNotification(
         key: String = SERVER_KEY,
         notificationData: PushNotification
-    ): Response<ApiResponseSingleData<Unit>> {
-        return fcmApi.sendNotification(key = "key=$key", notificationData = notificationData)
+    ): Response<CommonFCMResponse> {
+        return fcmApi.sendCommonNotification(key = "key=$key", notificationData = notificationData)
+    }
+
+    suspend fun sendSingleNotification(
+        key: String = SERVER_KEY,
+        notificationData: PushNotification
+    ): Response<SingleFCMResponse> {
+        return fcmApi.sendSingleNotification(key = "key=$key", notificationData = notificationData)
+    }
+
+    fun getNotifications(notificationQuery: Map<String, String>, token: String): Flow<PagingData<Notification>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE),
+            pagingSourceFactory = {
+                NotificationPagingSource(jolieAdminApi, "Bearer $token", notificationQuery)
+            }
+        ).flow
+    }
+
+    suspend fun getNotificationDetail(
+        notificationId: String,
+        token: String
+    ): Response<ApiResponseSingleData<Notification>> {
+        return jolieAdminApi.getNotificationDetail(notificationId = notificationId, token = "Bearer $token")
     }
 }

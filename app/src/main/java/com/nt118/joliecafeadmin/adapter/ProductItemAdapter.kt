@@ -51,11 +51,6 @@ class ProductItemAdapter(
                 onEditProductClicked(product.id)
             }
 
-
-            holder.binding.btnEditProduct.setOnClickListener {
-                onEditProductClicked(product.id)
-            }
-
             holder.binding.itemImg.load(product.thumbnail) {
                 crossfade(600)
                 error(R.drawable.image_logo)
