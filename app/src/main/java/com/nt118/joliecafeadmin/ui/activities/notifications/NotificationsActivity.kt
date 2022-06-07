@@ -20,6 +20,7 @@ import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.ActivityNotificationsBinding
 import com.nt118.joliecafeadmin.models.Notification
 import com.nt118.joliecafeadmin.util.Constants
+import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_ID
 import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_TYPE
 import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
 import com.nt118.joliecafeadmin.util.NetworkListener
@@ -155,12 +156,14 @@ class NotificationsActivity : AppCompatActivity() {
         notificationItemAdapter = NotificationItemAdapter(
             notificationActivity = this,
             diffUtil = diffUtil,
-            onEditNotificationClicked = { productId ->
-
+            onNotificationClicked = { notificationId ->
+                val intend = Intent(this, NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_VIEW)
+                intend.putExtra(NOTIFICATION_ID, notificationId)
+                startActivity(intend)
             },
-            onNotificationClicked = { productId ->
-
-            }
+            onEditNotificationClicked = { notificationId ->
+            },
         )
     }
 

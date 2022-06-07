@@ -128,4 +128,11 @@ class RemoteDataSource @Inject constructor(
             }
         ).flow
     }
+
+    suspend fun getNotificationDetail(
+        notificationId: String,
+        token: String
+    ): Response<ApiResponseSingleData<Notification>> {
+        return jolieAdminApi.getNotificationDetail(notificationId = notificationId, token = "Bearer $token")
+    }
 }
