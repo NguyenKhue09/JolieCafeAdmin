@@ -177,15 +177,20 @@ class NotificationActivity : AppCompatActivity() {
 
                     observerFormFieldChanged()
                     observerFormFieldError()
-                    //observerAddNewNotification()
+
                     observerSendNotification()
                     observerFooterActionClickEvent()
                     observerNotificationFormValidateSubmitEvent()
                     observerUploadImageToFirebase()
+
+                    observerGetDetailNotification()
+                    val notificationId = intent.extras?.getString(Constants.NOTIFICATION_ID)
+                    notificationId?.let { id ->
+                        notificationViewModel.getNotificationDetail(id)
+                    }
                 }
                 ACTION_TYPE_VIEW -> {
                     println("ACTION_TYPE_VIEW")
-
                     binding.footerActionButtonContainer.visibility = View.GONE
                     binding.btnGetImage.visibility = View.GONE
 
@@ -205,15 +210,19 @@ class NotificationActivity : AppCompatActivity() {
 
     }
 
+    // Action edit
+
     //Action View
     private fun setDataToView(notification: Notification) {
         binding.etNotificationTitle.setText(notification.title)
         binding.etNotificationMessage.setText(notification.message)
         binding.etNotificationType.setText(notification.type)
-        binding.notificationImg.load(Uri.parse(notification.image)) {
-            crossfade(600)
-            error(R.drawable.image_logo)
-            placeholder(R.drawable.image_logo)
+        notification.image?.let {
+            binding.notificationImg.load(it) {
+                crossfade(300)
+                error(R.drawable.image_logo)
+                placeholder(R.drawable.image_logo)
+            }
         }
     }
     private fun observerGetDetailNotification() {

@@ -163,6 +163,10 @@ class NotificationsActivity : AppCompatActivity() {
                 startActivity(intend)
             },
             onEditNotificationClicked = { notificationId ->
+                val intend = Intent(this, NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_EDIT)
+                intend.putExtra(NOTIFICATION_ID, notificationId)
+                startActivity(intend)
             },
         )
     }
