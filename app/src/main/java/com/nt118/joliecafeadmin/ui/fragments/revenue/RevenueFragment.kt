@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,10 +30,12 @@ import com.nt118.joliecafeadmin.adapter.BestSellerAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
 import com.nt118.joliecafeadmin.models.MonthlyRevenue
 import com.nt118.joliecafeadmin.models.WeeklyRevenue
+import com.nt118.joliecafeadmin.models.YearlyRevenue
 import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationsActivity
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.NetworkListener
+import com.nt118.joliecafeadmin.util.NumberUtil
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.RevenueViewModel
@@ -50,6 +54,7 @@ class RevenueFragment : Fragment() {
     private lateinit var rvBestSeller: RecyclerView
     private lateinit var chart: LineChart
     private lateinit var tabLayout: TabLayout
+    private lateinit var tvRevenueValue: TextView
 
     // backing field
     private var selectedTab
@@ -79,8 +84,18 @@ class RevenueFragment : Fragment() {
 
     private fun initDefaultData() {
         when (selectedTab) {
-            RevenueViewModel.WEEKLY_REVENUE -> revenueViewModel.getWeeklyRevenue()
-            RevenueViewModel.MONTHLY_REVENUE -> revenueViewModel.getMonthlyRevenue()
+            RevenueViewModel.WEEKLY_REVENUE -> {
+                revenueViewModel.getWeeklyRevenue()
+                revenueViewModel.getCurrentWeekRevenue()
+            }
+            RevenueViewModel.MONTHLY_REVENUE -> {
+                revenueViewModel.getMonthlyRevenue()
+                revenueViewModel.getCurrentMonthRevenue()
+            }
+            RevenueViewModel.YEARLY_REVENUE -> {
+                revenueViewModel.getYearlyRevenue()
+                revenueViewModel.getCurrentYearRevenue()
+            }
         }
         revenueViewModel.getBestSeller()
     }
@@ -112,6 +127,20 @@ class RevenueFragment : Fragment() {
     }
 
     private fun observe() = revenueViewModel.apply {
+        yearlyRevenueResponse.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ApiResult.Loading -> {
+                    revenueProgressIndicator.visibility = View.VISIBLE
+                }
+                is ApiResult.Success -> {
+                    revenueProgressIndicator.visibility = View.GONE
+                    initYearlyData(chart, requireContext(), response.data!!)
+                }
+                is ApiResult.Error -> {}
+                else -> {}
+            }
+        }
+
         monthlyRevenueResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is ApiResult.Loading -> {
@@ -158,13 +187,23 @@ class RevenueFragment : Fragment() {
             }
         }
 
+        totalRevenue.observe(viewLifecycleOwner) {
+            tvRevenueValue.text = getString(R.string.product_price, NumberUtil.addSeparator(it.toDouble()))
+        }
+
         selectedTab.observe(viewLifecycleOwner) { tab ->
             when (tab) {
                 RevenueViewModel.WEEKLY_REVENUE -> {
                     revenueViewModel.getWeeklyRevenue()
+                    revenueViewModel.getCurrentWeekRevenue()
                 }
                 RevenueViewModel.MONTHLY_REVENUE -> {
                     revenueViewModel.getMonthlyRevenue()
+                    revenueViewModel.getCurrentMonthRevenue()
+                }
+                RevenueViewModel.YEARLY_REVENUE -> {
+                    revenueViewModel.getYearlyRevenue()
+                    revenueViewModel.getCurrentYearRevenue()
                 }
                 else -> {}
             }
@@ -187,6 +226,28 @@ class RevenueFragment : Fragment() {
                 entries.add(Entry((i - currentWeek + 7).toFloat(), 0f))
             } else {
                 entries.add(Entry((i - currentWeek + 7).toFloat(), data.first { it.week == i }.totalCostOfWeek / 1000000f))
+            }
+        }
+
+        setupChart(chart, context, entries, xAxisValue)
+    }
+
+    private fun initYearlyData(chart: LineChart, context: Context, data: List<YearlyRevenue>) {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        val xAxisValue = ArrayList<String>()
+        for (i in currentYear - 5 until currentYear) {
+            xAxisValue.add("$i")
+        }
+
+        val entries = ArrayList<Entry>()
+
+        for (i in currentYear - 5 until currentYear) {
+            if (data.none { it.year == i }) {
+                entries.add(Entry((i - currentYear + 5).toFloat(), 0f))
+            } else {
+                entries.add(Entry((i - currentYear + 5).toFloat(), data.first { it.year == i }.totalCostOfYear / 1000000f))
             }
         }
 
@@ -251,6 +312,7 @@ class RevenueFragment : Fragment() {
         chart = binding.chart
         revenueProgressIndicator = binding.revenueProgressIndicator
         bestSellerProgressIndicator = binding.bestSellerProgressIndicator
+        tvRevenueValue = binding.tvRevenueValue
         tabLayout = binding.tabLayout
 
         tabLayout.getTabAt(selectedTab)?.select()
@@ -286,12 +348,14 @@ class RevenueFragment : Fragment() {
     private fun setupChart(chart: LineChart, context: Context, entries: MutableList<Entry>, xAxisValue: ArrayList<String>) {
         val dataSet = LineDataSet(entries, "Income")
 
-        println(xAxisValue.toString())
-
+        dataSet.setDrawFilled(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            dataSet.fillDrawable = context.getDrawable(R.drawable.gradient_chart)
+        }
         dataSet.color = ContextCompat.getColor(context, R.color.grey_primary_variant)
         dataSet.valueTextColor = ContextCompat.getColor(context, R.color.grey_primary_variant)
         dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-        dataSet.lineWidth = 4f
+        dataSet.lineWidth = 2f
         dataSet.circleRadius = 3f
         dataSet.setDrawValues(false)
         dataSet.circleHoleColor = ContextCompat.getColor(context, R.color.grey_secondary)

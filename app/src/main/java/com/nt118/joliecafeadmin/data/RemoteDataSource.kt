@@ -51,6 +51,12 @@ class RemoteDataSource @Inject constructor(
         return jolieAdminApi.getProductDetail(productId = productId, token = "Bearer $token")
     }
 
+    suspend fun getYearlyRevenue(
+        token: String
+    ): Response<ApiResponseMultiData<YearlyRevenue>> {
+        return jolieAdminApi.getYearlyRevenue(token = "Bearer $token")
+    }
+
     suspend fun getMonthlyRevenue(
         token: String
     ): Response<ApiResponseMultiData<MonthlyRevenue>> {
@@ -61,6 +67,24 @@ class RemoteDataSource @Inject constructor(
         token: String
     ): Response<ApiResponseMultiData<WeeklyRevenue>> {
         return jolieAdminApi.getWeeklyRevenue(token = "Bearer $token")
+    }
+
+    suspend fun getCurrentWeekRevenue(
+        token: String
+    ): Response<ApiResponseSingleData<Int>> {
+        return jolieAdminApi.getCurrentWeekRevenue(token = "Bearer $token")
+    }
+
+    suspend fun getCurrentMonthRevenue(
+        token: String
+    ): Response<ApiResponseSingleData<Int>> {
+        return jolieAdminApi.getCurrentMonthRevenue(token = "Bearer $token")
+    }
+
+    suspend fun getCurrentYearRevenue(
+        token: String
+    ): Response<ApiResponseSingleData<Int>> {
+        return jolieAdminApi.getCurrentYearRevenue(token = "Bearer $token")
     }
 
     suspend fun getBestSeller(): Response<ApiResponseMultiData<BestSeller>> {
