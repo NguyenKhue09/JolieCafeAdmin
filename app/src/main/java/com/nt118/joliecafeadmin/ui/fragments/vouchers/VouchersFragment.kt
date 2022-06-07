@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.nt118.joliecafeadmin.adapter.VoucherAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentVouchersBinding
 import com.nt118.joliecafeadmin.viewmodels.VouchersViewModel
 
@@ -23,11 +24,31 @@ class VouchersFragment : Fragment() {
     ): View {
 
         _binding = FragmentVouchersBinding.inflate(inflater, container, false)
+        recyclerViewVoucher()
+
+
         return binding.root
+    }
+
+
+    private fun recyclerViewVoucher() {
+        val recyclerViewVoucher = binding.recycleViewVoucher
+        val voucherAdapter = VoucherAdapter(fetDataBestSaler())
+        recyclerViewVoucher.layoutManager = LinearLayoutManager(requireContext(),
+            LinearLayoutManager.VERTICAL, false)
+        recyclerViewVoucher.adapter = voucherAdapter
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun fetDataBestSaler() : ArrayList<String> {
+        val item = ArrayList<String>()
+        for (i in 0 until 15) {
+            item.add("$i")
+        }
+        return item
     }
 }
