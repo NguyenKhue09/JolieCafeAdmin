@@ -12,7 +12,9 @@ data class NotificationFormState(
     val type: String = "Common",
     val typeError: String? = null,
     val productId: String = "",
+    val productName: String = "",
     val voucherId: String = "",
+    val voucherCode: String = "",
     val billId: String = "",
     val userId: String = "",
     val notificationId: String = ""

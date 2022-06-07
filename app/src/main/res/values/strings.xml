@@ -46,4 +46,6 @@
     <string name="for_you">For you</string>
     <string name="sold">Sold: %1$d</string>
     <string name="push_notification">Push notification</string>
+    <string name="last_update">Last update: %1$s</string>
+    <string name="create_at">Create at: %1$s</string>
 </resources>

@@ -1,28 +1,44 @@
 package com.nt118.joliecafeadmin.ui.activities.notifications
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.OpenableColumns
+import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.databinding.ActivityNotificationBinding
+import com.nt118.joliecafeadmin.firebase.firebasefirestore.FirebaseStorage
 import com.nt118.joliecafeadmin.models.NotificationData
 import com.nt118.joliecafeadmin.models.NotificationFormState
 import com.nt118.joliecafeadmin.models.PushNotification
+import com.nt118.joliecafeadmin.models.UploadFileToFirebaseResult
 import com.nt118.joliecafeadmin.util.*
 import com.nt118.joliecafeadmin.util.Constants.Companion.ACTION_TYPE
 import com.nt118.joliecafeadmin.util.Constants.Companion.ACTION_TYPE_ADD
 import com.nt118.joliecafeadmin.util.Constants.Companion.ACTION_TYPE_EDIT
 import com.nt118.joliecafeadmin.util.Constants.Companion.ACTION_TYPE_VIEW
 import com.nt118.joliecafeadmin.util.Constants.Companion.COMMON_NOTIFICATION_TOPIC
+import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_IMAGE
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_SUCCESS
 import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
+import com.nt118.joliecafeadmin.util.extenstions.isValidUrl
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.AddNewProductViewModel
@@ -30,6 +46,7 @@ import com.nt118.joliecafeadmin.viewmodels.NotificationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -38,6 +55,8 @@ class NotificationActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     private val notificationViewModel: NotificationViewModel by viewModels()
+
+    private lateinit var firebaseStorage: FirebaseStorage
 
     private lateinit var notificationFormState : MutableStateFlow<NotificationFormState>
     private lateinit var networkListener: NetworkListener
@@ -49,6 +68,7 @@ class NotificationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         notificationFormState = notificationViewModel.notificationFormState
+        firebaseStorage = FirebaseStorage()
 
         setupBackButton()
 
@@ -60,10 +80,70 @@ class NotificationActivity : AppCompatActivity() {
         getValueFromIntent()
 
         disableNotificationType()
+
+        onTakeImageButtonClicked()
     }
+
+    private fun onTakeImageButtonClicked() {
+        binding.btnGetImage.setOnClickListener {
+            if(checkPermissionGranted(permission = Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                firebaseStorage.chooseFile(getFile)
+            } else {
+                requestGetFilePermission()
+            }
+        }
+    }
+
+    private fun checkPermissionGranted(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val getFile =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // There are no request codes
+                val data: Uri? = result.data?.data
+                if (data != null) {
+                    try {
+                        setImage(image = data)
+                        setProductImage(uri = data)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        showSnackBar(message = "Get image failed!", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
+                    }
+                }
+            }
+        }
+
+    private fun setProductImage(uri: Uri) {
+        binding.notificationImg.load(uri) {
+            crossfade(600)
+            error(R.drawable.image_logo)
+            placeholder(R.drawable.image_logo)
+        }
+    }
+
+    private fun requestGetFilePermission() {
+        getFilePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
+
+    private var getFilePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                showSnackBar(message = "Permission granted", status = SNACK_BAR_STATUS_SUCCESS, icon = R.drawable.ic_success)
+                firebaseStorage.chooseFile(getFile)
+            } else {
+                showSnackBar(message = "Oops, you just denied the permission for get image!", status = Constants.SNACK_BAR_STATUS_DISABLE, icon = R.drawable.ic_sad)
+            }
+        }
+
 
     private fun getValueFromIntent() {
         val actionType = intent.extras?.getInt(ACTION_TYPE)
+        val image = intent.extras?.getString(NOTIFICATION_IMAGE)
 
         actionType?.let {
             when (it) {
@@ -77,6 +157,7 @@ class NotificationActivity : AppCompatActivity() {
                     observerSendNotification()
                     observerFooterActionClickEvent()
                     observerNotificationFormValidateSubmitEvent()
+                    observerUploadImageToFirebase()
 
                     getNotificationType()
                 }
@@ -90,12 +171,18 @@ class NotificationActivity : AppCompatActivity() {
                     observerSendNotification()
                     observerFooterActionClickEvent()
                     observerNotificationFormValidateSubmitEvent()
+                    observerUploadImageToFirebase()
                 }
                 ACTION_TYPE_VIEW -> {
                     println("ACTION_TYPE_VIEW")
                 }
             }
         }
+
+        image?.let {
+            setImage(Uri.parse(it))
+        }
+
     }
 
     private fun observerSendNotification() {
@@ -130,9 +217,15 @@ class NotificationActivity : AppCompatActivity() {
             when(result) {
                 is ApiResult.Loading -> {
                     println("Loading")
+                    if (!binding.notificationDetailCircularProgressIndicator.isVisible) {
+                        binding.notificationDetailCircularProgressIndicator.visibility = View.VISIBLE
+                    }
                 }
                 is ApiResult.NullDataSuccess -> {
                     println("Success")
+                    if (binding.notificationDetailCircularProgressIndicator.isVisible) {
+                        binding.notificationDetailCircularProgressIndicator.visibility = View.GONE
+                    }
                     showSnackBar(
                         message = "Create new notification success",
                         status = SNACK_BAR_STATUS_SUCCESS,
@@ -140,6 +233,9 @@ class NotificationActivity : AppCompatActivity() {
                     )
                 }
                 is ApiResult.Error -> {
+                    if (binding.notificationDetailCircularProgressIndicator.isVisible) {
+                        binding.notificationDetailCircularProgressIndicator.visibility = View.GONE
+                    }
                     println("Error")
                     showSnackBar(
                         message = result.message!!,
@@ -164,9 +260,41 @@ class NotificationActivity : AppCompatActivity() {
             notificationViewModel.validationEvents.collect { event ->
                 when (event) {
                     is NotificationViewModel.ValidationEvent.Success -> {
+                        if(notificationFormState.value.image != Uri.EMPTY && notificationFormState.value.image.toString().isValidUrl()) {
+                            addNewNotification()
+                        } else {
+                            val fileName = getNameFile(notificationFormState.value.image, this@NotificationActivity)
+
+                            firebaseStorage.uploadFile(
+                                file = notificationFormState.value.image,
+                                fileName = fileName,
+                                root = getString(R.string.app_name),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun observerUploadImageToFirebase() {
+        firebaseStorage.uploadImageResult.asLiveData().observe(this) { uploadResult ->
+            when(uploadResult) {
+                is UploadFileToFirebaseResult.Error -> {
+                    binding.notificationDetailCircularProgressIndicator.visibility = View.GONE
+                    showSnackBar(message = uploadResult.errorMessage!!, status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
+                }
+                is UploadFileToFirebaseResult.Success -> {
+                    println(uploadResult.downloadUri.toString())
+                    uploadResult.downloadUri?.let {
+                        setImage(image = Uri.parse(it))
                         addNewNotification()
                     }
                 }
+                is UploadFileToFirebaseResult.Loading -> {
+                    binding.notificationDetailCircularProgressIndicator.visibility = View.VISIBLE
+                }
+                else -> {}
             }
         }
     }
@@ -176,6 +304,7 @@ class NotificationActivity : AppCompatActivity() {
             "title" to notificationFormState.value.title,
             "message" to notificationFormState.value.message,
             "type" to notificationFormState.value.type,
+            "image" to notificationFormState.value.image.toString(),
         )
 
         var pushNotification = PushNotification(
@@ -190,17 +319,17 @@ class NotificationActivity : AppCompatActivity() {
             when(it) {
                 listNotificationType[0] -> {
                     notificationViewModel.addNewAdminNotification(notificationData)
-                    notificationViewModel.sendNotification(pushNotification)
+                    notificationViewModel.sendCommonNotification(pushNotification)
                 }
                 listNotificationType[1] -> {
                     notificationData["productId"] = notificationFormState.value.productId
                     notificationViewModel.addNewAdminNotification(notificationData)
-                    notificationViewModel.sendNotification(pushNotification)
+                    notificationViewModel.sendCommonNotification(pushNotification)
                 }
                 listNotificationType[2] -> {
                     notificationData["voucherId"] = notificationFormState.value.productId
                     notificationViewModel.addNewAdminNotification(notificationData)
-                    notificationViewModel.sendNotification(pushNotification)
+                    notificationViewModel.sendCommonNotification(pushNotification)
                 }
                 listNotificationType[3] -> {
                     notificationData["billId"] = notificationFormState.value.billId
@@ -210,7 +339,7 @@ class NotificationActivity : AppCompatActivity() {
                         to = userNoticeToken
                     )
                     notificationViewModel.addNewUserNotification(notificationData)
-                    notificationViewModel.sendNotification(pushNotification)
+                    notificationViewModel.sendSingleNotification(pushNotification)
                 }
             }
         }
@@ -225,28 +354,33 @@ class NotificationActivity : AppCompatActivity() {
                 listNotificationType[0] -> {}
                 listNotificationType[1] -> {
                     val productId = intent.extras?.getString(Constants.PRODUCT_ID)
-                    if (productId.isNullOrEmpty()) {
+                    val productName = intent.extras?.getString(Constants.PRODUCT_NAME)
+
+                    if (productId.isNullOrEmpty() || productName.isNullOrEmpty()) {
                         binding.footerActionButton.btnAddNewNotification.isEnabled = false
                         showSnackBar(
-                            message = "Notification type is product, but product id is empty",
+                            message = "Notification type is product, but product id  or product name is empty",
                             status = SNACK_BAR_STATUS_ERROR,
                             icon = R.drawable.ic_error
                         )
                     } else {
                         setProductId(productId)
+                        setProductName(productName = productName)
                     }
                 }
                 listNotificationType[2] -> {
                     val voucherId = intent.extras?.getString(Constants.VOUCHER_ID)
-                    if(voucherId.isNullOrEmpty()) {
+                    val voucherCode = intent.extras?.getString(Constants.VOUCHER_CODE)
+                    if(voucherId.isNullOrEmpty() || voucherCode.isNullOrEmpty()) {
                         binding.footerActionButton.btnAddNewNotification.isEnabled = false
                         showSnackBar(
-                            message = "Notification type is voucher, but voucher id is empty",
+                            message = "Notification type is voucher, but voucher id or voucher code is empty",
                             status = SNACK_BAR_STATUS_ERROR,
                             icon = R.drawable.ic_error
                         )
                     } else {
                         setVoucherId(voucherId)
+                        setVoucherCode(voucherCode)
                     }
                 }
                 listNotificationType[3] -> {
@@ -269,6 +403,25 @@ class NotificationActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    @SuppressLint("Range")
+    fun getNameFile(uri: Uri, context: Context): String {
+        var res: String? = null
+        if (uri.scheme.equals("content")) {
+            val cursor: Cursor = context.contentResolver.query(uri, null, null, null, null)!!
+            cursor.use { cur ->
+                if (cur.moveToFirst()) {
+                    res = cur.getString(cur.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                }
+            }
+        }
+        if (res == null) {
+            res = uri.path!!.split('/').also {
+                it[it.lastIndex]
+            }.toString()
+        }
+        return res as String
     }
 
     private fun observerFormFieldError() {
@@ -318,7 +471,11 @@ class NotificationActivity : AppCompatActivity() {
     }
 
 
-
+    private fun setVoucherCode(voucherCode: String) {
+        notificationFormState.value = notificationFormState.value.copy(
+            voucherCode = voucherCode
+        )
+    }
     private fun setUserId(userId: String) {
         notificationViewModel.onNotificationFormEvent(
             event = NotificationFormStateEvent.OnUserIdChanged(userId)
@@ -329,10 +486,19 @@ class NotificationActivity : AppCompatActivity() {
             event = NotificationFormStateEvent.OnNotificationIdChanged(id)
         )
     }
-
     private fun setProductId(productId: String) {
         notificationViewModel.onNotificationFormEvent(
             event = NotificationFormStateEvent.OnProductIdChanged(productId)
+        )
+    }
+    private fun setProductName(productName: String) {
+        notificationViewModel.onNotificationFormEvent(
+            event = NotificationFormStateEvent.OnProductNameChanged(productName)
+        )
+    }
+    private fun setImage(image: Uri) {
+        notificationViewModel.onNotificationFormEvent(
+            event = NotificationFormStateEvent.OnImageChanged(image)
         )
     }
 

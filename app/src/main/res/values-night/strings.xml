@@ -45,4 +45,6 @@
     <string name="all">All</string>
     <string name="for_you">For you</string>
     <string name="push_notification">Push notification</string>
+    <string name="last_update">Last update: %1$s</string>
+    <string name="create_at">Create at: %1$s</string>
 </resources>

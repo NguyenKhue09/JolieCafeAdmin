@@ -80,4 +80,10 @@ interface JolieAdminApi {
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Unit>>
 
+    @GET("$API_GATEWAY/notification/get-admin-notification")
+    suspend fun getNotification(
+        @QueryMap notificationQuery: Map<String, String>,
+        @Header("Authorization") token: String
+    ): ApiResponseMultiData<Notification>
+
 }
