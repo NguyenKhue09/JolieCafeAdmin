@@ -34,7 +34,7 @@ class NotificationPagingSource(
             //println(query)
 
             try {
-                val response = jolieAdminApi.getNotification(notificationQuery = notificationQuery, token = token)
+                val response = jolieAdminApi.getNotification(notificationQuery = query, token = token)
                 //println(response)
                 return if(response.success) {
                     LoadResult.Page(
