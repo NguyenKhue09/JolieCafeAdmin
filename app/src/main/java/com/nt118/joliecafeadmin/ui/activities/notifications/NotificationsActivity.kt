@@ -16,7 +16,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.adapter.NotificationItemAdapter
-import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.ActivityNotificationsBinding
 import com.nt118.joliecafeadmin.models.Notification
 import com.nt118.joliecafeadmin.util.Constants
@@ -26,7 +25,6 @@ import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
 import com.nt118.joliecafeadmin.util.Constants.Companion.listTabNotificationType
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.NotificationComparator
-import com.nt118.joliecafeadmin.util.ProductComparator
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.NotificationsViewModel
@@ -60,9 +58,9 @@ class NotificationsActivity : AppCompatActivity() {
 
         onAddNotificationButtonClicked()
 
-        initProductAdapter()
+        initNotificationAdapter()
         configProductRecyclerView()
-        addProductTabText()
+        addNotificationTabText()
         initProductAdapterData()
         setNotificationAdapterDataWhenTabChange()
         onNotificationTabSelected()
@@ -123,14 +121,14 @@ class NotificationsActivity : AppCompatActivity() {
                         )
                     ).collectLatest { data ->
                         selectedTab = tab
-                        submitProductAdapterData(data = data)
+                        submitNotificationAdapterData(data = data)
                     }
                 }
             }
         }
     }
 
-    private suspend fun submitProductAdapterData(data: PagingData<Notification>) {
+    private suspend fun submitNotificationAdapterData(data: PagingData<Notification>) {
         notificationItemAdapter.submitData(data)
     }
 
@@ -139,7 +137,7 @@ class NotificationsActivity : AppCompatActivity() {
         binding.notificationsTabLayout.selectTab(binding.notificationsTabLayout.getTabAt(tabIndex), true)
     }
 
-    private fun addProductTabText() {
+    private fun addNotificationTabText() {
         listTabNotificationType.forEach {
             binding.notificationsTabLayout.addTab(binding.notificationsTabLayout.newTab().apply {
                 tag = it
@@ -154,7 +152,7 @@ class NotificationsActivity : AppCompatActivity() {
         notificationRv.adapter = notificationItemAdapter
     }
 
-    private fun initProductAdapter() {
+    private fun initNotificationAdapter() {
         val diffUtil = NotificationComparator
         notificationItemAdapter = NotificationItemAdapter(
             notificationActivity = this,
@@ -231,7 +229,7 @@ class NotificationsActivity : AppCompatActivity() {
                     )
                 ).collectLatest { data ->
                     selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
-                    submitProductAdapterData(data = data)
+                    submitNotificationAdapterData(data = data)
                 }
             }
 
@@ -289,7 +287,7 @@ class NotificationsActivity : AppCompatActivity() {
                 )
             ).collectLatest { data ->
                 selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
-                submitProductAdapterData(data = data)
+                submitNotificationAdapterData(data = data)
             }
         }
     }
