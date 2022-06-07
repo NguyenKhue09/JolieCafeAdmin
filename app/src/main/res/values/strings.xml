@@ -46,4 +46,16 @@
     <string name="for_you">For you</string>
     <string name="sold">Sold: %1$d</string>
     <string name="push_notification">Push notification</string>
+    <string name="new_voucher">New Voucher</string>
+    <string name="code">Code</string>
+    <string name="enter_voucher_code">Enter voucher code</string>
+    <string name="enter_voucher_description">Enter voucher description</string>
+    <string name="date_format">yyyy/MM/dd</string>
+    <string name="condition">Condition</string>
+    <string name="condition_hint">Bill cost that can trigger the discount</string>
+    <string name="discount_percent_2">Discount percent (%)</string>
+    <string name="enter_discount_percent">Enter discount percent</string>
+    <string name="quantity">Quantity</string>
+    <string name="enter_quantity">Enter quantity</string>
+    <string name="add_voucher">Add voucher</string>
 </resources>

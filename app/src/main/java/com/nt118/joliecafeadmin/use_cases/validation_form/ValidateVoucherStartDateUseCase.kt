@@ -1,20 +1,18 @@
 package com.nt118.joliecafeadmin.use_cases.validation_form
 
 import com.nt118.joliecafeadmin.models.ValidationResult
-import com.nt118.joliecafeadmin.util.Constants.Companion.LOCAL_TIME_FORMAT
+import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.extenstions.toDate
-import java.lang.reflect.InvocationTargetException
 import java.text.ParseException
 import java.util.*
 
-
-class ValidateProductStartDateDiscountUseCase {
+class ValidateVoucherStartDateUseCase {
 
     fun execute(startDate: String): ValidationResult {
 
         try {
             startDate.toDate(
-                dateFormat = LOCAL_TIME_FORMAT,
+                dateFormat = Constants.LOCAL_TIME_FORMAT,
                 timeZone = TimeZone.getDefault()
             )?: return ValidationResult(
                 successful = false,

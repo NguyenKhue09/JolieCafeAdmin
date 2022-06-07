@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+    tools:context=".ui.activities.add_voucher.AddVoucherActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/grey_primary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/raleway_regular"
+                    android:gravity="center_vertical"
+                    android:text="@string/new_voucher"
+                    android:textColor="@color/title_text_color"
+                    android:textSize="20sp" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/tv_code_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/code"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_code_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_code"
+                    style="@style/RegularText"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/enter_voucher_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="textAutoComplete"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_description_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@id/til_code"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/description"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_description_label">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_description"
+                    style="@style/RegularText"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/enter_voucher_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ellipsize="end"
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:paddingStart="@dimen/very_small_margin"
+                    android:paddingEnd="@dimen/very_small_margin"
+                    android:textColor="#ffffff" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@id/til_description"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/start_date"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_start_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_start_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_percent="0.48">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_start_date"
+                    style="@style/RegularNumber"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/date_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="date"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toTopOf="@id/tv_start_date"
+                app:layout_constraintStart_toStartOf="@id/til_end_date"
+                android:text="@string/end_date"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_end_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toTopOf="@id/til_start_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.48">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_end_date"
+                    style="@style/RegularNumber"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/date_format"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="textAutoComplete"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@id/til_start_date"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/type"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_type"
+                style="@style/DropDownMenuStyle"
+                app:endIconMode="dropdown_menu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:layout_constraintTop_toBottomOf="@id/tv_type">
+
+                <AutoCompleteTextView
+                    android:id="@+id/et_type"
+                    style="@style/RegularText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dropDownSelector="@color/grey_secondary"
+                    android:paddingStart="4dp"
+                    android:inputType="none"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:text="Discount"
+                    android:textColor="#ffffff"
+                    tools:ignore="HardcodedText,LabelFor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                app:layout_constraintTop_toBottomOf="@id/til_type"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/condition"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_condition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_condition">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_condition"
+                    style="@style/RegularNumber"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/condition_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_discount_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@+id/til_condition"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/discount_percent_2"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_discount_percent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_discount_percent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_discount_percent"
+                    style="@style/RegularNumber"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/enter_discount_percent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/RegularText"
+                app:layout_constraintTop_toBottomOf="@+id/til_discount_percent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/quantity"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/TextInputLayoutAppearance"
+                app:boxBackgroundColor="@color/text_input_custom_bg"
+                app:boxStrokeColor="@color/box_stroke_color_textinput"
+                app:errorEnabled="true"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/tv_quantity">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_quantity"
+                    style="@style/RegularNumber"
+                    android:textColorHint="@color/text_color"
+                    android:hint="@string/enter_quantity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:paddingStart="0dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="0dp"
+                    android:textColor="#ffffff"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_add"
+        style="@style/PositiveButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/add_voucher"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.48">
+
+    </com.google.android.material.button.MaterialButton>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancel"
+        style="@style/NegativeButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/cancel"
+        app:layout_constraintWidth_percent="0.48"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
