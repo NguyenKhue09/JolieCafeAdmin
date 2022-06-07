@@ -98,4 +98,12 @@ interface JolieAdminApi {
         @Body voucherData: Map<String, String>,
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Voucher>>
+    // End of Voucher API
+
+    @Headers("Content-Type: application/json")
+    @PUT("$API_GATEWAY/notification/update")
+    suspend fun updateNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Notification>>
 }

@@ -29,6 +29,10 @@ class NotificationViewModel @Inject constructor(
         MutableStateFlow<ApiResult<Unit>>(ApiResult.Idle())
     val addNewNotificationResponse: StateFlow<ApiResult<Unit>> = _addNewNotificationResponse
 
+    private val _updateNotificationResponse =
+        MutableStateFlow<ApiResult<Notification>>(ApiResult.Idle())
+    val updateNotificationResponse: StateFlow<ApiResult<Notification>> = _updateNotificationResponse
+
     private val _sendNotificationResponse =
         MutableStateFlow<ApiResult<Unit>>(ApiResult.Idle())
     val sendNotificationResponse: StateFlow<ApiResult<Unit>> = _sendNotificationResponse
@@ -58,6 +62,15 @@ class NotificationViewModel @Inject constructor(
             _addNewNotificationResponse.value = handleApiNullDataSuccessResponse(response = result)
         }
     }
+
+    fun updateNotification(notificationData: Map<String, String>) {
+        viewModelScope.launch {
+            _updateNotificationResponse.value = ApiResult.Loading()
+            val result = repository.remote.updateNotification(token = adminToken, notificationData = notificationData)
+            _updateNotificationResponse.value = handleApiResponse(response = result)
+        }
+    }
+
 
     fun sendCommonNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
