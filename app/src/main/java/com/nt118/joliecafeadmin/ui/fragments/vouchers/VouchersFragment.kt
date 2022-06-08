@@ -75,15 +75,15 @@ class VouchersFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (!newText.isNullOrEmpty()) {
-                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter?
                     val filteredDataset = vouchersViewModel.voucherList.value?.filter {
                         it.code.lowercase().contains(newText.toString().lowercase()) && it.type == listVoucherTypes[selectedTab]
                     } ?: emptyList()
                     println(filteredDataset.toString())
-                    adapter.fetchData(filteredDataset)
+                    adapter?.fetchData(filteredDataset)
                 } else {
-                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter
-                    adapter.fetchData(vouchersViewModel.voucherList.value?.filter{
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter?
+                    adapter?.fetchData(vouchersViewModel.voucherList.value?.filter{
                         it.type == listVoucherTypes[selectedTab]
                     } ?: emptyList())
                 }
