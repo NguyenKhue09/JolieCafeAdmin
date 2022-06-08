@@ -37,6 +37,7 @@
         android:iconifiedByDefault="false"
         android:queryBackground="@null"
         android:layout_marginHorizontal="@dimen/large_margin"
+        android:imeOptions="actionSearch"
         android:queryHint="Search for your notifications..."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
