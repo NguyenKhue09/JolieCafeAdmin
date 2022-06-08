@@ -1,9 +1,12 @@
 package com.nt118.joliecafeadmin.util
 
+import android.os.Build
 import android.text.Editable
 
 import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputEditText
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -62,5 +65,6 @@ class DateTimeUtil {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         }
+        fun dateFormatter(dateString: String): String = dateString.substring(0,10).split("-").asReversed().joinToString(separator = "/")
     }
 }

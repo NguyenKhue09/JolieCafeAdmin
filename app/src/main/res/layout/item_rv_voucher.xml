@@ -8,7 +8,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
         android:backgroundTint="@color/grey_opacity60_primary"
         app:cardCornerRadius="9dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +39,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/tv_name_voucher"
+                    android:id="@+id/tv_voucher_code"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -55,29 +54,29 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/tv_data_voucher"
+                    android:id="@+id/tv_voucher_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20sp"
                     android:layout_marginTop="7dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="08/02/2022 - 14/02/2022"
+                    android:text="@string/voucher_date"
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_name_voucher" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_code" />
 
                 <TextView
-                    android:id="@+id/tv_discount_voucher"
+                    android:id="@+id/tv_voucher_discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="5%"
+                    android:text="@string/number_with_percent"
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/textView3"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_data_voucher" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_date" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -90,7 +89,7 @@
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_data_voucher" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_date" />
 
                 <TextView
                     android:id="@+id/textView4"
@@ -102,11 +101,11 @@
                     android:text="."
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
-                    app:layout_constraintStart_toEndOf="@+id/tv_discount_voucher"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_data_voucher" />
+                    app:layout_constraintStart_toEndOf="@+id/tv_voucher_discount"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_date" />
 
                 <TextView
-                    android:id="@+id/tv_quantity_voucher"
+                    android:id="@+id/tv_voucher_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
@@ -116,7 +115,7 @@
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
                     app:layout_constraintStart_toEndOf="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_data_voucher" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_date" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,8 +126,8 @@
                     android:text="vouchers"
                     android:textColor="@color/text_color"
                     android:textSize="11sp"
-                    app:layout_constraintStart_toEndOf="@+id/tv_quantity_voucher"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_data_voucher" />
+                    app:layout_constraintStart_toEndOf="@+id/tv_voucher_quantity"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_voucher_date" />
 
                 <ImageView
                     android:id="@+id/btn_edit"

@@ -60,4 +60,7 @@
     <string name="add_voucher">Add voucher</string>
     <string name="last_update">Last update: %1$s</string>
     <string name="create_at">Create at: %1$s</string>
+    <string name="shipping">Shipping</string>
+    <string name="voucher_date">%1$s - %2$s</string>
+    <string name="number_with_percent">%1$s%%</string>
 </resources>

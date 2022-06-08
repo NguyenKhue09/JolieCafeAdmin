@@ -143,6 +143,13 @@ class RemoteDataSource @Inject constructor(
         return jolieAdminApi.addNewVoucher(token = "Bearer $token", voucherData = voucherData)
     }
 
+    suspend fun getAllVouchers(
+        token: String
+    ): Response<ApiResponseMultiData<Voucher>> {
+        return jolieAdminApi.getAllVouchers(token = "Bearer $token")
+    }
+
+
     suspend fun updateNotification(
         token: String,
         notificationData: Map<String, String>
