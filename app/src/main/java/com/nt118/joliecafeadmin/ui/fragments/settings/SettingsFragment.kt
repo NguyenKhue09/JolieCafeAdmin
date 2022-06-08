@@ -30,6 +30,7 @@ class SettingsFragment : Fragment() {
             settingsViewModel.saveAdminToken(adminToken = "")
             if(settingsViewModel.adminToken.isEmpty()) {
                 startActivity(Intent(requireContext(), LoginActivity::class.java))
+                requireActivity().finish()
             }
 
         }

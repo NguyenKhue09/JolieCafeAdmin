@@ -151,6 +151,7 @@ class LoginActivity : AppCompatActivity() {
                     println(loginViewModel.adminToken)
 
                     startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 }
                 is ApiResult.Error -> {
                     showSnackBar(
