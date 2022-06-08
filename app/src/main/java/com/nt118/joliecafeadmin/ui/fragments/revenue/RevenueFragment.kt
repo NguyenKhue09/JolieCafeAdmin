@@ -67,8 +67,7 @@ class RevenueFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // check user
-
-        if ( revenueViewModel.adminToken.isNotEmpty() ) {
+        if (revenueViewModel.adminToken.isNullOrEmpty()) {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
     }

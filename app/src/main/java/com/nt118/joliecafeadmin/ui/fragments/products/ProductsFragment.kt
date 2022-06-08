@@ -274,6 +274,7 @@ class ProductsFragment : Fragment() {
                     else -> null
                 }
                 error?.let {
+                    println(it)
                     if (productsViewModel.networkStatus)
                         showSnackBar(
                             message = "Can't load product data!",
