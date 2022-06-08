@@ -20,6 +20,7 @@ import com.nt118.joliecafeadmin.databinding.ActivityEditVoucherBinding
 import com.nt118.joliecafeadmin.models.Voucher
 import com.nt118.joliecafeadmin.util.*
 import com.nt118.joliecafeadmin.util.Constants.Companion.VOUCHER_DATA
+import com.nt118.joliecafeadmin.util.Constants.Companion.VOUCHER_FLAG
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.EditVoucherViewModel
@@ -59,6 +60,7 @@ class EditVoucherActivity : AppCompatActivity() {
         updateNetworkStatus()
 
         initViews()
+        receiveFlag()
         initListeners()
         initDropdownData()
         listenFieldChange()
@@ -68,6 +70,30 @@ class EditVoucherActivity : AppCompatActivity() {
         observeNetworkMessage()
 
         setVoucherTypeDropdownMenu()
+    }
+
+    private fun receiveFlag() {
+        val flag = intent.getIntExtra(VOUCHER_FLAG, 0)
+
+        if (flag == 1) {
+            binding.tvTitle.text = getString(R.string.voucher_detail)
+            etCode.isEnabled = false
+            etDescription.isEnabled = false
+            etStartDate.isEnabled = false
+            etEndDate.isEnabled = false
+            etType.isEnabled = false
+            etCondition.isEnabled = false
+            etDiscountPercent.isEnabled = false
+            etQuantity.isEnabled = false
+            btnSave.visibility = View.GONE
+            btnCancel.visibility = View.GONE
+
+            // set back button
+            binding.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+            binding.toolbar.setNavigationOnClickListener {
+                onBackPressed()
+            }
+        }
     }
 
     private fun fillVoucherData() {

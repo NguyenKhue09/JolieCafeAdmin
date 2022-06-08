@@ -70,4 +70,5 @@
     <string name="delete_voucher">Delete voucher?</string>
     <string name="delete_voucher_alert">Do you really want to delete this voucher?</string>
     <string name="delete">Delete</string>
+    <string name="voucher_detail">Voucher detail</string>
 </resources>
