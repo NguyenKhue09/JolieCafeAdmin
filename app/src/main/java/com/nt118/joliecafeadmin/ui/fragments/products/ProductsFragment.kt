@@ -23,6 +23,7 @@ import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
+import com.nt118.joliecafeadmin.ui.activities.login.LoginActivity
 import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationActivity
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
@@ -52,7 +53,9 @@ class ProductsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // check user
-
+        if ( productsViewModel.adminToken.isNotEmpty() ) {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+        }
     }
 
     override fun onCreateView(

@@ -22,6 +22,12 @@ class RemoteDataSource @Inject constructor(
     private val fcmApi: FCMApi
 ) {
 
+    suspend fun loginAdmin(
+        loginData: Map<String, String>,
+    ): Response<ApiResponseSingleData<AdminData>> {
+        return jolieAdminApi.loginAdmin(loginData = loginData)
+    }
+
     fun getProducts(productQuery: Map<String, String>, token: String): Flow<PagingData<Product>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE),
