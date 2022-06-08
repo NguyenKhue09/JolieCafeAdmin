@@ -31,6 +31,7 @@ import com.nt118.joliecafeadmin.databinding.FragmentRevenueBinding
 import com.nt118.joliecafeadmin.models.MonthlyRevenue
 import com.nt118.joliecafeadmin.models.WeeklyRevenue
 import com.nt118.joliecafeadmin.models.YearlyRevenue
+import com.nt118.joliecafeadmin.ui.activities.login.LoginActivity
 import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationsActivity
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
@@ -62,6 +63,15 @@ class RevenueFragment : Fragment() {
         set(value) {
             revenueViewModel.selectedTab.value = value
         }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // check user
+
+        if ( revenueViewModel.adminToken.isNotEmpty() ) {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

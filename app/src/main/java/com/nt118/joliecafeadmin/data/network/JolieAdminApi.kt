@@ -7,6 +7,12 @@ import retrofit2.http.*
 
 interface JolieAdminApi {
 
+
+    @POST("$API_GATEWAY/admin/login-admin")
+    suspend fun loginAdmin(
+        @Body loginData: Map<String, String>
+    ): Response<ApiResponseSingleData<AdminData>>
+
     @GET("$API_GATEWAY/product/get-admin-products")
     suspend fun getProducts(
         @QueryMap productQuery: Map<String, String>,

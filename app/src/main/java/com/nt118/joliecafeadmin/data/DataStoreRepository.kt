@@ -68,7 +68,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         }
         .map { preferences ->
             println("readtoken")
-            val userToken = preferences[PreferenceKeys.userToken] ?: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOTBkMmY0OTY1MTBjZWNhYzA3MzBjOCIsImlhdCI6MTY1MzY1OTA0MH0.lkHuEWIn8HwF-N8tMq0_C8FZdU4CuPAGLfM7hnDOCEM"
+            val userToken = preferences[PreferenceKeys.userToken] ?: ""
             userToken
         }.distinctUntilChanged()
 
