@@ -120,8 +120,13 @@ class AddVoucherActivity : AppCompatActivity() {
                 is ApiResult.Error -> {
                     progressIndicator.visibility = View.GONE
                     showSnackBar("Add voucher failed: voucher code is already exist", status = SNACK_BAR_STATUS_ERROR, icon = R.drawable.ic_error)
+                    btnAdd.isEnabled = true
+                    btnCancel.isEnabled = true
                 }
-                else -> {}
+                else -> {
+                    btnAdd.isEnabled = true
+                    btnCancel.isEnabled = true
+                }
             }
         }
     }

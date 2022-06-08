@@ -12,6 +12,13 @@ class ValidateVoucherCodeUseCase {
             )
         }
 
+        if (voucherCode.length > 20) {
+            return ValidationResult(
+                successful = false,
+                errorMessage = "The voucher code can't be longer than 20 characters"
+            )
+        }
+
         return ValidationResult(
             successful = true
         )

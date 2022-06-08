@@ -113,8 +113,8 @@ class AddVoucherViewModel @Inject constructor(
                 mapOf(
                     "code" to voucherFormState.value.voucherCode,
                     "description" to voucherFormState.value.voucherDescription,
-                    "start_date" to voucherFormState.value.voucherStartDate,
-                    "end_date" to voucherFormState.value.voucherEndDate,
+                    "startDate" to voucherFormState.value.voucherStartDate,
+                    "endDate" to voucherFormState.value.voucherEndDate,
                     "condition" to voucherFormState.value.voucherCondition,
                     "discount_percent" to voucherFormState.value.voucherDiscountPercent,
                     "quantity" to voucherFormState.value.voucherQuantity,
@@ -124,8 +124,8 @@ class AddVoucherViewModel @Inject constructor(
                 mapOf(
                     "code" to voucherFormState.value.voucherCode,
                     "description" to voucherFormState.value.voucherDescription,
-                    "start_date" to voucherFormState.value.voucherStartDate,
-                    "end_date" to voucherFormState.value.voucherEndDate,
+                    "startDate" to voucherFormState.value.voucherStartDate,
+                    "endDate" to voucherFormState.value.voucherEndDate,
                     "condition" to voucherFormState.value.voucherCondition,
                     "quantity" to voucherFormState.value.voucherQuantity,
                     "type" to voucherFormState.value.voucherType

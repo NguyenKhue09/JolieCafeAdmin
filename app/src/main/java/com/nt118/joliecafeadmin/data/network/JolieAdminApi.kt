@@ -98,6 +98,11 @@ interface JolieAdminApi {
         @Body voucherData: Map<String, String>,
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Voucher>>
+
+    @GET("$API_GATEWAY/voucher/get-admin-voucher")
+    suspend fun getAllVouchers(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<Voucher>>
     // End of Voucher API
 
     @Headers("Content-Type: application/json")

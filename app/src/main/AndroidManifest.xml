@@ -17,7 +17,7 @@
         <activity
             android:name=".ui.activities.add_voucher.AddVoucherActivity"
             android:windowSoftInputMode="adjustPan"
-            android:exported="true" >
+            android:exported="false" >
 
         </activity>
         <activity
