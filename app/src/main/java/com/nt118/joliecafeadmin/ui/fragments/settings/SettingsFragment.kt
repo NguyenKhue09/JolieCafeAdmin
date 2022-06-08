@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.nt118.joliecafeadmin.databinding.FragmentSettingsBinding
+import com.nt118.joliecafeadmin.ui.activities.bill.BillsActivity
 import com.nt118.joliecafeadmin.ui.activities.login.LoginActivity
 import com.nt118.joliecafeadmin.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,10 @@ class SettingsFragment : Fragment() {
                 requireActivity().finish()
             }
 
+        }
+
+        binding.btnBill.setOnClickListener {
+            startActivity(Intent(requireContext(), BillsActivity::class.java))
         }
 
         return binding.root

@@ -47,4 +47,7 @@
     <string name="push_notification">Push notification</string>
     <string name="last_update">Last update: %1$s</string>
     <string name="create_at">Create at: %1$s</string>
+    <string name="bills">Bills</string>
+    <string name="product_quantity">%1$s items</string>
+    <string name="size">Size</string>
 </resources>

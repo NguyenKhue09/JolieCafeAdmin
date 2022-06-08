@@ -44,5 +44,6 @@ class Constants {
 
         val listNotificationType = listOf("COMMON", "PRODUCT", "VOUCHER", "BILL")
         val listTabNotificationType = listOf("All", "Common", "Product", "Voucher", "Bill")
+        val listTabBillStatus = listOf("Pending", "Delivering", "Received", "Cancelled")
     }
 }
