@@ -237,6 +237,8 @@ class VouchersFragment : Fragment() {
         binding.btnAddVoucher.setOnClickListener {
             startActivity(Intent(context, AddVoucherActivity::class.java))
         }
+
+
     }
 
     override fun onDestroyView() {
@@ -244,13 +246,6 @@ class VouchersFragment : Fragment() {
         _binding = null
     }
 
-    private fun fetDataBestSeller() : ArrayList<String> {
-        val item = ArrayList<String>()
-        for (i in 0 until 15) {
-            item.add("$i")
-        }
-        return item
-    }
 
     override fun onResume() {
         super.onResume()

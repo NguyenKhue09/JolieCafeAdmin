@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CommonFCMResponse(
+data class ResultSingleFCMResponse(
     @SerialName("message_id")
-    val messageId: Long,
+    val messageId: String,
 )

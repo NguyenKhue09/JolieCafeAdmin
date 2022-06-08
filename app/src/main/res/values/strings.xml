@@ -71,4 +71,11 @@
     <string name="delete_voucher_alert">Do you really want to delete this voucher?</string>
     <string name="delete">Delete</string>
     <string name="voucher_detail">Voucher detail</string>
+    <string name="order_id">Order ID: %1$s</string>
+    <string name="update_bill_status">Update Bill Status</string>
+    <string name="pending">Pending</string>
+    <string name="delivering">Delivering</string>
+    <string name="received">Received</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="paid">Paid</string>
 </resources>

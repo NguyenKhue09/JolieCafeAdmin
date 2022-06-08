@@ -24,6 +24,7 @@ import java.util.*
 class BillAdapter(
     private val billsActivity: BillsActivity,
     private val onNotificationClicked: (String, String, String?) -> Unit,
+    private val onBillUpdateClicked: (String, String, Boolean) -> Unit,
     diffUtil: DiffUtil.ItemCallback<Bill>
 ) : PagingDataAdapter<Bill, BillAdapter.MyViewHolder>(diffCallback = diffUtil) {
 
@@ -91,6 +92,10 @@ class BillAdapter(
                 onNotificationClicked(bill.orderId, bill.userInfo, bill.token)
             }
 
+            holder.binding.btnEditBill.setOnClickListener {
+                onBillUpdateClicked(bill.id, bill.status, bill.paid)
+            }
+
             orderItemInBillAdapter.setData(newData = bill.products)
 
             val totalItem = bill.products.sumOf { it.quantity }
@@ -121,6 +126,8 @@ class BillAdapter(
                 R.string.product_price,
                 NumberFormat.getNumberInstance(Locale.US).format(if(bill.discountCost == 0.0) 0 else -bill.discountCost)
             )
+
+            holder.binding.tvOrderId.text = billsActivity.getString(R.string.order_id, bill.orderId)
 
             holder.binding.tvPaidStatus.text = if(bill.paid) "Paid" else "Not paid"
             holder.binding.tvPaidMethod.text = bill.paymentMethod

@@ -184,4 +184,11 @@ class RemoteDataSource @Inject constructor(
             pagingSourceFactory = { BillPagingSource(token = "Bearer $token", jolieAdminApi = jolieAdminApi, status = status) }
         ).flow
     }
+
+    suspend fun updateStatusAndPaymentStatusBill(
+        token: String,
+        billData: Map<String, String>
+    ): Response<ApiResponseSingleData<Unit>> {
+        return jolieAdminApi.updateStatusAndPaymentStatusBill(token = "Bearer $token", billData = billData)
+    }
 }

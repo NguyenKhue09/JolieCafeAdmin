@@ -15,6 +15,8 @@ import com.nt118.joliecafeadmin.databinding.ItemRvVoucherBinding
 import com.nt118.joliecafeadmin.models.Voucher
 import com.nt118.joliecafeadmin.ui.DeleteVoucherDialog
 import com.nt118.joliecafeadmin.ui.activities.edit_voucher.EditVoucherActivity
+import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationActivity
+import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.VOUCHER_DATA
 import com.nt118.joliecafeadmin.util.Constants.Companion.VOUCHER_FLAG
 import com.nt118.joliecafeadmin.util.Constants.Companion.VOUCHER_FLAG_DETAIL
@@ -82,6 +84,15 @@ class VoucherAdapter(
             }
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
+        }
+
+        holder.binding.btnNotification.setOnClickListener {
+            val intend = Intent(context, NotificationActivity::class.java)
+            intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+            intend.putExtra(Constants.VOUCHER_ID, dataset[position].id)
+            intend.putExtra(Constants.VOUCHER_CODE, dataset[position].code)
+            intend.putExtra(Constants.NOTIFICATION_TYPE, Constants.listNotificationType[2])
+            context.startActivity(intend)
         }
     }
 
