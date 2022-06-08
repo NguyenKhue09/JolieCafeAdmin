@@ -65,6 +65,7 @@ class DateTimeUtil {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         }
-        fun dateFormatter(dateString: String): String = dateString.substring(0,10).split("-").asReversed().joinToString(separator = "/")
+        fun dateFormatter(dateString: String) = dateString.substring(0,10).split("-").asReversed().joinToString(separator = "/")
+        fun dateToString(dateString: String) = dateString.substring(0,10).split("-").joinToString(separator = "/")
     }
 }

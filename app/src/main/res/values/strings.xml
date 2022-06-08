@@ -63,4 +63,8 @@
     <string name="shipping">Shipping</string>
     <string name="voucher_date">%1$s - %2$s</string>
     <string name="number_with_percent">%1$s%%</string>
+    <string name="edit_voucher">Edit voucher</string>
+    <string name="delete_voucher">Delete voucher?</string>
+    <string name="delete_voucher_alert">Do you really want to delete this voucher?</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -41,6 +41,7 @@ class Constants {
         const val USER_ID = "userId"
         const val USER_NOTICE_TOKEN = "userNoticeToken"
         const val COMMON_NOTIFICATION_TOPIC = "JolieCafeNotificationMainTopic"
+        const val VOUCHER_DATA = "voucherData"
 
         val listNotificationType = listOf("COMMON", "PRODUCT", "VOUCHER", "BILL")
         val listTabNotificationType = listOf("All", "Common", "Product", "Voucher", "Bill")

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    tools:context=".ui.activities.add_voucher.AddVoucherActivity">
+    tools:context=".ui.activities.edit_voucher.EditVoucherActivity">
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -34,7 +34,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/raleway_regular"
                     android:gravity="center_vertical"
-                    android:text="@string/new_voucher"
+                    android:text="@string/edit_voucher"
                     android:textColor="@color/title_text_color"
                     android:textSize="20sp" />
 
@@ -340,11 +340,11 @@
     </ScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_add"
+        android:id="@+id/btn_save"
         style="@style/PositiveButtonStyle"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
-        android:text="@string/add_voucher"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

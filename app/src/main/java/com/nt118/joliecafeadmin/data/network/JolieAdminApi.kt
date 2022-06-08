@@ -103,6 +103,19 @@ interface JolieAdminApi {
     suspend fun getAllVouchers(
         @Header("Authorization") token: String
     ): Response<ApiResponseMultiData<Voucher>>
+
+    @PUT("$API_GATEWAY/voucher/update-voucher/{id}")
+    suspend fun updateVoucher(
+        @Path("id") id: String,
+        @Body voucherData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Voucher>>
+
+    @DELETE("$API_GATEWAY/voucher/delete-voucher/{id}")
+    suspend fun deleteVoucher(
+        @Path("id") id: String,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
     // End of Voucher API
 
     @Headers("Content-Type: application/json")
