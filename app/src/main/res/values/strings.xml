@@ -66,4 +66,8 @@
     <string name="bills">Bills</string>
     <string name="product_quantity">%1$s items</string>
     <string name="size">Size</string>
+    <string name="edit_voucher">Edit voucher</string>
+    <string name="delete_voucher">Delete voucher?</string>
+    <string name="delete_voucher_alert">Do you really want to delete this voucher?</string>
+    <string name="delete">Delete</string>
 </resources>

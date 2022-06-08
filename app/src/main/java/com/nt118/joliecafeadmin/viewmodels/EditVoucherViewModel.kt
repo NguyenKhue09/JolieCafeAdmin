@@ -16,28 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddVoucherViewModel @Inject constructor(
+class EditVoucherViewModel @Inject constructor(
     application: Application,
     private val repository: Repository,
     private val voucherFormValidationUseCase: VoucherFormValidationUseCase,
     dataStoreRepository: DataStoreRepository
-) : BaseViewModel(application, dataStoreRepository){
+): BaseViewModel(application, dataStoreRepository) {
 
     val voucherFormState = MutableStateFlow(VoucherFormState())
-    val addVoucherResponse = MutableStateFlow<ApiResult<Voucher>>(ApiResult.Idle())
-
-    private fun addVoucher(voucherData: Map<String, String>) {
-        viewModelScope.launch {
-            addVoucherResponse.value = ApiResult.Loading()
-            try {
-                val response = repository.remote.addNewVoucher(voucherData = voucherData, token = adminToken)
-                addVoucherResponse.value = handleApiResponse(response)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                addVoucherResponse.value = ApiResult.Error(e.message)
-            }
-        }
-    }
+    val updateVoucherResponse = MutableStateFlow<ApiResult<Voucher>>(ApiResult.Idle())
+    lateinit var voucherId: String
 
     fun onVoucherFormEvent(event: VoucherFormStateEvent) {
         when (event) {
@@ -132,7 +120,20 @@ class AddVoucherViewModel @Inject constructor(
                 )
             }
 
-            addVoucher(newVoucher)
+            updateVoucher(newVoucher)
+        }
+    }
+
+    private fun updateVoucher(voucherData: Map<String, String>) {
+        viewModelScope.launch {
+            updateVoucherResponse.value = ApiResult.Loading()
+            try {
+                val response = repository.remote.updateVoucher(voucherData = voucherData, token = adminToken, voucherId = voucherId)
+                updateVoucherResponse.value = handleApiResponse(response)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                updateVoucherResponse.value = ApiResult.Error(e.message)
+            }
         }
     }
 
