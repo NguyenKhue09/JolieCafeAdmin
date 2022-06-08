@@ -54,11 +54,12 @@ class ProductsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         // check user
         if ( productsViewModel.adminToken.isNotEmpty() ) {
-            lifecycleScope.launch {
+            lifecycleScope.launchWhenStarted {
                 productsViewModel.readAdminToken.collectLatest { token ->
                     if (token.isNullOrEmpty()) {
                         val intent = Intent(requireContext(), LoginActivity::class.java)
                         startActivity(intent)
+                        requireActivity().finish()
                     }
                 }
             }
