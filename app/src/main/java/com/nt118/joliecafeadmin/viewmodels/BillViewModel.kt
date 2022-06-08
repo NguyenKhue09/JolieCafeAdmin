@@ -26,6 +26,9 @@ class BillViewModel @Inject constructor(
     private var _tabSelected = MutableLiveData<String>()
     val tabSelected: LiveData<String> = _tabSelected
 
+    private val _billClickedList = MutableLiveData<MutableList<String>>(mutableListOf())
+    val billClickedList: LiveData<MutableList<String>> = _billClickedList
+
     init {
         setTabSelected(Constants.listTabBillStatus[0])
     }
@@ -47,6 +50,16 @@ class BillViewModel @Inject constructor(
             println("Token empty")
             flowOf(PagingData.empty())
         }
+    }
+
+    fun addNewBillToClickedList(id: String) {
+        println(id)
+        if(!_billClickedList.value!!.contains(id)) {
+            _billClickedList.value!!.add(id)
+        } else {
+            _billClickedList.value!!.remove(id)
+        }
+        _billClickedList.value = _billClickedList.value
     }
 
     fun setTabSelected(tab: String) {

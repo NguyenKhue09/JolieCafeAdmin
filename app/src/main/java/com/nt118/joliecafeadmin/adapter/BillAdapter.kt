@@ -23,6 +23,7 @@ import java.util.*
 
 class BillAdapter(
     private val billsActivity: BillsActivity,
+    private val onNotificationClicked: (String, String, String?) -> Unit,
     diffUtil: DiffUtil.ItemCallback<Bill>
 ) : PagingDataAdapter<Bill, BillAdapter.MyViewHolder>(diffCallback = diffUtil) {
 
@@ -79,12 +80,16 @@ class BillAdapter(
                 )
             }
 
-           // billsActivity.orderHistoryClickedList.observeForever(orderListIdObserver)
+            billsActivity.billClickedList.observeForever(orderListIdObserver)
 
 
-//            btnCollapse.setOnClickListener {
-//                billsActivity.addNewOrderToClickList(bill.id)
-//            }
+            btnCollapse.setOnClickListener {
+                billsActivity.addNewBillToClickList(bill.id)
+            }
+
+            holder.binding.btnBillNotice.setOnClickListener {
+                onNotificationClicked(bill.orderId, bill.userInfo, bill.token)
+            }
 
             orderItemInBillAdapter.setData(newData = bill.products)
 
@@ -117,11 +122,12 @@ class BillAdapter(
                 NumberFormat.getNumberInstance(Locale.US).format(if(bill.discountCost == 0.0) 0 else -bill.discountCost)
             )
 
-            holder.binding.tvPaidStatus.text = if(bill.paid) "You paid this bill" else "You haven't pay yet!"
+            holder.binding.tvPaidStatus.text = if(bill.paid) "Paid" else "Not paid"
+            holder.binding.tvPaidMethod.text = bill.paymentMethod
         }
     }
 
     fun removeOrderListIdObserver() {
-        //if(!::orderListIdObserver.isInitialized) billsActivity.orderHistoryClickedList.removeObserver(orderListIdObserver)
+        if(!::orderListIdObserver.isInitialized) billsActivity.billClickedList.removeObserver(orderListIdObserver)
     }
 }

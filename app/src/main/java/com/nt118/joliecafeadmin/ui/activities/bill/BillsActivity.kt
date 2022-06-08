@@ -1,10 +1,12 @@
 package com.nt118.joliecafeadmin.ui.activities.bill
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
@@ -16,6 +18,7 @@ import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.adapter.BillAdapter
 import com.nt118.joliecafeadmin.databinding.ActivityBillsBinding
 import com.nt118.joliecafeadmin.models.Bill
+import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationActivity
 import com.nt118.joliecafeadmin.util.BillComparator
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.NetworkListener
@@ -37,10 +40,14 @@ class BillsActivity : AppCompatActivity() {
     private lateinit var selectedTab: String
     private lateinit var networkListener: NetworkListener
 
+    lateinit var billClickedList: LiveData<MutableList<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityBillsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        billClickedList = billViewModel.billClickedList
 
         updateNetworkStatus()
         updateBackOnlineStatus()
@@ -53,6 +60,10 @@ class BillsActivity : AppCompatActivity() {
         setBillAdapterDataWhenTabChange()
         onBillTabSelected()
         handleProductPagingAdapterState()
+    }
+
+    fun addNewBillToClickList(id: String) {
+        billViewModel.addNewBillToClickedList(id)
     }
 
     private fun handleProductPagingAdapterState() {
@@ -140,7 +151,19 @@ class BillsActivity : AppCompatActivity() {
 
     private fun initBillAdapter() {
         val diffUtil = BillComparator
-        billAdapter = BillAdapter(this, diffUtil)
+        billAdapter = BillAdapter(
+            this,
+            onNotificationClicked = { id, userId, token ->
+                val intend = Intent(this, NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+                intend.putExtra(Constants.USER_ID, userId)
+                intend.putExtra(Constants.BILL_ID, id)
+                intend.putExtra(Constants.USER_NOTICE_TOKEN, token)
+                intend.putExtra(Constants.NOTIFICATION_TYPE, Constants.listNotificationType[3])
+                startActivity(intend)
+            },
+            diffUtil,
+        )
     }
 
     private fun observerNetworkMessage() {
@@ -202,5 +225,11 @@ class BillsActivity : AppCompatActivity() {
             .setCustomBackground(getDrawable(R.drawable.snackbar_normal_custom_bg)!!)
 
         snackBar.show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        billAdapter.removeOrderListIdObserver()
     }
 }
