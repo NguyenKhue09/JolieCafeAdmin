@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -34,6 +35,7 @@ import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.ProductsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductsFragment : Fragment() {
@@ -72,7 +74,37 @@ class ProductsFragment : Fragment() {
         onProductsTabSelected()
         handleProductPagingAdapterState()
         navigateToAddNewProductScreen()
+
+        handleSearchBox()
+
         return binding.root
+    }
+
+    private fun handleSearchBox() {
+        binding.searchProductBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                println("onQueryTextSubmit")
+                println(query)
+                if(!query.isNullOrEmpty()) {
+                    lifecycleScope.launch {
+                        productsViewModel.getProducts(
+                            mapOf(
+                                "name" to query,
+                                "type" to selectedTab
+                            )
+                        ).collectLatest { data ->
+                            submitProductAdapterData(data = data)
+                        }
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                return false
+            }
+        })
     }
 
     private fun observerNetworkMessage() {
