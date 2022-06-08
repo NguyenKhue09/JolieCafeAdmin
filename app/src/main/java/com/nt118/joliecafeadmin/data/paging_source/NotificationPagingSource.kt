@@ -25,11 +25,18 @@ class NotificationPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Notification> {
         try {
             val nextPageNumber = params.key ?: 1
-            val query = mapOf(
+
+            val title = notificationQuery["title"]
+
+            val query = mutableMapOf(
                 "currentPage" to nextPageNumber.toString(),
                 "notificationPerPage" to PAGE_SIZE.toString(),
                 "type" to notificationQuery["type"]!!
             )
+
+            title?.let {
+                query["title"] = title
+            }
 
             //println(query)
 

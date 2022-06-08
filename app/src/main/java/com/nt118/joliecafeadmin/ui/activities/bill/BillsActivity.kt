@@ -330,6 +330,9 @@ class BillsActivity : AppCompatActivity() {
             .asLiveData().observe(this) { status ->
                 billViewModel.networkStatus = status
                 billViewModel.showNetworkStatus()
+                if(billViewModel.backOnline) {
+                    getAdminBills()
+                }
             }
     }
 

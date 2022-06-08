@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -65,6 +66,36 @@ class NotificationsActivity : AppCompatActivity() {
         setNotificationAdapterDataWhenTabChange()
         onNotificationTabSelected()
         handleNotificationPagingAdapterState()
+        handleSearchBox()
+    }
+
+    private fun handleSearchBox() {
+        binding.searchNotificationBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                println("onQueryTextSubmit")
+                println(query)
+                if(!query.isNullOrEmpty()) {
+                    lifecycleScope.launch {
+                        notificationsViewModel.getNotifications(
+                            notificationQuery = mapOf(
+                                "type" to listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition].uppercase(
+                                    Locale.getDefault()
+                                ),
+                                "title" to query
+                            )
+                        ).collectLatest { data ->
+                            submitNotificationAdapterData(data = data)
+                        }
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                return false
+            }
+        })
     }
 
     private fun handleNotificationPagingAdapterState() {
