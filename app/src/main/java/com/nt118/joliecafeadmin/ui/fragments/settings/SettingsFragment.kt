@@ -28,7 +28,10 @@ class SettingsFragment : Fragment() {
 
         binding.btnLogout.setOnClickListener {
             settingsViewModel.saveAdminToken(adminToken = "")
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            if(settingsViewModel.adminToken.isEmpty()) {
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+            }
+
         }
 
         return binding.root

@@ -16,21 +16,21 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.nt118.joliecafeadmin.R
 import com.nt118.joliecafeadmin.adapter.NotificationItemAdapter
-import com.nt118.joliecafeadmin.adapter.ProductItemAdapter
 import com.nt118.joliecafeadmin.databinding.ActivityNotificationsBinding
 import com.nt118.joliecafeadmin.models.Notification
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_ID
 import com.nt118.joliecafeadmin.util.Constants.Companion.NOTIFICATION_TYPE
 import com.nt118.joliecafeadmin.util.Constants.Companion.listNotificationType
+import com.nt118.joliecafeadmin.util.Constants.Companion.listTabNotificationType
 import com.nt118.joliecafeadmin.util.NetworkListener
 import com.nt118.joliecafeadmin.util.NotificationComparator
-import com.nt118.joliecafeadmin.util.ProductComparator
 import com.nt118.joliecafeadmin.util.extenstions.setCustomBackground
 import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.NotificationsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -58,9 +58,9 @@ class NotificationsActivity : AppCompatActivity() {
 
         onAddNotificationButtonClicked()
 
-        initProductAdapter()
+        initNotificationAdapter()
         configProductRecyclerView()
-        addProductTabText()
+        addNotificationTabText()
         initProductAdapterData()
         setNotificationAdapterDataWhenTabChange()
         onNotificationTabSelected()
@@ -96,6 +96,7 @@ class NotificationsActivity : AppCompatActivity() {
         binding.notificationsTabLayout.addOnTabSelectedListener(object :
             TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                println(binding.notificationsTabLayout.selectedTabPosition)
                 if (tab != null) {
                     notificationsViewModel.setTabSelected(tab = tab.text.toString())
                 }
@@ -120,14 +121,14 @@ class NotificationsActivity : AppCompatActivity() {
                         )
                     ).collectLatest { data ->
                         selectedTab = tab
-                        submitProductAdapterData(data = data)
+                        submitNotificationAdapterData(data = data)
                     }
                 }
             }
         }
     }
 
-    private suspend fun submitProductAdapterData(data: PagingData<Notification>) {
+    private suspend fun submitNotificationAdapterData(data: PagingData<Notification>) {
         notificationItemAdapter.submitData(data)
     }
 
@@ -136,8 +137,8 @@ class NotificationsActivity : AppCompatActivity() {
         binding.notificationsTabLayout.selectTab(binding.notificationsTabLayout.getTabAt(tabIndex), true)
     }
 
-    private fun addProductTabText() {
-        Constants.listTabNotificationType.forEach {
+    private fun addNotificationTabText() {
+        listTabNotificationType.forEach {
             binding.notificationsTabLayout.addTab(binding.notificationsTabLayout.newTab().apply {
                 tag = it
                 text = it
@@ -151,7 +152,7 @@ class NotificationsActivity : AppCompatActivity() {
         notificationRv.adapter = notificationItemAdapter
     }
 
-    private fun initProductAdapter() {
+    private fun initNotificationAdapter() {
         val diffUtil = NotificationComparator
         notificationItemAdapter = NotificationItemAdapter(
             notificationActivity = this,
@@ -163,6 +164,10 @@ class NotificationsActivity : AppCompatActivity() {
                 startActivity(intend)
             },
             onEditNotificationClicked = { notificationId ->
+                val intend = Intent(this, NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_EDIT)
+                intend.putExtra(NOTIFICATION_ID, notificationId)
+                startActivity(intend)
             },
         )
     }
@@ -215,15 +220,16 @@ class NotificationsActivity : AppCompatActivity() {
     private fun backOnlineRecallNotifications() {
         lifecycleScope.launchWhenStarted {
             if (notificationsViewModel.backOnline) {
+                println(binding.notificationsTabLayout.selectedTabPosition)
                 notificationsViewModel.getNotifications(
                     notificationQuery = mapOf(
-                        "type" to Constants.listProductTypes[binding.notificationsTabLayout.selectedTabPosition].uppercase(
+                        "type" to listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition].uppercase(
                             Locale.getDefault()
                         )
                     )
                 ).collectLatest { data ->
-                    selectedTab = Constants.listProductTypes[binding.notificationsTabLayout.selectedTabPosition]
-                    submitProductAdapterData(data = data)
+                    selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
+                    submitNotificationAdapterData(data = data)
                 }
             }
 
@@ -268,6 +274,22 @@ class NotificationsActivity : AppCompatActivity() {
             .setCustomBackground(ResourcesCompat.getDrawable(resources, R.drawable.snackbar_normal_custom_bg, null)!!)
 
         snackBar.show()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            notificationsViewModel.getNotifications(
+                notificationQuery = mapOf(
+                    "type" to listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition].uppercase(
+                        Locale.getDefault()
+                    )
+                )
+            ).collectLatest { data ->
+                selectedTab = listTabNotificationType[binding.notificationsTabLayout.selectedTabPosition]
+                submitNotificationAdapterData(data = data)
+            }
+        }
     }
 
     override fun onDestroy() {

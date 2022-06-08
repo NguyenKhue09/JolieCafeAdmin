@@ -32,6 +32,7 @@ class ProductsViewModel @Inject constructor(
     fun getProducts(
         productQuery: Map<String, String>
     ): Flow<PagingData<Product>> {
+        println(productQuery)
         return if (adminToken.isNotEmpty()) {
             try {
                 repository.remote.getProducts(

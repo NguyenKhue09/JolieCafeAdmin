@@ -1,15 +1,18 @@
 package com.nt118.joliecafeadmin.util
 
+import android.os.Build
 import android.text.Editable
 
 import android.text.TextWatcher
 import com.google.android.material.textfield.TextInputEditText
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
 class DateTimeUtil {
     companion object {
-        fun getTextChangeListener(date: TextInputEditText) = object : TextWatcher {
+        fun getTextChangeListener(date: TextInputEditText, callback: (() -> Unit)?) = object : TextWatcher {
             private var current = ""
             private val dateFormat = "yyyyMMdd"
             private val cal: Calendar = Calendar.getInstance()
@@ -56,10 +59,12 @@ class DateTimeUtil {
                     date.setText(current)
                     date.setSelection(if (sel < current.length) sel else current.length)
                 }
+                callback?.invoke()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         }
+        fun dateFormatter(dateString: String): String = dateString.substring(0,10).split("-").asReversed().joinToString(separator = "/")
     }
 }

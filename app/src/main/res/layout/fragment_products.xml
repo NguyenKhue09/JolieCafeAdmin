@@ -29,6 +29,8 @@
         android:background="@drawable/searchview_background"
         android:backgroundTint="@color/grey_opacity60_primary"
         android:iconifiedByDefault="false"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
         android:queryBackground="@null"
         android:layout_marginHorizontal="@dimen/large_margin"
         android:queryHint="Search for your products..."

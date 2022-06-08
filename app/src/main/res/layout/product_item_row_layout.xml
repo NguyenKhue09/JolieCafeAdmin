@@ -112,17 +112,33 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_edit_product"
                 style="@style/Button.Rounded"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_marginEnd="@dimen/medium_margin"
-                app:icon="@drawable/ic_edit"
-                app:iconSize="24dp"
-                app:iconTint="@color/text_color"
                 android:backgroundTint="@color/grey_opacity60_primary"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded"
-                app:layout_constraintBottom_toBottomOf="@+id/img_card"
+                app:icon="@drawable/ic_edit"
+                app:iconSize="18dp"
+                app:iconTint="@color/text_color"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/img_card">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btn_product_notice"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded">
+
+            </com.google.android.material.button.MaterialButton>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_product_notice"
+                style="@style/Button.Rounded"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/grey_opacity60_primary"
+                app:icon="@drawable/ic_notifications_black_24dp"
+                app:iconSize="18dp"
+                app:iconTint="@color/text_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btn_edit_product"
+                app:layout_constraintTop_toBottomOf="@+id/btn_edit_product"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.MyApp.Button.Rounded">
 
             </com.google.android.material.button.MaterialButton>
 

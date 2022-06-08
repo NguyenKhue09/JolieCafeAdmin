@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import com.nt118.joliecafeadmin.databinding.FragmentProductsBinding
 import com.nt118.joliecafeadmin.models.Product
 import com.nt118.joliecafeadmin.ui.activities.add_product.AddNewProductActivity
 import com.nt118.joliecafeadmin.ui.activities.login.LoginActivity
+import com.nt118.joliecafeadmin.ui.activities.notifications.NotificationActivity
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
 import com.nt118.joliecafeadmin.util.Constants.Companion.listProductTypes
@@ -34,6 +36,7 @@ import com.nt118.joliecafeadmin.util.extenstions.setIcon
 import com.nt118.joliecafeadmin.viewmodels.ProductsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductsFragment : Fragment() {
@@ -74,7 +77,37 @@ class ProductsFragment : Fragment() {
         onProductsTabSelected()
         handleProductPagingAdapterState()
         navigateToAddNewProductScreen()
+
+        handleSearchBox()
+
         return binding.root
+    }
+
+    private fun handleSearchBox() {
+        binding.searchProductBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                println("onQueryTextSubmit")
+                println(query)
+                if(!query.isNullOrEmpty()) {
+                    lifecycleScope.launch {
+                        productsViewModel.getProducts(
+                            mapOf(
+                                "name" to query,
+                                "type" to selectedTab
+                            )
+                        ).collectLatest { data ->
+                            submitProductAdapterData(data = data)
+                        }
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+                return false
+            }
+        })
     }
 
     private fun observerNetworkMessage() {
@@ -160,6 +193,15 @@ class ProductsFragment : Fragment() {
             },
             onEditProductClicked = { productId ->
                 onProductClicked(productId = productId, isEdit = true)
+            },
+            onNotificationClicked = { id, name, image ->
+                val intend = Intent(requireContext(), NotificationActivity::class.java)
+                intend.putExtra(Constants.ACTION_TYPE, Constants.ACTION_TYPE_ADD)
+                intend.putExtra(Constants.NOTIFICATION_TYPE, Constants.listNotificationType[1])
+                intend.putExtra(Constants.PRODUCT_NAME, name)
+                intend.putExtra(Constants.PRODUCT_ID, id)
+                intend.putExtra(Constants.NOTIFICATION_IMAGE, image)
+                startActivity(intend)
             }
         )
     }

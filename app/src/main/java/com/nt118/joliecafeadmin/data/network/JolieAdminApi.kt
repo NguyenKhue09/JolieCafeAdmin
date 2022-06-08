@@ -97,4 +97,24 @@ interface JolieAdminApi {
         @Query("notificationId") notificationId: String,
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Notification>>
+
+    // Voucher API
+    @POST("$API_GATEWAY/voucher/create-new-voucher")
+    suspend fun addNewVoucher(
+        @Body voucherData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Voucher>>
+
+    @GET("$API_GATEWAY/voucher/get-admin-voucher")
+    suspend fun getAllVouchers(
+        @Header("Authorization") token: String
+    ): Response<ApiResponseMultiData<Voucher>>
+    // End of Voucher API
+
+    @Headers("Content-Type: application/json")
+    @PUT("$API_GATEWAY/notification/update")
+    suspend fun updateNotification(
+        @Body notificationData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Notification>>
 }
