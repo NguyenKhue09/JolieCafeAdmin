@@ -9,7 +9,7 @@ import java.util.*
 
 class DateTimeUtil {
     companion object {
-        fun getTextChangeListener(date: TextInputEditText) = object : TextWatcher {
+        fun getTextChangeListener(date: TextInputEditText, callback: (() -> Unit)?) = object : TextWatcher {
             private var current = ""
             private val dateFormat = "yyyyMMdd"
             private val cal: Calendar = Calendar.getInstance()
@@ -56,6 +56,7 @@ class DateTimeUtil {
                     date.setText(current)
                     date.setSelection(if (sel < current.length) sel else current.length)
                 }
+                callback?.invoke()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

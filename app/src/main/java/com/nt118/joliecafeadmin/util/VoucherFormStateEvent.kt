@@ -7,7 +7,7 @@ sealed class VoucherFormStateEvent {
     data class OnEndDateChanged(val endDate: String): VoucherFormStateEvent()
     data class OnTypeChanged(val type: String): VoucherFormStateEvent()
     data class OnConditionChanged(val condition: String): VoucherFormStateEvent()
-    data class OnDiscountChanged(val discount: String): VoucherFormStateEvent()
+    data class OnDiscountPercentChanged(val discountPercent: String): VoucherFormStateEvent()
     data class OnQuantityChanged(val quantity: String): VoucherFormStateEvent()
     object Submit: VoucherFormStateEvent()
 }
