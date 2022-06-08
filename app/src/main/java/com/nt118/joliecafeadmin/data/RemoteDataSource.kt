@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nt118.joliecafeadmin.data.network.FCMApi
 import com.nt118.joliecafeadmin.data.network.JolieAdminApi
+import com.nt118.joliecafeadmin.data.paging_source.BillPagingSource
 import com.nt118.joliecafeadmin.data.paging_source.NotificationPagingSource
 import com.nt118.joliecafeadmin.data.paging_source.ProductPagingSource
 import com.nt118.joliecafeadmin.models.*
@@ -161,5 +162,12 @@ class RemoteDataSource @Inject constructor(
         notificationData: Map<String, String>
     ): Response<ApiResponseSingleData<Notification>> {
         return jolieAdminApi.updateNotification(token = "Bearer $token", notificationData = notificationData)
+    }
+
+    fun getAdminBills(token: String, status: String): Flow<PagingData<Bill>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE),
+            pagingSourceFactory = { BillPagingSource(token = "Bearer $token", jolieAdminApi = jolieAdminApi, status = status) }
+        ).flow
     }
 }

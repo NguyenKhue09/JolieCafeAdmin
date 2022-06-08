@@ -117,4 +117,11 @@ interface JolieAdminApi {
         @Body notificationData: Map<String, String>,
         @Header("Authorization") token: String
     ): Response<ApiResponseSingleData<Notification>>
+
+    @Headers("Content-Type: application/json")
+    @GET("$API_GATEWAY/bill/get-bill-admin")
+    suspend fun getAdminBills(
+        @Header("Authorization") token: String,
+        @QueryMap billQuery: Map<String, String>,
+    ): ApiResponseMultiData<Bill>
 }

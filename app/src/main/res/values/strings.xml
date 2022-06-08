@@ -63,4 +63,7 @@
     <string name="shipping">Shipping</string>
     <string name="voucher_date">%1$s - %2$s</string>
     <string name="number_with_percent">%1$s%%</string>
+    <string name="bills">Bills</string>
+    <string name="product_quantity">%1$s items</string>
+    <string name="size">Size</string>
 </resources>
