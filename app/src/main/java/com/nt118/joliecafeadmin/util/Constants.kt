@@ -39,6 +39,7 @@ class Constants {
         const val VOUCHER_ID = "voucherId"
         const val VOUCHER_CODE = "voucherCode"
         const val USER_ID = "userId"
+        const val BILL_ID = "billId"
         const val USER_NOTICE_TOKEN = "userNoticeToken"
         const val COMMON_NOTIFICATION_TOPIC = "JolieCafeNotificationMainTopic"
         const val VOUCHER_DATA = "voucherData"
