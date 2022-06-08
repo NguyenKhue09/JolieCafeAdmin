@@ -70,11 +70,12 @@ class RevenueFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // check user
-        lifecycleScope.launch {
+        lifecycleScope.launchWhenStarted {
             revenueViewModel.readAdminToken.collectLatest { token ->
                 if (token.isNullOrEmpty()) {
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     startActivity(intent)
+                    requireActivity().finish()
                 }
             }
         }
