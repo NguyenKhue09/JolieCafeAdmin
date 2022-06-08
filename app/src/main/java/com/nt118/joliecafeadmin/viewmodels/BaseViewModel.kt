@@ -34,7 +34,7 @@ open class BaseViewModel(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             readAdminToken.collectLatest { token ->
-                println(token)
+                println("Token: $token")
                 adminToken = token
             }
         }
