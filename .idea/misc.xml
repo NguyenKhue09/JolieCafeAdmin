@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_arrow_back.xml" value="0.222" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_arrow_down.xml" value="0.1705" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_arrow_up.xml" value="0.1705" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_camera.xml" value="0.1605" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_edit.xml" value="0.221" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable-v24/searchview_background.xml" value="0.221" />
@@ -17,6 +19,7 @@
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/drawable/snackbar_normal_custom_bg.xml" value="0.166" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/font/fonts.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_add_new_product.xml" value="0.264" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_bills.xml" value="0.3625" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_notification.xml" value="0.33" />
@@ -24,15 +27,21 @@
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/activity_product_detail.xml" value="0.1" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/add_new_notifiation_footer_action_button.xml" value="0.3625" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/add_new_product_footer_action_button.xml" value="0.25" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/bill_item_layout.xml" value="0.45176110260336905" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/drop_down_item.xml" value="0.6" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_notification_detail.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_notifications.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.1" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_settings.xml" value="0.3625" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/fragment_vouchers.xml" value="0.3625" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/item_rv_voucher.xml" value="0.67" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/notification_item_layout.xml" value="0.4" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_detail_footer_action_button.xml" value="0.4878048780487805" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_item_in_bill_layout.xml" value="0.67" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/product_item_row_layout.xml" value="0.75" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/test.xml" value="0.24895833333333334" />
+        <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/layout/update_bill_status_dialog_layout.xml" value="0.3614583333333333" />
         <entry key="..\:/AndroidStudioProjects/JolieCafeAdmin/app/src/main/res/menu/bottom_nav_menu.xml" value="0.25" />
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1995" />
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/drawable/ic_bell.xml" value="0.1995" />
@@ -45,20 +54,9 @@
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/Nguyen Tra Vi/Desktop/jolie/JolieCafeAdmin/app/src/main/res/layout/fragment_settings.xml" value="0.264" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/drawable/dialog_background.xml" value="0.2425" />
         <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/drawable/ic_bell.xml" value="0.182" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/drawable/rounded_shape.xml" value="0.2425" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/activity_add_new_product.xml" value="0.3625" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/activity_add_voucher.xml" value="0.3625" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/activity_edit_voucher.xml" value="0.3625" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/activity_voucher_detail.xml" value="0.3625" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/dialog.xml" value="0.3614583333333333" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/dialog_delete_voucher.xml" value="0.3625" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/fragment_products.xml" value="0.3625" />
         <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/fragment_revenue.xml" value="0.24615384615384617" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/fragment_vouchers.xml" value="0.3625" />
         <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/item_best_seller.xml" value="0.25" />
-        <entry key="..\:/project/JolieCafeAdmin/app/src/main/res/layout/item_rv_voucher.xml" value="0.3625" />
       </map>
     </option>
   </component>

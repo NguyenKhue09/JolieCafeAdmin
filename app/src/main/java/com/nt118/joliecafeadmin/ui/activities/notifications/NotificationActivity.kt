@@ -477,7 +477,7 @@ class NotificationActivity : AppCompatActivity() {
                     notificationViewModel.sendCommonNotification(pushNotification)
                 }
                 listNotificationType[2] -> {
-                    notificationData["voucherId"] = notificationFormState.value.productId
+                    notificationData["voucherId"] = notificationFormState.value.voucherId
                     notificationViewModel.addNewAdminNotification(notificationData)
                     notificationViewModel.sendCommonNotification(pushNotification)
                 }
@@ -534,6 +534,7 @@ class NotificationActivity : AppCompatActivity() {
                     } else {
                         setVoucherId(voucherId)
                         setVoucherCode(voucherCode)
+                        setPredictVoucherNotificationContent(voucherCode)
                     }
                 }
                 listNotificationType[3] -> {
@@ -555,6 +556,11 @@ class NotificationActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setPredictVoucherNotificationContent(voucherCode: String) {
+        binding.etNotificationTitle.setText(voucherCode)
+        binding.etNotificationMessage.setText(voucherCode)
     }
 
     private fun setPredictBillNotificationContent(billId: String) {

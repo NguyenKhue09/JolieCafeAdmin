@@ -74,6 +74,7 @@ class NotificationViewModel @Inject constructor(
 
     fun sendCommonNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
+            println("sendCommonNotification")
             try {
                 _sendNotificationResponse.value = ApiResult.Loading()
                 val result = repository.remote.sendCommonNotification(notificationData = pushNotification)
@@ -88,6 +89,7 @@ class NotificationViewModel @Inject constructor(
 
     fun sendSingleNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
+            println("sendCommonNotification")
             try {
                 _sendNotificationResponse.value = ApiResult.Loading()
                 val result = repository.remote.sendSingleNotification(notificationData = pushNotification)

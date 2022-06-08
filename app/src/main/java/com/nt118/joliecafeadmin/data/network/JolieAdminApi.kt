@@ -137,4 +137,11 @@ interface JolieAdminApi {
         @Header("Authorization") token: String,
         @QueryMap billQuery: Map<String, String>,
     ): ApiResponseMultiData<Bill>
+
+    @Headers("Content-Type: application/json")
+    @PUT("$API_GATEWAY/bill/update-bill-admin")
+    suspend fun updateStatusAndPaymentStatusBill(
+        @Body billData: Map<String, String>,
+        @Header("Authorization") token: String
+    ): Response<ApiResponseSingleData<Unit>>
 }
