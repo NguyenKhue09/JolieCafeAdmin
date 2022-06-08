@@ -43,6 +43,11 @@ class Constants {
         const val COMMON_NOTIFICATION_TOPIC = "JolieCafeNotificationMainTopic"
         const val VOUCHER_DATA = "voucherData"
 
+        // Voucher flags
+        const val VOUCHER_FLAG = "voucherFlag"
+        const val VOUCHER_FLAG_EDIT = 0
+        const val VOUCHER_FLAG_DETAIL = 1
+
         val listNotificationType = listOf("COMMON", "PRODUCT", "VOUCHER", "BILL")
         val listTabNotificationType = listOf("All", "Common", "Product", "Voucher", "Bill")
         val listTabBillStatus = listOf("Pending", "Delivering", "Received", "Cancelled")

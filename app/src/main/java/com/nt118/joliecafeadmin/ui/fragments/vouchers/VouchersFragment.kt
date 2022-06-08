@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -53,6 +54,7 @@ class VouchersFragment : Fragment() {
 
         updateNetworkStatus()
         updateBackOnlineStatus()
+        handleSearchView()
         observeNetworkMessage()
         observeGetVoucherResponse()
         observeDeleteVoucherResponse()
@@ -63,6 +65,31 @@ class VouchersFragment : Fragment() {
         setMarginForRvItem()
 
         return binding.root
+    }
+
+    private fun handleSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter
+                    val filteredDataset = vouchersViewModel.voucherList.value?.filter {
+                        it.code.lowercase().contains(newText.toString().lowercase()) && it.type == listVoucherTypes[selectedTab]
+                    } ?: emptyList()
+                    println(filteredDataset.toString())
+                    adapter.fetchData(filteredDataset)
+                } else {
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter
+                    adapter.fetchData(vouchersViewModel.voucherList.value?.filter{
+                        it.type == listVoucherTypes[selectedTab]
+                    } ?: emptyList())
+                }
+                return false
+            }
+        })
     }
 
     private fun observeDeleteVoucherResponse() {
