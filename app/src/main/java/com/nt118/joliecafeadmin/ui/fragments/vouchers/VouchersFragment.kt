@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.nt118.joliecafeadmin.R
@@ -20,6 +20,7 @@ import com.nt118.joliecafeadmin.ui.activities.add_voucher.AddVoucherActivity
 import com.nt118.joliecafeadmin.util.ApiResult
 import com.nt118.joliecafeadmin.util.Constants
 import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_ERROR
+import com.nt118.joliecafeadmin.util.Constants.Companion.SNACK_BAR_STATUS_SUCCESS
 import com.nt118.joliecafeadmin.util.Constants.Companion.listVoucherTypes
 import com.nt118.joliecafeadmin.util.MarginItemDecoration
 import com.nt118.joliecafeadmin.util.NetworkListener
@@ -35,7 +36,7 @@ class VouchersFragment : Fragment() {
     private val binding get() = _binding!!
     private val vouchersViewModel: VouchersViewModel by viewModels()
     private lateinit var discountAdapter: VoucherAdapter
-    private lateinit var shipAdaper: VoucherAdapter
+    private lateinit var shipAdapter: VoucherAdapter
     private lateinit var networkListener: NetworkListener
 
     private var selectedTab
@@ -53,8 +54,10 @@ class VouchersFragment : Fragment() {
 
         updateNetworkStatus()
         updateBackOnlineStatus()
+        handleSearchView()
         observeNetworkMessage()
         observeGetVoucherResponse()
+        observeDeleteVoucherResponse()
         observeVoucherList()
         observeTabSelection()
         initTabSelection()
@@ -62,6 +65,48 @@ class VouchersFragment : Fragment() {
         setMarginForRvItem()
 
         return binding.root
+    }
+
+    private fun handleSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter?
+                    val filteredDataset = vouchersViewModel.voucherList.value?.filter {
+                        it.code.lowercase().contains(newText.toString().lowercase()) && it.type == listVoucherTypes[selectedTab]
+                    } ?: emptyList()
+                    println(filteredDataset.toString())
+                    adapter?.fetchData(filteredDataset)
+                } else {
+                    val adapter = binding.recycleViewVoucher.adapter as VoucherAdapter?
+                    adapter?.fetchData(vouchersViewModel.voucherList.value?.filter{
+                        it.type == listVoucherTypes[selectedTab]
+                    } ?: emptyList())
+                }
+                return false
+            }
+        })
+    }
+
+    private fun observeDeleteVoucherResponse() {
+        vouchersViewModel.deleteVoucherResponse.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is ApiResult.Loading -> binding.progressIndicator.visibility = View.VISIBLE
+                is ApiResult.NullDataSuccess -> {
+                    (binding.recycleViewVoucher.adapter as VoucherAdapter).deleteItem()
+                    showSnackBar("Voucher deleted successfully", SNACK_BAR_STATUS_SUCCESS, R.drawable.ic_success)
+                    binding.progressIndicator.visibility = View.GONE
+                }
+                is ApiResult.Error -> {
+                    showSnackBar("Failed to delete voucher", SNACK_BAR_STATUS_ERROR, R.drawable.ic_error)
+                }
+                else -> {}
+            }
+        }
     }
 
     private fun setMarginForRvItem() {
@@ -72,7 +117,7 @@ class VouchersFragment : Fragment() {
         vouchersViewModel.selectedTab.observe(viewLifecycleOwner) { tab ->
             when (tab) {
                 VouchersViewModel.DISCOUNT_TAB -> binding.recycleViewVoucher.adapter = discountAdapter
-                VouchersViewModel.SHIPPING_TAB -> binding.recycleViewVoucher.adapter = shipAdaper
+                VouchersViewModel.SHIPPING_TAB -> binding.recycleViewVoucher.adapter = shipAdapter
             }
         }
     }
@@ -95,11 +140,11 @@ class VouchersFragment : Fragment() {
 
     private fun observeVoucherList() {
         vouchersViewModel.voucherList.observe(viewLifecycleOwner) { data ->
-            discountAdapter = VoucherAdapter(data.filter { it.type == listVoucherTypes[0] } as MutableList<Voucher>, requireContext())
-            shipAdaper = VoucherAdapter(data.filter { it.type == listVoucherTypes[1] } as MutableList<Voucher>, requireContext())
+            discountAdapter = VoucherAdapter(data.filter { it.type == listVoucherTypes[0] } as MutableList<Voucher>, requireContext(), vouchersViewModel)
+            shipAdapter = VoucherAdapter(data.filter { it.type == listVoucherTypes[1] } as MutableList<Voucher>, requireContext(), vouchersViewModel)
             when (selectedTab) {
                 VouchersViewModel.DISCOUNT_TAB -> binding.recycleViewVoucher.adapter = discountAdapter
-                VouchersViewModel.SHIPPING_TAB -> binding.recycleViewVoucher.adapter = shipAdaper
+                VouchersViewModel.SHIPPING_TAB -> binding.recycleViewVoucher.adapter = shipAdapter
             }
         }
     }
@@ -192,6 +237,8 @@ class VouchersFragment : Fragment() {
         binding.btnAddVoucher.setOnClickListener {
             startActivity(Intent(context, AddVoucherActivity::class.java))
         }
+
+
     }
 
     override fun onDestroyView() {
@@ -199,13 +246,6 @@ class VouchersFragment : Fragment() {
         _binding = null
     }
 
-    private fun fetDataBestSeller() : ArrayList<String> {
-        val item = ArrayList<String>()
-        for (i in 0 until 15) {
-            item.add("$i")
-        }
-        return item
-    }
 
     override fun onResume() {
         super.onResume()

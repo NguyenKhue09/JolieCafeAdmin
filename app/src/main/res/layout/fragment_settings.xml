@@ -138,6 +138,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
@@ -145,18 +146,40 @@
         android:background="@drawable/profile_button_custom_bg"
         android:drawableStart="@drawable/ic_log_out"
         android:drawablePadding="10dp"
-        android:layout_marginTop="27dp"
         android:fontFamily="@font/raleway_medium"
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp"
+        android:layout_marginTop="27dp"
         android:text="Sign out"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/text_color"
         android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/btn_bill"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_bill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/grey_opacity60_primary"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp"
+        android:layout_marginTop="27dp"
+        android:text="Manage bills"
+        android:fontFamily="@font/raleway_medium"
+        android:textAlignment="textStart"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"
+        app:icon="@drawable/ic_bill"
+        app:iconSize="20dp"
+        app:iconTint="@color/text_color"
+        app:cornerRadius="9dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView2">
 
+    </com.google.android.material.button.MaterialButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

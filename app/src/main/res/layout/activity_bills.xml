@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.notifications.NotificationsActivity">
+    tools:context=".ui.activities.bill.BillsActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_notifications_fragment"
+        android:id="@+id/toolbar_bills"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/grey_primary"
@@ -22,41 +22,23 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/raleway_medium"
             android:gravity="center_vertical"
-            android:text="@string/notifications"
+            android:text="@string/bills"
             android:textColor="@color/title_text_color" />
 
     </androidx.appcompat.widget.Toolbar>
 
-    <SearchView
-        android:id="@+id/search_notification_box"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/searchview_background"
-        android:backgroundTint="@color/grey_opacity60_primary"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@null"
-        android:layout_marginHorizontal="@dimen/large_margin"
-        android:imeOptions="actionSearch"
-        android:queryHint="Search for your notifications..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_notifications_fragment"
-        app:theme="@style/SearchViewStyle" />
-
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/notifications_tab_layout"
+        android:id="@+id/bills_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_notification_box"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_bills"
         app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/grey_primary_variant"
         android:textAlignment="textStart"
         app:tabIndicatorColor="@color/grey_primary_variant"
-        android:layout_marginTop="25dp"
         app:tabPaddingStart="10dp"
         app:tabIndicatorFullWidth="false"
         android:contentDescription="@string/products_tab_page"
@@ -66,43 +48,27 @@
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/notification_rv"
+        android:id="@+id/bill_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notifications_tab_layout"
+        app:layout_constraintTop_toBottomOf="@+id/bills_tab_layout"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/large_margin"
         tools:itemCount="10"
-        tools:listitem="@layout/notification_item_layout" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_create_new_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin"
-        android:backgroundTint="@color/title_text_color"
-        android:contentDescription="@string/create_new_notification"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add"
-        app:tint="@color/text_color">
-
-    </com.google.android.material.floatingactionbutton.FloatingActionButton>
+        tools:listitem="@layout/bill_item_layout" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/notification_CircularProgressIndicator"
+        android:id="@+id/bill_CircularProgressIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:indicatorColor="@color/text_color_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/bills_tab_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

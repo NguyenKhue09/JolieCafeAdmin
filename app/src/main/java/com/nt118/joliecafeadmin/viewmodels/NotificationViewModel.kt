@@ -74,17 +74,31 @@ class NotificationViewModel @Inject constructor(
 
     fun sendCommonNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
-            _sendNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.sendCommonNotification(notificationData = pushNotification)
-            _sendNotificationResponse.value = handleFCMCommonApiResponse(response = result)
+            println("sendCommonNotification")
+            try {
+                _sendNotificationResponse.value = ApiResult.Loading()
+                val result = repository.remote.sendCommonNotification(notificationData = pushNotification)
+                _sendNotificationResponse.value = handleFCMCommonApiResponse(response = result)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _sendNotificationResponse.value = ApiResult.Error(e.message)
+            }
+
         }
     }
 
     fun sendSingleNotification(pushNotification: PushNotification) {
         viewModelScope.launch {
-            _sendNotificationResponse.value = ApiResult.Loading()
-            val result = repository.remote.sendSingleNotification(notificationData = pushNotification)
-            _sendNotificationResponse.value = handleFCMSingleApiResponse(response = result)
+            println("sendCommonNotification")
+            try {
+                _sendNotificationResponse.value = ApiResult.Loading()
+                val result = repository.remote.sendSingleNotification(notificationData = pushNotification)
+                _sendNotificationResponse.value = handleFCMSingleApiResponse(response = result)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _sendNotificationResponse.value = ApiResult.Error(e.message)
+            }
+
         }
     }
 

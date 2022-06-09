@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.nt118.joliecafeadmin.data.network.FCMApi
 import com.nt118.joliecafeadmin.data.network.JolieAdminApi
+import com.nt118.joliecafeadmin.data.paging_source.BillPagingSource
 import com.nt118.joliecafeadmin.data.paging_source.NotificationPagingSource
 import com.nt118.joliecafeadmin.data.paging_source.ProductPagingSource
 import com.nt118.joliecafeadmin.models.*
@@ -155,11 +156,39 @@ class RemoteDataSource @Inject constructor(
         return jolieAdminApi.getAllVouchers(token = "Bearer $token")
     }
 
+    suspend fun updateVoucher(
+        token: String,
+        voucherId: String,
+        voucherData: Map<String, String>
+    ): Response<ApiResponseSingleData<Voucher>> {
+        return jolieAdminApi.updateVoucher(token = "Bearer $token", voucherData = voucherData, id = voucherId)
+    }
+
+    suspend fun deleteVoucher(
+        token: String,
+        voucherId: String
+    ): Response<ApiResponseSingleData<Unit>> {
+        return jolieAdminApi.deleteVoucher(token = "Bearer $token", id = voucherId)
+    }
 
     suspend fun updateNotification(
         token: String,
         notificationData: Map<String, String>
     ): Response<ApiResponseSingleData<Notification>> {
         return jolieAdminApi.updateNotification(token = "Bearer $token", notificationData = notificationData)
+    }
+
+    fun getAdminBills(token: String, status: String): Flow<PagingData<Bill>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE),
+            pagingSourceFactory = { BillPagingSource(token = "Bearer $token", jolieAdminApi = jolieAdminApi, status = status) }
+        ).flow
+    }
+
+    suspend fun updateStatusAndPaymentStatusBill(
+        token: String,
+        billData: Map<String, String>
+    ): Response<ApiResponseSingleData<Unit>> {
+        return jolieAdminApi.updateStatusAndPaymentStatusBill(token = "Bearer $token", billData = billData)
     }
 }

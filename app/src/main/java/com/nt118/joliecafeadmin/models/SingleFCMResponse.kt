@@ -11,5 +11,5 @@ data class SingleFCMResponse(
     val failure: Long,
     @SerialName("canonical_ids")
     val canonicalIds: Long,
-    val results: List<CommonFCMResponse>
+    val results: List<ResultSingleFCMResponse>
 )

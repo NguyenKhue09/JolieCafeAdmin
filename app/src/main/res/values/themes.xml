@@ -112,15 +112,46 @@
     </style>
 
     <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:textColor">@color/text_color_2</item>
+        <item name="android:textColor">@color/grey_primary_variant</item>
         <item name="backgroundTint">@color/text_color</item>
         <item name="cornerRadius">@dimen/large_corner_radius</item>
     </style>
 
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/text_color</item>
-        <item name="backgroundTint">@color/text_color_2</item>
+        <item name="backgroundTint">@color/grey_primary_variant</item>
         <item name="cornerRadius">@dimen/large_corner_radius</item>
+    </style>
+
+    <style name="SmallCorneredButton" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="cornerRadius">@dimen/small_corner_radius</item>
+        <item name="backgroundTint">@color/grey_primary_variant</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="ThemeOverlay.MaterialComponents.MaterialAlertDialog_Background" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- Background Color-->
+        <item name="android:background">@color/grey_opacity60_primary</item>
+
+        <!-- Style for positive button -->
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveDialogButtonStyle</item>
+        <!-- Style for negative button -->
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeDialogButtonStyle</item>
+    </style>
+
+    <style name="PositiveDialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <!-- text color for the button -->
+        <!-- Background tint for the button -->
+        <item name="backgroundTint">@color/text_color_2</item>
+    </style>
+
+    <style name="NegativeDialogButtonStyle" parent="@style/Widget.MaterialComponents.Button">
+        <!-- text color for the button -->
+        <!-- Background tint for the button -->
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="elevation">0dp</item>
     </style>
 
 </resources>

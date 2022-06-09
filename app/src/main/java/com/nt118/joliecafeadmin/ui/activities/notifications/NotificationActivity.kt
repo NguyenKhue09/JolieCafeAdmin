@@ -157,6 +157,12 @@ class NotificationActivity : AppCompatActivity() {
         actionType = intent.extras?.getInt(ACTION_TYPE)
         image = intent.extras?.getString(NOTIFICATION_IMAGE)
 
+        if (image == null) {
+            setImage(Uri.EMPTY)
+        } else {
+            setImage(Uri.parse(image))
+        }
+
         actionType?.let {
             when (it) {
                 ACTION_TYPE_ADD -> {
@@ -208,11 +214,6 @@ class NotificationActivity : AppCompatActivity() {
                 else -> {}
             }
         }
-
-        image?.let {
-            setImage(Uri.parse(it))
-        }
-
     }
 
     // Action edit
@@ -383,7 +384,7 @@ class NotificationActivity : AppCompatActivity() {
                         println(notificationFormState.value.image != Uri.EMPTY)
                         println(notificationFormState.value.image.toString()
                             .isValidUrl())
-                        if (notificationFormState.value.image != Uri.EMPTY && notificationFormState.value.image.toString()
+                        if (notificationFormState.value.image == Uri.EMPTY || notificationFormState.value.image.toString()
                                 .isValidUrl()
                         ) {
                             apiAction()
@@ -476,7 +477,7 @@ class NotificationActivity : AppCompatActivity() {
                     notificationViewModel.sendCommonNotification(pushNotification)
                 }
                 listNotificationType[2] -> {
-                    notificationData["voucherId"] = notificationFormState.value.productId
+                    notificationData["voucherId"] = notificationFormState.value.voucherId
                     notificationViewModel.addNewAdminNotification(notificationData)
                     notificationViewModel.sendCommonNotification(pushNotification)
                 }
@@ -533,15 +534,14 @@ class NotificationActivity : AppCompatActivity() {
                     } else {
                         setVoucherId(voucherId)
                         setVoucherCode(voucherCode)
+                        setPredictVoucherNotificationContent(voucherCode)
                     }
                 }
                 listNotificationType[3] -> {
-                    val notificationId = intent.extras?.getString(Constants.NOTIFICATION_ID)
+                    val billId = intent.extras?.getString(Constants.BILL_ID)
                     val userId = intent.extras?.getString(Constants.USER_ID)
-                    notificationId?.let { id ->
-                        setNotificationId(id)
-                    }
-                    if (notificationId.isNullOrEmpty() || userId.isNullOrEmpty()) {
+
+                    if (billId.isNullOrEmpty() || userId.isNullOrEmpty()) {
                         binding.footerActionButton.btnAddNewNotification.isEnabled = false
                         showSnackBar(
                             message = "Notification type is bill, but notification id or user id is empty",
@@ -550,11 +550,22 @@ class NotificationActivity : AppCompatActivity() {
                         )
                     } else {
                         setUserId(userId)
-                        setNotificationId(notificationId)
+                        setBillId(billId)
+                        setPredictBillNotificationContent(billId)
                     }
                 }
             }
         }
+    }
+
+    private fun setPredictVoucherNotificationContent(voucherCode: String) {
+        binding.etNotificationTitle.setText(voucherCode)
+        binding.etNotificationMessage.setText(voucherCode)
+    }
+
+    private fun setPredictBillNotificationContent(billId: String) {
+        binding.etNotificationTitle.setText(billId)
+        binding.etNotificationMessage.setText(billId)
     }
 
     private fun setPredictProductNotificationContent(productName: String, image: String?) {
@@ -650,9 +661,9 @@ class NotificationActivity : AppCompatActivity() {
         )
     }
 
-    private fun setNotificationId(id: String) {
+    private fun setBillId(id: String) {
         notificationViewModel.onNotificationFormEvent(
-            event = NotificationFormStateEvent.OnNotificationIdChanged(id)
+            event = NotificationFormStateEvent.OnBillIdChanged(id)
         )
     }
 

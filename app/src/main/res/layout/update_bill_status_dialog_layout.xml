@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_vertical_margin"
+    android:background="@color/grey_opacity60_primary">
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/RegularText"
+        android:textSize="@dimen/h6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/update_bill_status"
+        android:textColor="@color/title_text_color"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_status"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/status"
+        android:layout_marginTop="@dimen/small_margin"
+        android:textColor="@color/title_text_color"
+        android:textSize="@dimen/body1"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/cb_pending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:buttonTint="@color/checkable_color"
+        app:layout_constraintStart_toStartOf="@+id/tv_status"
+        app:layout_constraintTop_toBottomOf="@+id/tv_status">
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_pending"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/pending"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_pending"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_pending"
+        app:layout_constraintTop_toTopOf="@+id/cb_pending">
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/cb_delivering"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:buttonTint="@color/checkable_color"
+        app:layout_constraintStart_toStartOf="@+id/cb_pending"
+        app:layout_constraintTop_toBottomOf="@+id/cb_pending">
+
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_delivering"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/delivering"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_delivering"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_delivering"
+        app:layout_constraintTop_toTopOf="@+id/cb_delivering">
+
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/cb_received"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/checkable_color"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintStart_toStartOf="@+id/cb_delivering"
+        app:layout_constraintTop_toBottomOf="@+id/cb_delivering">
+
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_received"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/received"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_received"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_received"
+        app:layout_constraintTop_toTopOf="@+id/cb_received">
+
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/cb_cancelled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/checkable_color"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintStart_toStartOf="@+id/cb_received"
+        app:layout_constraintTop_toBottomOf="@+id/cb_received">
+
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_cancelled"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelled"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_cancelled"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_cancelled"
+        app:layout_constraintTop_toTopOf="@+id/cb_cancelled">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_payment"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment status"
+        android:textColor="@color/title_text_color"
+        android:textSize="@dimen/body1"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintStart_toStartOf="@+id/cb_cancelled"
+        app:layout_constraintTop_toBottomOf="@+id/cb_cancelled">
+
+    </TextView>
+
+    <CheckBox
+        android:id="@+id/cb_paid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/checkable_color"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintStart_toStartOf="@+id/tv_payment"
+        app:layout_constraintTop_toBottomOf="@+id/tv_payment">
+    </CheckBox>
+
+    <TextView
+        android:id="@+id/tv_payment_status"
+        style="@style/RegularText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/paid"
+        android:textColor="@color/text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/cb_paid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cb_paid"
+        app:layout_constraintTop_toTopOf="@+id/cb_paid">
+
+    </TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>
