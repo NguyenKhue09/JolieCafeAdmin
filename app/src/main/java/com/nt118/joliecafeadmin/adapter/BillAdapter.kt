@@ -130,7 +130,7 @@ class BillAdapter(
             holder.binding.tvOrderId.text = billsActivity.getString(R.string.order_id, bill.orderId)
 
             holder.binding.tvPaidStatus.text = if(bill.paid) "Paid" else "Not paid"
-            holder.binding.tvPaidMethod.text = bill.paymentMethod
+            holder.binding.tvPaidMethodText.text = bill.paymentMethod
         }
     }
 
