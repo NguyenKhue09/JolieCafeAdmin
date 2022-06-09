@@ -72,11 +72,11 @@ class RevenueFragment : Fragment() {
         // check user
         lifecycleScope.launchWhenStarted {
             revenueViewModel.readAdminToken.collectLatest { token ->
-                if (token.isNullOrEmpty()) {
+                if (token.isEmpty()) {
                     val intent = Intent(requireContext(), LoginActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
-                }
+                } else initDefaultData()
             }
         }
 
@@ -96,7 +96,7 @@ class RevenueFragment : Fragment() {
         observe()
         buttonClickListener()
         tabChangeListener()
-        initDefaultData()
+
 
         return binding.root
     }

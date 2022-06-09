@@ -188,6 +188,13 @@ class AddVoucherActivity : AppCompatActivity() {
                     type = type.toString()
                 )
             )
+            if (type.toString() == listVoucherTypes[0]) {
+                binding.tvCondition.visibility = View.VISIBLE
+                etCondition.visibility = View.VISIBLE
+            } else {
+                binding.tvCondition.visibility = View.GONE
+                etCondition.visibility = View.GONE
+            }
         }
 
         etCondition.addTextChangedListener { condition ->
