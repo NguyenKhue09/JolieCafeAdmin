@@ -103,7 +103,6 @@ open class BaseViewModel(
     }
 
     fun <T> handleApiNullDataSuccessResponse(response: Response<ApiResponseSingleData<T>>): ApiResult<T> {
-        val result = response.body()
         println(response)
         return when {
             response.message().toString().contains("timeout") -> {
@@ -122,7 +121,6 @@ open class BaseViewModel(
     }
 
     fun <T> handleFCMCommonApiResponse(response: Response<CommonFCMResponse>): ApiResult<T> {
-        val result = response.body()
         return when {
             response.message().toString().contains("timeout") -> {
                 ApiResult.Error("Timeout")
@@ -140,7 +138,6 @@ open class BaseViewModel(
     }
 
     fun <T> handleFCMSingleApiResponse(response: Response<SingleFCMResponse>): ApiResult<T> {
-        val result = response.body()
         return when {
             response.message().toString().contains("timeout") -> {
                 ApiResult.Error("Timeout")
